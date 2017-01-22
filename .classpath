@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="src\wpilib\java\current\lib\NetworkTables-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/wpilib/java/current/lib/NetworkTables.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/wpilib/java/current/lib/WPILib-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/wpilib/java/current/lib/WPILib.jar" sourcepath="src/wpilib/java/current/lib/WPILib-sources.jar"/>
+	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
+	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
+	<classpathentry kind="var" path="opencv" sourcepath="opencv.sources"/>
+	<classpathentry kind="var" path="cscore" sourcepath="cscore.sources"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
