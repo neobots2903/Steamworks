@@ -3,7 +3,6 @@ package org.usfirst.frc.team2903.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import java.lang.Math;
 
 public class CameraVision2903 extends Subsystem {
 

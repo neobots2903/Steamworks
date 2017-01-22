@@ -3,7 +3,6 @@
  */
 package org.usfirst.frc.team2903.robot.commands.commoners;
 
-import org.usfirst.frc.team2903.robot.*;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 
@@ -17,19 +16,19 @@ public class DriveStraightWithGyro {
 		double gyroAngle = gyroSubsystem.GyroPosition() % 360;
 
 		double leftSpeed;
-		double rightSpeed;
+//		double rightSpeed;
 		// requires(Robot.driveSubsystem);
 
 		if (gyroAngle != targetAngle ) {
 			if (gyroAngle > (targetAngle)) {
 				leftSpeed = -0.5;
-				rightSpeed = 0.5;
+//				rightSpeed = 0.5;
 				driveSubsystem.arcadeDrive(0, leftSpeed);
 
 			}
 			else {// (gyroAngle < (targetAngle)) {
 				leftSpeed = 0.5;
-				rightSpeed = -0.5;
+//				rightSpeed = -0.5;
 				driveSubsystem.arcadeDrive(0, leftSpeed);
 
 			}

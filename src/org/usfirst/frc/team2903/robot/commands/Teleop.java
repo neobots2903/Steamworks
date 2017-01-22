@@ -2,12 +2,8 @@ package org.usfirst.frc.team2903.robot.commands;
 
 import org.usfirst.frc.team2903.robot.Robot;
 import org.usfirst.frc.team2903.robot.RobotMap;
-import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
-
-import edu.wpi.first.wpilibj.CANTalon;
+import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Teleop extends Command {
 
@@ -41,7 +37,7 @@ public class Teleop extends Command {
 		 * outward on release they stop when b is pressed and held, both motors
 		 * turn in opposite directions inward on release they stop
 		 */
-		int pov=Robot.joyOp.getPOV();
+//		int pov=Robot.joyOp.getPOV();
 		
 		if (Robot.joyOp.getPOV() == 0)
 			//raise arm 

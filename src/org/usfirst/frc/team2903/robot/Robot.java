@@ -10,12 +10,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-import org.usfirst.frc.team2903.robot.commands.Auto;
 import org.usfirst.frc.team2903.robot.commands.groups.CrossMoat;
-import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.commoners.Shoot;
-import org.usfirst.frc.team2903.robot.commands.commoners.StopShoot;
 //import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 import org.usfirst.frc.team2903.robot.subsystems.Arm2903;
@@ -64,8 +61,8 @@ public class Robot extends IterativeRobot {
 
 		teleopCommand = new Teleop();
 		CameraServer server = CameraServer.getInstance();
-		server.setQuality(50);
-		server.startAutomaticCapture("cam0");
+		//server.setQuality(50);
+		server.startAutomaticCapture();
 		triggerKick.whenPressed(new Shoot());
 	//	triggerKick.whenReleased(new StopShoot());
 

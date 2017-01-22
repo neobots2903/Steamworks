@@ -1,13 +1,11 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
 import org.usfirst.frc.team2903.robot.RobotMap;
+import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.DigitalInput;
+
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter2903 extends Subsystem {
 

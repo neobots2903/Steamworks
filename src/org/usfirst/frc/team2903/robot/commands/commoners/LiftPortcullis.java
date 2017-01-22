@@ -1,12 +1,7 @@
 package org.usfirst.frc.team2903.robot.commands.commoners;
 
 
-import org.usfirst.frc.team2903.robot.*;
 import org.usfirst.frc.team2903.robot.Robot;
-import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
-import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
-import org.usfirst.frc.team2903.robot.subsystems.Arm2903;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 public class LiftPortcullis  extends Command {

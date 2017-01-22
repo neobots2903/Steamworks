@@ -2,8 +2,6 @@ package org.usfirst.frc.team2903.robot.commands;
 
 import org.usfirst.frc.team2903.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
-import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightWithGyro;
-import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 
 public class Auto extends Command {
 
@@ -34,13 +32,13 @@ public class Auto extends Command {
 
 	protected void initialize() {
 		// double autoForwardSpeed = (double) 0.25;
-		int autoDuration = 150000;
-		long startTime = System.currentTimeMillis();
-		long stopTime = startTime;
-		double leftSpeed;
-		double rightSpeed;
-		leftSpeed = 0.5;
-		rightSpeed = 0.5;
+//		int autoDuration = 150000;
+//		long startTime = System.currentTimeMillis();
+//		long stopTime = startTime;
+//		double leftSpeed;
+//		double rightSpeed;
+//		leftSpeed = 0.5;
+//		rightSpeed = 0.5;
 		Robot.gyroSubsystem.Calibrate();
 //		TurnWithGyro.setTargetAngle(-90);
 
