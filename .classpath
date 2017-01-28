@@ -10,5 +10,10 @@
 	<classpathentry exported="true" kind="lib" path="src/wpilib/user/java/lib/mindsensors.jar"/>
 	<classpathentry kind="lib" path="src/wpilib/java/current/lib/cscore.jar"/>
 	<classpathentry kind="lib" path="src/wpilib/java/current/lib/opencv.jar"/>
+	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
+	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
+	<classpathentry kind="var" path="opencv" sourcepath="opencv.sources"/>
+	<classpathentry kind="var" path="cscore" sourcepath="cscore.sources"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/CTRLib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -7,6 +7,7 @@ import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2903.robot.*;
 
@@ -24,14 +25,17 @@ public class TurnWithGyro extends Command{
 	double MotorSpeed = 0.6;
 	double ReadjustMotorSpeed = 0;
 	boolean PreviousTurnLeft = false;
-	private Drive2903 drive = new Drive2903();
+	private Drive2903 drive;
 	private MiniPID2903 pid;
-	private Gyro2903 gyro = new Gyro2903();
+	private Gyro2903 gyro;
 	
 
 	public TurnWithGyro(double targetangle) {
+		super ("TurnWithGyro");
 		setTargetAngle(targetangle);
-		pid = new MiniPID2903(4.0, 0.2, 1.0);
+		drive = Robot.driveSubsystem;
+		gyro = Robot.gyroSubsystem;
+		pid = Robot.minipidSubsystem;
 		pid.setSetpoint(TargetAngle);
 		pid.setOutputLimits(-100, 100);
 	
@@ -66,14 +70,14 @@ public class TurnWithGyro extends Command{
 		double gyroAngle = gyro.GyroPosition() % 360;
 
 		double speed = pid.getOutput(gyroAngle);
-		
-		drive.arcadeDrive(0, speed);
+		SmartDashboard.putNumber("auto output=", speed);
+		//drive.arcadeDrive(0, speed);
 	}
 
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		double gyroAngle = Robot.gyroSubsystem.GyroPosition() % 360;
+		double gyroAngle = gyro.GyroPosition() % 360;
 		
 		if (gyroAngle >= LowLimit && gyroAngle <= HighLimit ) 
 			return true;

@@ -1,13 +1,21 @@
 package org.usfirst.frc.team2903.robot.commands;
 
 import org.usfirst.frc.team2903.robot.Robot;
+import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightWithGyro;
+
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Auto extends Command {
 
 	public Auto() {
 		requires(Robot.driveSubsystem);
-		// requires(Robot.gyroSubsystem);
+		requires(Robot.gyroSubsystem);
+		requires(Robot.minipidSubsystem); 
+		Robot.minipidSubsystem.setPID(0.25, 0.01, 0.4);
+		Robot.gyroSubsystem.Calibrate();
+		
+		
 		//9.549296585513720 encoder clicks per rotation of a wheel
 		// distance of one wheel rotation is 37.699111843077518861551720599354 inches
 		//close to three feet.
@@ -19,42 +27,25 @@ public class Auto extends Command {
 	// }
 
 	protected void end() {
+		Robot.driveSubsystem.arcadeDrive(0, 0);
+
 	}
 
 	protected void execute() {
-      //  TurnWithGyro.RobotTurn();
-		// Robot.driveSubsystem.arcadeDrive(0.5, 0);
-
-		// Robot.gyroSubsystem.GyroPostion();
-		// DriveStraightWithGyro.GyroPID(Robot.driveSubsystem,
-		// Robot.gyroSubsystem);
+		double output = Robot.minipidSubsystem.getOutput(Robot.gyroSubsystem.GyroPosition(),90) * 0.25;
+		if (output > 25) output = 25;
+		output /= 100;
+		
+		Robot.driveSubsystem.robotDrive.arcadeDrive(0,output);
+		//Robot.driveSubsystem.tankDrive(-output, output);
+		SmartDashboard.putNumber("auto output=", output);
+		//DriveStraightWithGyro.GyroPID(Robot.driveSubsystem, Robot.gyroSubsystem);
 	}
 
 	protected void initialize() {
-		// double autoForwardSpeed = (double) 0.25;
-//		int autoDuration = 150000;
-//		long startTime = System.currentTimeMillis();
-//		long stopTime = startTime;
-//		double leftSpeed;
-//		double rightSpeed;
-//		leftSpeed = 0.5;
-//		rightSpeed = 0.5;
-		Robot.gyroSubsystem.Calibrate();
-//		TurnWithGyro.setTargetAngle(-90);
-
-		// Robot.driveSubsystem.arcadeDrive(0,autoForwardSpeed);
-
-		// Robot.driveSubsystem.tankDrive(leftSpeed, rightSpeed);
-		//
-		// while (stopTime <= (startTime + autoDuration)) {
-		// stopTime = System.currentTimeMillis();
-		//// Robot.gyroSubsystem.gyroPID(Robot.driveSubsystem);
-		// Robot.gyroSubsystem.GyroPostion();
-		// TurnWithGyro.GyroPID(Robot.driveSubsystem, Robot.gyroSubsystem);
-		// }
-
-		// Robot.driveSubsystem.arcadeDrive(0,0);
-
+		Robot.minipidSubsystem.setSetpoint(90);
+		Robot.minipidSubsystem.setOutputLimits(-80,80);
+		Robot.driveSubsystem.robotDrive.setSafetyEnabled(false);
 	}
 
 	protected void interrupted() {
@@ -62,12 +53,14 @@ public class Auto extends Command {
 	}
 
 	protected boolean isFinished() {
-//		if (TurnWithGyro.getTargetAngle() % 90 >= 90) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-		return false;
+		double output = Robot.gyroSubsystem.GyroPosition();
+
+		if (Math.abs(output - 90) <= 2) {
+			return true;
+		} else {
+			return false;
+		}
+	
 	}
 
 }

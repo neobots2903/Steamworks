@@ -10,15 +10,18 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-import org.usfirst.frc.team2903.robot.commands.groups.CrossMoat;
+//import org.usfirst.frc.team2903.robot.commands.groups.CrossMoat;
+import org.usfirst.frc.team2903.robot.commands.Auto;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.commoners.Shoot;
+import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 //import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 import org.usfirst.frc.team2903.robot.subsystems.Arm2903;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
+import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
 
 /**
@@ -34,7 +37,7 @@ public class Robot extends IterativeRobot {
 	public static Shooter2903 shooterSubsystem;
 	public static Gyro2903 gyroSubsystem;
 	public static Arm2903 armSubsystem;
-
+	public static MiniPID2903 minipidSubsystem;
 	Command autonomousCommand;
 	Command teleopCommand;
 	public static CameraVision2903 cameraSubsystem;
@@ -53,16 +56,17 @@ public class Robot extends IterativeRobot {
 
 		driveSubsystem = new Drive2903();
 		gyroSubsystem = new Gyro2903();
-		cameraSubsystem = new CameraVision2903();
+		minipidSubsystem = new MiniPID2903(0.25, 0.01, 0.4);
+//		cameraSubsystem = new CameraVision2903();
 
 		shooterSubsystem = new Shooter2903();
 		armSubsystem = new Arm2903();
-		autonomousCommand = new CrossMoat(false);
+		autonomousCommand = new TurnWithGyro (90);
 
 		teleopCommand = new Teleop();
-		CameraServer server = CameraServer.getInstance();
+//		CameraServer server = CameraServer.getInstance();
 		//server.setQuality(50);
-		server.startAutomaticCapture();
+//		server.startAutomaticCapture();
 		triggerKick.whenPressed(new Shoot());
 	//	triggerKick.whenReleased(new StopShoot());
 

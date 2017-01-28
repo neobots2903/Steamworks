@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
+import edu.wpi.first.wpilibj.command.Subsystem;
+
 /**
 * Small, easy to use PID implementation with advanced controller capability.<br> 
 * Minimal usage:<br>
@@ -10,7 +12,7 @@ package org.usfirst.frc.team2903.robot.subsystems;
 * 
 * @see http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-direction/improving-the-beginners-pid-introduction
 */
-public class MiniPID2903{
+public class MiniPID2903 extends Subsystem {
 	//**********************************
 	// Class private variables
 	//**********************************
@@ -466,5 +468,11 @@ public class MiniPID2903{
 			if(D<0) D*=-1;
 			if(F<0) F*=-1;
 		}
+	}
+
+	@Override
+	protected void initDefaultCommand() {
+		// TODO Auto-generated method stub
+		
 	}
 }
