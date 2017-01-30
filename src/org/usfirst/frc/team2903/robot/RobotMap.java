@@ -31,7 +31,7 @@ public class RobotMap {
 	// PWM
 
 	// Gyro is on analog 0
-	public static int Gyro = 0;
+	public static int AnalogGyro = 0;
 
 	// Winch
 	public static int WinchMotor = 3;
