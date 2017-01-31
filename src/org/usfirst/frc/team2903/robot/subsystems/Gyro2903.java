@@ -12,7 +12,7 @@ public class Gyro2903 extends Subsystem {
 
 	public Gyro2903() {
 			gyro = new AnalogGyro(RobotMap.Gyro);
-			gyro.initGyro();
+			//gyro.initGyro();
 			gyro.calibrate();
 	}
 	

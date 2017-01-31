@@ -9,13 +9,16 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//import org.usfirst.frc.team2903.robot.commands.groups.CrossMoat;
+import org.usfirst.frc.team2903.robot.commands.groups.CrossMoat;
 import org.usfirst.frc.team2903.robot.commands.Auto;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
+import org.usfirst.frc.team2903.robot.commands.commoners.DriveForward;
 import org.usfirst.frc.team2903.robot.commands.commoners.Shoot;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
-//import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
+import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 import org.usfirst.frc.team2903.robot.subsystems.Arm2903;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
@@ -39,6 +42,7 @@ public class Robot extends IterativeRobot {
 	public static Arm2903 armSubsystem;
 	public static MiniPID2903 minipidSubsystem;
 	Command autonomousCommand;
+	SendableChooser autoChooser;
 	Command teleopCommand;
 	public static CameraVision2903 cameraSubsystem;
 
@@ -61,7 +65,13 @@ public class Robot extends IterativeRobot {
 
 		shooterSubsystem = new Shooter2903();
 		armSubsystem = new Arm2903();
-		autonomousCommand = new TurnWithGyro (90);
+		//autonomousCommand = new DriveForward (12);
+		autoChooser = new SendableChooser();
+		autoChooser.addDefault("CrossMoat", new CrossMoat(false));
+		autoChooser.addObject("DriveForward", new DriveForward(12));
+		autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
+		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
+		SmartDashboard.putData("AutoChooser", autoChooser);
 
 		teleopCommand = new Teleop();
 //		CameraServer server = CameraServer.getInstance();
@@ -78,7 +88,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
+			autonomousCommand = (Command) autoChooser.getSelected();
 			autonomousCommand.start();
 	}
 
