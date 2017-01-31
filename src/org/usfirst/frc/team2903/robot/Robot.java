@@ -68,9 +68,9 @@ public class Robot extends IterativeRobot {
 		armSubsystem = new Arm2903();
 		//autonomousCommand = new DriveForward (12);
 		autoChooser = new SendableChooser();
-		autoChooser.addDefault("CrossMoat", new CrossMoat(false));
+		autoChooser.addObject("CrossMoat", new CrossMoat(false));
 		autoChooser.addObject("DriveForward", new DriveForward(12));
-		autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
+		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
 		SmartDashboard.putData("AutoChooser", autoChooser);
 
