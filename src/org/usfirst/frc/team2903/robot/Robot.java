@@ -39,7 +39,6 @@ public class Robot extends IterativeRobot {
 	public static Drive2903 driveSubsystem;
 	public static Shooter2903 shooterSubsystem;
 	public static Gyro2903 gyroSubsystem;
-	public static Arm2903 armSubsystem;
 	public static MiniPID2903 minipidSubsystem;
 	Command autonomousCommand;
 	SendableChooser autoChooser;
@@ -69,11 +68,11 @@ public class Robot extends IterativeRobot {
 //		cameraSubsystem = new CameraVision2903();
 
 		shooterSubsystem = new Shooter2903();
-		armSubsystem = new Arm2903();
+		
 		//autonomousCommand = new DriveForward (12);
 		autoChooser = new SendableChooser();
-		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("CrossMoat", new CrossMoat(false));
+		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("DriveForward", new DriveForward(12));
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
 		SmartDashboard.putData("AutoChooser", autoChooser);
@@ -82,8 +81,7 @@ public class Robot extends IterativeRobot {
 //		CameraServer server = CameraServer.getInstance();
 		//server.setQuality(50);
 //		server.startAutomaticCapture();
-		triggerKick.whenPressed(new Shoot());
-	//	triggerKick.whenReleased(new StopShoot());
+
 
 	}
 

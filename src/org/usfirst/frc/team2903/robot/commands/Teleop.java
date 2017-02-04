@@ -20,93 +20,49 @@ public class Teleop extends Command {
 
 	}
 
-	// @SuppressWarnings("deprecation")
+	/*
+	 * This routine is called by the scheduler on a regular basis so be careful
+	 * when adding code to not cause blocking issues or delays as this will affect
+	 * the performance of the robot.
+	 */
 	protected void execute() {
-		double forward = Robot.joy1.getY(); // logitech Y, positive
-											// is forward
-		//double turn = Robot.joy1.getZ()/1.5; // logitech X, positive
-		// means turn right
-		double turn = Robot.joy1.getX(); // logitech X, positive
-											// means turn right
 		
-
-
-		Robot.driveSubsystem.arcadeDrive(turn, forward);
 		/*
-		 * when a is pressed and held, both motors turn in opposite directions
-		 * outward on release they stop when b is pressed and held, both motors
-		 * turn in opposite directions inward on release they stop
+		 * Drive the robot arcade style.  
+		 * Y-axis -- forward and reverse
+		 * X-axis -- turn left and rught
 		 */
-//		int pov=Robot.joyOp.getPOV();
-		
-		if (Robot.joyOp.getPOV() == 0)
-			//raise arm 
-			Robot.armSubsystem.raiseArm();
-		else if (Robot.joyOp.getPOV() == 180)
-			//lower arm
-			Robot.armSubsystem.lowerArm();
-		else 
-			//stop arm
-			if (!Robot.armSubsystem.isReset())
-				Robot.armSubsystem.resetArm();
-			else
-				//stop arm
-				Robot.armSubsystem.stopArm();
-		
-//		if (Robot.joyOp.getRawButton(3))
-//			// high goal
-			
-		if (Robot.joyOp.getRawButton(5)){
-			Robot.shooterSubsystem.Kick(0.1);
-		}
-		else if (Robot.joyOp.getRawButton(6)){
-			Robot.shooterSubsystem.Kick(-0.1);
-		}
-		else {
-			Robot.shooterSubsystem.stopKicker();
-		}
-		
-		if (Robot.joyOp.getRawButton(3)){
-			CANTalon leftShoot = new CANTalon(RobotMap.LeftShooter);
-			CANTalon rightShoot = new CANTalon(RobotMap.RightShooter);
-			
-			leftShoot.set(1.0);
-			rightShoot.set(-1.0);
-		}
-		
-	
-		else if (Robot.joyOp.getRawButton(4)){
-			CANTalon leftShoot = new CANTalon(RobotMap.LeftShooter);
-			CANTalon rightShoot = new CANTalon(RobotMap.RightShooter);
-			
-			leftShoot.set(-0.65);
-			rightShoot.set(0.65);
-		}
-		
-		else{
-			CANTalon leftShoot = new CANTalon(RobotMap.LeftShooter);
-			CANTalon rightShoot = new CANTalon(RobotMap.RightShooter);
-			
-			leftShoot.set(0);
-			rightShoot.set(0);
-		}
-		
-	
-		
+		double forward = Robot.joy1.getY();
+		double turn = Robot.joy1.getX();
+		Robot.driveSubsystem.arcadeDrive(turn, forward);
+
+		/*
+		 *  Once we have further functionality for buttons 
+		 *  add it here/
+		 */
 	}
 
-		
-			
-
-
-
+	/*
+	 * This is also called by the scheduler on a regular basis and will cause the robot
+	 * to cease to function for the duration of the match if true is returned.
+	 *	Return true if the robot work is finished
+	 *	Return false if the robot is not finished
+	 */
 	protected boolean isFinished() {
 		return false;
 	}
 
+	/*
+	 * This is called when the match ends or if isFinished returns true.
+	 * all systems should be disabled at this point.
+	 */
 	protected void end() {
 	}
 
+	/*
+	 * This is called if for some reason the normal operation of the robot is cancelled 
+	 * by an external action.
+	 */
 	protected void interrupted() {
 	}
 }
