@@ -23,7 +23,7 @@ public class TurnWithGyro extends Command{
 	
 	double HighLimit;
 	double LowLimit;
-	double ErrorLimit = 0.1;
+	double ErrorLimit = 1.0;
 	double MotorSpeed = 0.6;
 	double ReadjustMotorSpeed = 0;
 	boolean PreviousTurnLeft = false;
@@ -57,7 +57,7 @@ public class TurnWithGyro extends Command{
 		TargetAngle = targetAngle;
 
 		// adjust angle down to one circle
-		TargetAngle = TargetAngle % 360;
+		//TargetAngle = TargetAngle
 
 		// set the limits for adjustment
 		HighLimit = TargetAngle + ErrorLimit;
@@ -98,6 +98,12 @@ public class TurnWithGyro extends Command{
 //			MotorSpeed = ReadjustMotorSpeed;
 //			PreviousTurnLeft = turnLeft;
 //		}
+		
+		if (0 <= MotorSpeed && MotorSpeed < 0.25)
+			MotorSpeed = 0.25;
+		else if (-0.25 < MotorSpeed && MotorSpeed <= 0)
+			MotorSpeed = -0.25;
+		
 		SmartDashboard.putNumber("Taget Angle", TargetAngle);
 		SmartDashboard.putNumber("MotorSpeed = ", MotorSpeed);
 		Robot.driveSubsystem.tankDrive(-MotorSpeed, -MotorSpeed);

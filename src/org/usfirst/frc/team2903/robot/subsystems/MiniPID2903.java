@@ -89,6 +89,9 @@ public class MiniPID2903 extends Subsystem {
 		P=p;
 		checkSigns();
 	}
+	public double getP(){
+		return P;
+		}
 
 	/**
 	 * Changes the I parameter <br>
@@ -114,6 +117,9 @@ public class MiniPID2903 extends Subsystem {
 		 // As an example doubling the I term cuts the accumulated error in half, which results in the 
 		 // output change due to the I term constant during the transition. 
 	}
+	public double getI(){
+		return I;
+		}
 
 	/**
 	 * Changes the D parameter <br>
@@ -134,7 +140,9 @@ public class MiniPID2903 extends Subsystem {
 		D=d;
 		checkSigns();
 		}
-
+	public double getD(){
+		return D;
+		}
 	/**
 	 * Configure the FeedForward parameter. <br>
 	 * This is excellent for velocity, rate, and other  continuous control modes where you can 

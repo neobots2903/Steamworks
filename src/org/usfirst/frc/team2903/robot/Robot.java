@@ -61,16 +61,20 @@ public class Robot extends IterativeRobot {
 		driveSubsystem = new Drive2903();
 		Gyro2903.GYRO_TYPE gyroType = Gyro2903.GYRO_TYPE.SPI;
 		gyroSubsystem = new Gyro2903(gyroType);
-		minipidSubsystem = new MiniPID2903(0.25, 0.01, 0.4);
+		minipidSubsystem = new MiniPID2903(3.5, 0, 0);
+		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
+		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
+		SmartDashboard.putNumber("kD", minipidSubsystem.getD());
+
 //		cameraSubsystem = new CameraVision2903();
 
 		shooterSubsystem = new Shooter2903();
 		armSubsystem = new Arm2903();
 		//autonomousCommand = new DriveForward (12);
 		autoChooser = new SendableChooser();
+		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("CrossMoat", new CrossMoat(false));
 		autoChooser.addObject("DriveForward", new DriveForward(12));
-		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
 		SmartDashboard.putData("AutoChooser", autoChooser);
 
