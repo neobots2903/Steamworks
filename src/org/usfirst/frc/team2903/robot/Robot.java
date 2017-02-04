@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team2903.robot.commands.groups.CrossMoat;
 import org.usfirst.frc.team2903.robot.commands.Auto;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveForward;
@@ -20,7 +19,7 @@ import org.usfirst.frc.team2903.robot.commands.commoners.Shoot;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
-import org.usfirst.frc.team2903.robot.subsystems.Arm2903;
+
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
@@ -55,7 +54,6 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-		// oi = new OI();
 
 		driveSubsystem = new Drive2903();
 		Gyro2903.GYRO_TYPE gyroType = Gyro2903.GYRO_TYPE.SPI;
@@ -67,21 +65,19 @@ public class Robot extends IterativeRobot {
 
 //		cameraSubsystem = new CameraVision2903();
 
-		shooterSubsystem = new Shooter2903();
+//		shooterSubsystem = new Shooter2903();
 		
-		//autonomousCommand = new DriveForward (12);
 		autoChooser = new SendableChooser();
-		autoChooser.addObject("CrossMoat", new CrossMoat(false));
 		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("DriveForward", new DriveForward(12));
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
 		SmartDashboard.putData("AutoChooser", autoChooser);
 
 		teleopCommand = new Teleop();
-//		CameraServer server = CameraServer.getInstance();
-		//server.setQuality(50);
-//		server.startAutomaticCapture();
 
+		//CameraServer server = CameraServer.getInstance();
+		//server.setQuality(50);
+		//server.startAutomaticCapture();
 
 	}
 

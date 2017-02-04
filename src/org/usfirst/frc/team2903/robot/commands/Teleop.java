@@ -9,14 +9,12 @@ public class Teleop extends Command {
 
 	public Teleop() {
 		requires(Robot.driveSubsystem);
-		requires(Robot.armSubsystem);
 
 		// requires(Robot.pneumaticsSubsystem);
 	}
 
 	protected void initialize() {
 		// Robot.elevatorSubsystem.encoder.reset();
-		Robot.armSubsystem.autoShooter.disable();
 
 	}
 

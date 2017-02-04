@@ -12,16 +12,13 @@ public class VerticalAim extends Command {
 		super("VerticalAim");
 		this.index = index;
 		requires(Robot.cameraSubsystem);
-		requires(Robot.armSubsystem);
 	}
 
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
 		double VerticalAngle = Robot.cameraSubsystem.GetVerticalAngle(index);
-		Robot.armSubsystem.setTargetAngle(VerticalAngle);
-		Robot.armSubsystem.moveArm();
-		
+
 	}
 
 	@Override
@@ -33,13 +30,13 @@ public class VerticalAim extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return Robot.armSubsystem.isTargetReached();
+		return false;
 	}
 
 	@Override
 	protected void end() {
 		// TODO Auto-generated method stub
-		Robot.armSubsystem.stopArm();
+
 	}
 
 	@Override

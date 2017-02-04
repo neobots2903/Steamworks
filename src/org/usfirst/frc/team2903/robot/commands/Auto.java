@@ -57,7 +57,7 @@ public class Auto extends Command {
 		// limit output to 25% in either direction
 		if (output > 25) 
 			output = 25;
-		else if (ou8tput < -25)
+		else if (output < -25)
 			output = -25;
 		
 		// convert output to a value the drive subsystem can use (-1 to 1)

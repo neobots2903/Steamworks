@@ -1,0 +1,6 @@
+tree d67f333c5b2e5fe3d6980ff35e6165abf2b6fb37
+parent 137a5c2967fc63cc8d4dc5fd184ce38c871e8def
+author John Burnham <listbuddy@frontier.com> 1485076245 -0800
+committer John Burnham <listbuddy@frontier.com> 1485076245 -0800
+
+Adding more libraries to classpath

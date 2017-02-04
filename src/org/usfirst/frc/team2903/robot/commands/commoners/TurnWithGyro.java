@@ -25,6 +25,7 @@ public class TurnWithGyro extends Command{
 	double LowLimit;
 	double ErrorLimit = 1.0;
 	double MotorSpeed = 0.6;
+	double MinMotorSpeed = 0.3;
 	double ReadjustMotorSpeed = 0;
 	boolean PreviousTurnLeft = false;
 	boolean TurnLeft = false;
@@ -99,10 +100,10 @@ public class TurnWithGyro extends Command{
 //			PreviousTurnLeft = turnLeft;
 //		}
 		
-		if (0 <= MotorSpeed && MotorSpeed < 0.25)
-			MotorSpeed = 0.25;
-		else if (-0.25 < MotorSpeed && MotorSpeed <= 0)
-			MotorSpeed = -0.25;
+		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed)
+			MotorSpeed = MinMotorSpeed;
+		else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0)
+			MotorSpeed = -MinMotorSpeed;
 		
 		SmartDashboard.putNumber("Taget Angle", TargetAngle);
 		SmartDashboard.putNumber("MotorSpeed = ", MotorSpeed);
