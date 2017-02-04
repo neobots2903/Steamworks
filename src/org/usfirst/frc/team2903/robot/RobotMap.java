@@ -14,23 +14,16 @@ public class RobotMap {
 	public static int LeftBottomMotor = 33;
 	public static int RightBottomMotor = 32;
 
-	// arm controller motor
-	public static int armMotor = 34;
+
 	//public static int climbingMotor = 35
-	// kicker motor
-	public static int kickerMotor = 38;
-	// kicker Limit Switches
-//	public static int botLimitSwitch = 4;//port subjected to change
-//    public static int topLimitSwitch = 5;//port subjected to change
-	
+
 	// shooter motors
 	public static int RightShooter = 36;
 	public static int LeftShooter = 37;
 	
 
-	// PWM
 
-	// Gyro is on analog 0
+	// Analog Gyro is on analog 0
 	public static int AnalogGyro = 0;
 
 	// Winch
