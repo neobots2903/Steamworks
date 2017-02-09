@@ -9,23 +9,28 @@ package org.usfirst.frc.team2903.robot;
 public class RobotMap {
 
 	// drive motors
-	public static int RightTopMotor = 30;
-	public static int LeftTopMotor = 31;
-	public static int LeftBottomMotor = 33;
-	public static int RightBottomMotor = 32;
+	public static int RightTopMotor = 3;
+	public static int RightBottomMotor = 4;
+	public static int LeftTopMotor = 1;
+	public static int LeftBottomMotor = 2;
 
 
 	//public static int climbingMotor = 35
 
-	// shooter motors
-	public static int RightShooter = 36;
-	public static int LeftShooter = 37;
 	
-
-
+	// shooter motor
+	public static int ShootMotor = 5;
+	
+	
+	// Pick Up
+	public static int PickUpMotor = 6;
+	
+	
 	// Analog Gyro is on analog 0
 	public static int AnalogGyro = 0;
 
+	
 	// Winch
-	public static int WinchMotor = 3;
+	public static int WinchMotor = 7;
+	
 }

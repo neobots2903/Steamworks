@@ -25,7 +25,7 @@ public class DriveForward extends Command {
 		requires(Robot.driveSubsystem);
 		
 		Distance = distance;
-		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+//		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
 		TargetEncoderPos =  distance * (int) COUNTS_PER_INCH + CurrentEncoderPos; 
 		SmartDashboard.putNumber("DFCEP", CurrentEncoderPos);
 		SmartDashboard.putNumber("DF distance", distance);
@@ -39,7 +39,7 @@ public class DriveForward extends Command {
 		// TODO Auto-generated method stub
 		//Robot.driveSubsystem.setPosition(DistanceToDrive);
 
-		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+//		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
 		TargetEncoderPos =  Distance * (int) COUNTS_PER_INCH + CurrentEncoderPos; 
 		SmartDashboard.putNumber("DFINITCEP", CurrentEncoderPos);
 		SmartDashboard.putNumber("DFINIT distance", Distance);
@@ -58,7 +58,7 @@ public class DriveForward extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+//		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
 		SmartDashboard.putNumber("encoder position",CurrentEncoderPos);
 		SmartDashboard.putNumber("target position",TargetEncoderPos);
 		if (CurrentEncoderPos >= TargetEncoderPos){

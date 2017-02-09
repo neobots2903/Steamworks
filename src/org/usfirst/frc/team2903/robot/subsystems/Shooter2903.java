@@ -47,8 +47,8 @@ public class Shooter2903 extends Subsystem {
 		super("Shooter2903");
 		
 		// instantiate the talon motor controllers
-		rightShooter = new CANTalon(RobotMap.RightShooter);
-		leftShooter = new CANTalon(RobotMap.LeftShooter);
+//		rightShooter = new CANTalon(RobotMap.RightShooter);
+//		leftShooter = new CANTalon(RobotMap.LeftShooter);
 
 		
 		

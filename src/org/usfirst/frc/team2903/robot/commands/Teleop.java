@@ -4,6 +4,7 @@ import org.usfirst.frc.team2903.robot.Robot;
 import org.usfirst.frc.team2903.robot.RobotMap;
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Teleop extends Command {
 
@@ -30,9 +31,15 @@ public class Teleop extends Command {
 		 * Y-axis -- forward and reverse
 		 * X-axis -- turn left and rught
 		 */
+		
 		double forward = Robot.joy1.getY();
 		double turn = Robot.joy1.getX();
-		Robot.driveSubsystem.arcadeDrive(turn, forward);
+		SmartDashboard.putNumber("Forward", forward);
+		SmartDashboard.putNumber("Turn", turn);
+		Robot.driveSubsystem.arcadeDrive(forward, -turn);
+		//Robot.driveSubsystem.tankDrive(forward, forward);
+		
+		SmartDashboard.putNumber("Voltage", Robot.driveSubsystem.GetVoltage());
 
 		/*
 		 *  Once we have further functionality for buttons 
