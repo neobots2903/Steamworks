@@ -34,7 +34,9 @@ public class RobotMap {
 	public static int WinchMotor = 7;
 	
 	// Pnuematics
-	public static int gearShift = 0;
-	public static int gearDelivery = 0;
+	public static int highGearShiftSol = 6;
+	public static int lowGearShiftSol = 7;
+	public static int gearArmsOpen = 0;
+	public static int gearArmsClose = 1;
 	
 }

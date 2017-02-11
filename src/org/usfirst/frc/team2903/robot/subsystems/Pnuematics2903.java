@@ -6,49 +6,46 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class Pnuematics2903 {
 	
-	public Solenoid gearShift = null; //new Solenoid(RobotMap.gearShift); 
-	public Solenoid gearDelivery = null; //new Solenoid(RobotMap.gearDelivery);
-	public boolean isOpen = false;
+	public Solenoid highGearShift = new Solenoid(RobotMap.highGearShiftSol); 
+	public Solenoid lowGearShift = new Solenoid(RobotMap.lowGearShiftSol); 
+	public Solenoid gearArmsOpen = new Solenoid(RobotMap.gearArmsOpen);
+	public Solenoid gearArmsClosed = new Solenoid(RobotMap.gearArmsClose);
 	
 	public void openarms()
 	{
-		gearDelivery.set(true);
+		if (gearArmsClosed.get()){
+			gearArmsOpen.set(true);
+		}
 	}
 	
 	public void closearms()
 	{
-		gearDelivery.set(false);
+		if (gearArmsOpen.get()){
+			gearArmsClosed.set(false);
+		}
 	}
 	
 	
 	public void highGear()
 	{
-		gearShift.set(false);
+		if(lowGearShift.get()){
+			lowGearShift.set(false);
+			highGearShift.set(true);
+		}
 	}
 	
 	public void lowGear()
 	{
-		gearShift.set(true);
+		if(highGearShift.get()){
+			highGearShift.set(false);
+			lowGearShift.set(true);
+		}
 	}
 	
 	
 	public void armReset()
 	{
 		closearms();
-	}
-
-	public void armsOpenClose()
-	{
-		if (isOpen)
-		{
-			closearms();
-			isOpen = false;
-		}
-		else
-		{
-			openarms();
-			isOpen = true; 
-		}
 	}
 		
 }

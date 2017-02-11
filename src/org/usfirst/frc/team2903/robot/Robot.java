@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2903.robot.commands.Auto;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
-import org.usfirst.frc.team2903.robot.commands.commoners.DriveForward;
+import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightForDistance;
 import org.usfirst.frc.team2903.robot.commands.commoners.Shoot;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
@@ -74,7 +74,7 @@ public class Robot extends IterativeRobot {
 		
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
-		autoChooser.addObject("DriveForward", new DriveForward(12));
+		autoChooser.addObject("DriveForward", new DriveStraightForDistance(12));
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
 		SmartDashboard.putData("AutoChooser", autoChooser);
 

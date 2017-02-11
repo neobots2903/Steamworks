@@ -5,8 +5,10 @@ import org.usfirst.frc.team2903.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveForward extends Command {
+public class DriveStraightForDistance extends Command {
 
+	// TODO update for two encoders with average of the two and gyro 
+	
 	int TargetEncoderPos;
 	int CurrentEncoderPos;
 	int Distance;
@@ -18,7 +20,7 @@ public class DriveForward extends Command {
 	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / 
 			(WHEEL_DIAMETER_INCHES * 3.141595));
 	
-	public DriveForward(int distance)
+	public DriveStraightForDistance(int distance)
 	{
 		super("DriveForward");
 		
