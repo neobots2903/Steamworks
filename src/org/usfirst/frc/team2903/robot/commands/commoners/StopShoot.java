@@ -16,10 +16,6 @@ public class StopShoot extends Command {
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
-		Robot.shooterSubsystem.Kick(1.0);
-		Timer.delay(0.128);
-		Robot.shooterSubsystem.Kick(0);
-
 	}
 
 	@Override

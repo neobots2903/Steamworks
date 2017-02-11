@@ -9,10 +9,10 @@ package org.usfirst.frc.team2903.robot;
 public class RobotMap {
 
 	// drive motors
-	public static int RightTopMotor = 3;
-	public static int RightBottomMotor = 4;
-	public static int LeftTopMotor = 1;
-	public static int LeftBottomMotor = 2;
+	public static int RightTopMotor = 1;
+	public static int RightBottomMotor = 2;
+	public static int LeftTopMotor = 3;
+	public static int LeftBottomMotor = 4;
 
 
 	//public static int climbingMotor = 35
@@ -32,5 +32,9 @@ public class RobotMap {
 	
 	// Winch
 	public static int WinchMotor = 7;
+	
+	// Pnuematics
+	public static int gearShift = 0;
+	public static int gearDelivery = 0;
 	
 }

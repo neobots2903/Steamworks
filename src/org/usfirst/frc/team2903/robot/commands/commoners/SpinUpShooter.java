@@ -17,13 +17,7 @@ public class SpinUpShooter extends Command {
 	}
 
 	@Override
-	protected void initialize() {
-		
-		if (HighShooter)
-			Robot.shooterSubsystem.enableHighGoalMode();
-		else
-			Robot.shooterSubsystem.enableLowGoalMode();
-			
+	protected void initialize() {		
 
 	}
 

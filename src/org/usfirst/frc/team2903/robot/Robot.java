@@ -21,10 +21,12 @@ import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
-
+import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
+import org.usfirst.frc.team2903.robot.subsystems.Pnuematics2903;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,6 +41,8 @@ public class Robot extends IterativeRobot {
 	public static Shooter2903 shooterSubsystem;
 	public static Gyro2903 gyroSubsystem;
 	public static MiniPID2903 minipidSubsystem;
+	public static Pnuematics2903 pnuematicsSubsystem;
+	public static Gear2903 gearSubsystem;
 	Command autonomousCommand;
 	SendableChooser autoChooser;
 	Command teleopCommand;
@@ -59,6 +63,7 @@ public class Robot extends IterativeRobot {
 		Gyro2903.GYRO_TYPE gyroType = Gyro2903.GYRO_TYPE.SPI;
 		gyroSubsystem = new Gyro2903(gyroType);
 		minipidSubsystem = new MiniPID2903(3.5, 0, 0);
+		pnuematicsSubsystem = new Pnuematics2903 ();
 		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
 		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
 		SmartDashboard.putNumber("kD", minipidSubsystem.getD());

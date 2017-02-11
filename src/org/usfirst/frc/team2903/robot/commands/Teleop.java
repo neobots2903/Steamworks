@@ -3,11 +3,17 @@ package org.usfirst.frc.team2903.robot.commands;
 import org.usfirst.frc.team2903.robot.Robot;
 import org.usfirst.frc.team2903.robot.RobotMap;
 import com.ctre.CANTalon;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Teleop extends Command {
 
+	static final double errorTurn = 0.25;
+	static final double Proportional = 0.03;
+	static final double circleDegrees = 360;
+	
 	public Teleop() {
 		requires(Robot.driveSubsystem);
 
@@ -26,20 +32,48 @@ public class Teleop extends Command {
 	 */
 	protected void execute() {
 		
+		
+		
 		/*
 		 * Drive the robot arcade style.  
-		 * Y-axis -- forward and reverse
-		 * X-axis -- turn left and rught
+		 * X-axis -- forward and reverse
+		 * Y-axis -- turn left and right
 		 */
 		
-		double forward = Robot.joy1.getY();
-		double turn = Robot.joy1.getX();
+		//Driver
+		double forward = Robot.joy1.getX();
+		double turn = Robot.joy1.getY();
 		SmartDashboard.putNumber("Forward", forward);
 		SmartDashboard.putNumber("Turn", turn);
-		Robot.driveSubsystem.arcadeDrive(forward, -turn);
+		if (-errorTurn >= turn && turn <= errorTurn) {
+			double angle = Robot.gyroSubsystem.GyroPosition() % circleDegrees;
+			angle = angle / circleDegrees;
+			Robot.driveSubsystem.arcadeDrive(forward, -angle * Proportional);
+		} else {
+		Robot.driveSubsystem.arcadeDrive(forward, turn);
+		}
+		
+		if (Robot.joy1.getRawButton(3)){
+			Robot.driveSubsystem.changeToHighGear();
+		}
+		
+		if (Robot.joy1.getRawButton(4)){
+			Robot.driveSubsystem.changeToLowGear();
+		}
+		
+		//Operator
+		if (Robot.joyOp.getRawButton(5)){
+			Robot.gearSubsystem.openArms();
+		}
+		
+		if (Robot.joyOp.getRawButton(6)){
+			Robot.gearSubsystem.closeArms();
+		}
+		
+		
 		//Robot.driveSubsystem.tankDrive(forward, forward);
 		
-		SmartDashboard.putNumber("Voltage", Robot.driveSubsystem.GetVoltage());
+		//SmartDashboard.putNumber("Voltage", Robot.driveSubsystem.GetVoltage());
 
 		/*
 		 *  Once we have further functionality for buttons 
