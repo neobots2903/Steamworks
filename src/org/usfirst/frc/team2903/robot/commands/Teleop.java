@@ -45,13 +45,13 @@ public class Teleop extends Command {
 		double turn = Robot.joy1.getY();
 		SmartDashboard.putNumber("Forward", forward);
 		SmartDashboard.putNumber("Turn", turn);
-		if (-errorTurn >= turn && turn <= errorTurn) {
-			double angle = Robot.gyroSubsystem.GyroPosition() % circleDegrees;
-			angle = angle / circleDegrees;
-			Robot.driveSubsystem.arcadeDrive(forward, -angle * Proportional);
-		} else {
+//		if (-errorTurn >= turn && turn <= errorTurn) {
+//			double angle = Robot.gyroSubsystem.GyroPosition() % circleDegrees;
+//			angle = angle / circleDegrees;
+//			Robot.driveSubsystem.arcadeDrive(forward, -angle * Proportional);
+//		} else {
 		Robot.driveSubsystem.arcadeDrive(forward, turn);
-		}
+//		}
 		
 		if (Robot.joy1.getRawButton(3)){
 			Robot.driveSubsystem.changeToHighGear();

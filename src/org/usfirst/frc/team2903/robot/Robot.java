@@ -59,11 +59,14 @@ public class Robot extends IterativeRobot {
 	 */
 	public void robotInit() {
 
+		pnuematicsSubsystem = new Pnuematics2903 ();
+
 		driveSubsystem = new Drive2903();
 		Gyro2903.GYRO_TYPE gyroType = Gyro2903.GYRO_TYPE.SPI;
 		gyroSubsystem = new Gyro2903(gyroType);
 		minipidSubsystem = new MiniPID2903(3.5, 0, 0);
-		pnuematicsSubsystem = new Pnuematics2903 ();
+		gearSubsystem = new Gear2903();
+		
 		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
 		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
 		SmartDashboard.putNumber("kD", minipidSubsystem.getD());

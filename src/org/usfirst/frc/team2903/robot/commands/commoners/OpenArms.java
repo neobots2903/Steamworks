@@ -5,17 +5,17 @@ import org.usfirst.frc.team2903.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class GearDropOff extends Command {
+public class OpenArms extends Command {
 
 	// TODO update for two encoders with average of the two and gyro 
 	
 	
-	public GearDropOff(int distance)
+	public OpenArms()
 	{
-		super("GearDropOff");
+		super("OpenArms");
 		
-		requires(Robot.driveSubsystem);
 		requires(Robot.gearSubsystem);
+		
 		
 	}
 	
@@ -27,7 +27,7 @@ public class GearDropOff extends Command {
 
 	@Override
 	protected void execute() {
-		
+		Robot.gearSubsystem.openArms();
 	}
 
 	@Override

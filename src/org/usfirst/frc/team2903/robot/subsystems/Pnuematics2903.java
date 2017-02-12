@@ -11,9 +11,18 @@ public class Pnuematics2903 {
 	public Solenoid gearArmsOpen = new Solenoid(RobotMap.gearArmsOpen);
 	public Solenoid gearArmsClosed = new Solenoid(RobotMap.gearArmsClose);
 	
+	public Pnuematics2903 () {
+		highGearShift.clearAllPCMStickyFaults();
+		
+		gearArmsClosed.set(false);
+		gearArmsOpen.set(true);
+		highGearShift.set(false);
+		lowGearShift.set(true);
+	}
 	public void openarms()
 	{
 		if (gearArmsClosed.get()){
+			gearArmsClosed.set(false);
 			gearArmsOpen.set(true);
 		}
 	}
@@ -21,7 +30,8 @@ public class Pnuematics2903 {
 	public void closearms()
 	{
 		if (gearArmsOpen.get()){
-			gearArmsClosed.set(false);
+			gearArmsOpen.set(false);
+			gearArmsClosed.set(true);
 		}
 	}
 	
