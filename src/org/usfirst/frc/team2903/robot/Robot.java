@@ -2,6 +2,8 @@
 package org.usfirst.frc.team2903.robot;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2903.robot.commands.Auto;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightForDistance;
+import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.Shoot;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
@@ -23,6 +26,7 @@ import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
+import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
 import org.usfirst.frc.team2903.robot.subsystems.Pnuematics2903;
@@ -43,6 +47,8 @@ public class Robot extends IterativeRobot {
 	public static MiniPID2903 minipidSubsystem;
 	public static Pnuematics2903 pnuematicsSubsystem;
 	public static Gear2903 gearSubsystem;
+	public static LIDAR2903 lidarSubsystem;
+	
 	Command autonomousCommand;
 	SendableChooser autoChooser;
 	Command teleopCommand;
@@ -53,6 +59,7 @@ public class Robot extends IterativeRobot {
 
 	public static Joystick joy1 = new Joystick(1);
 
+	public static Port lidarPort = I2C.Port.kOnboard;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -66,6 +73,7 @@ public class Robot extends IterativeRobot {
 		gyroSubsystem = new Gyro2903(gyroType);
 		minipidSubsystem = new MiniPID2903(3.5, 0, 0);
 		gearSubsystem = new Gear2903();
+		lidarSubsystem = new LIDAR2903(lidarPort);
 		
 		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
 		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
@@ -78,6 +86,7 @@ public class Robot extends IterativeRobot {
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("DriveForward", new DriveStraightForDistance(12));
+		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
 		SmartDashboard.putData("AutoChooser", autoChooser);
 
