@@ -13,6 +13,7 @@ public class Teleop extends Command {
 	static final double errorTurn = 0.25;
 	static final double Proportional = 0.03;
 	static final double circleDegrees = 360;
+	static final double adjustTurn = 0.01;
 	
 	public Teleop() {
 		requires(Robot.driveSubsystem);
@@ -22,18 +23,15 @@ public class Teleop extends Command {
 
 	protected void initialize() {
 		// Robot.elevatorSubsystem.encoder.reset();
-
 	}
-
+	
 	/*
 	 * This routine is called by the scheduler on a regular basis so be careful
 	 * when adding code to not cause blocking issues or delays as this will affect
 	 * the performance of the robot.
 	 */
 	protected void execute() {
-		
-		
-		
+			
 		/*
 		 * Drive the robot arcade style.  
 		 * X-axis -- forward and reverse
@@ -50,9 +48,16 @@ public class Teleop extends Command {
 //			angle = angle / circleDegrees;
 //			Robot.driveSubsystem.arcadeDrive(forward, -angle * Proportional);
 //		} else {
-		Robot.driveSubsystem.arcadeDrive(forward, turn);
-//		}
+	//		}			
 		
+		//drive straight error adjustment
+		if (Robot.joy1.getThrottle() < 1){
+			turn = turn + Robot.joy1.getThrottle() / 2;
+		}
+		Robot.driveSubsystem.arcadeDrive(forward, turn);
+		//Robot.driveSubsystem.tankDrive(forward, forward);
+
+		//driver
 		if (Robot.joy1.getRawButton(3)){
 			Robot.driveSubsystem.changeToHighGear();
 		}
@@ -70,16 +75,25 @@ public class Teleop extends Command {
 			Robot.gearSubsystem.closeArms();
 		}
 		
+		/*if (Robot.joyOp.getRawButton(a)){
+				run shooter 
+			}
+			
+		if ((shooter motor >= optimalspeed)? Robot.joyOp.getRawButton(x)){
+				shoot 
+		}
 		
-		//Robot.driveSubsystem.tankDrive(forward, forward);
+		if(Robot.joyOp.getRawButton(x)){
+			emergency shoot 
+		}*/
 		
-		//SmartDashboard.putNumber("Voltage", Robot.driveSubsystem.GetVoltage());
-
+		
 		/*
 		 *  Once we have further functionality for buttons 
 		 *  add it here/
 		 */
 	}
+	
 
 	/*
 	 * This is also called by the scheduler on a regular basis and will cause the robot
