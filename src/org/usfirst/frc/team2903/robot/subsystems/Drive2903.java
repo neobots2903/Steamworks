@@ -9,7 +9,6 @@ import com.ctre.CANTalon.TalonControlMode;
 //import com.mindsensors.CANSD540;
 //import com.mindsensors.CANSD540.StopMode;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -20,12 +19,19 @@ public class Drive2903 extends Subsystem {
 	CANTalon leftRearMotor;
 	CANTalon rightFrontMotor;
 	CANTalon rightRearMotor;
-	
+
+	static final double		PI						= 3.14159;
+    static final double     COUNTS_PER_MOTOR_REV    = 256 ;    // eg: Grayhill 61R256
+    static final double     DRIVE_GEAR_REDUCTION    = 3.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 3.0 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            												(WHEEL_DIAMETER_INCHES * PI);
+    
+    static final double 	CM_PER_INCH             = 2.54;
+    static final double 	COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    													((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
 	
 
-	// here is the encoder
-	Encoder leftDriveSpeedEncoder;
-	Encoder driveSpeedEncoder;
 
 	public enum DriveType {
 		ArcadeMode1Joystick,
@@ -57,40 +63,31 @@ public class Drive2903 extends Subsystem {
 		
 		robotDrive = new RobotDrive(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
 		
-//		leftRearMotor.setVoltageRamp(0);
-//		leftFrontMotor.setVoltageRamp(0);
-//		rightRearMotor.setVoltageRamp(0);
-//		rightFrontMotor.setVoltageRamp(0);
-//
-//		leftRearMotor.setStopMode(StopMode.Brake);
-//		leftFrontMotor.setStopMode(StopMode.Brake);
-//		rightRearMotor.setStopMode(StopMode.Brake);
-//		rightFrontMotor.setStopMode(StopMode.Brake);
-		
-//		rightFrontMotor.setInverted(true);
-//		rightRearMotor.setInverted(true);
-//		leftFrontMotor.setInverted(false);
-//		leftRearMotor.setInverted(false);
-		
 		// set the drive type
 		driveType = DriveType.ArcadeMode1Joystick;
 
-		// enable the encoder
-		driveSpeedEncoder = null;// new Encoder(0, 1, false, Encoder.EncodingType.k4X);
-
-//		RightCount = driveSpeedEncoder.get();
-//		RightRawCount = driveSpeedEncoder.get();
 		
 		// talon position set up 
 		int absolutePosition = leftFrontMotor.getPulseWidthPosition() & 0xFFF;
-		rightFrontMotor.setEncPosition(absolutePosition);
+		leftFrontMotor.setEncPosition(absolutePosition);
+		absolutePosition = rightFrontMotor.getPulseWidthPosition() & 0xFFF;
+		rightFrontMotor.setEncPosition(absolutePosition);		
 		
-		rightFrontMotor.setEncPosition(0);
 		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
-		leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
-
+		leftFrontMotor.changeControlMode(TalonControlMode.Follower);
+		rightRearMotor.changeControlMode(TalonControlMode.Follower);
+		leftRearMotor.changeControlMode(TalonControlMode.Follower);
+		
+		// have the other motors follow the rightFrontMotor
+		leftFrontMotor.set(rightFrontMotor.getDeviceID());
+		leftRearMotor.set(rightFrontMotor.getDeviceID());
+		rightRearMotor.set(rightFrontMotor.getDeviceID());
+		
+		// disable timeout safety on drives
+		rightFrontMotor.setSafetyEnabled(false);
+		rightFrontMotor.set(0);
+		
+		// configure the encoders
 		rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rightFrontMotor.reverseSensor(true);
 		rightFrontMotor.configEncoderCodesPerRev(256);
@@ -98,173 +95,81 @@ public class Drive2903 extends Subsystem {
 		leftFrontMotor.reverseSensor(false);
 		leftFrontMotor.configEncoderCodesPerRev(256);
 		
+		// configure the output
 		rightFrontMotor.configNominalOutputVoltage(+0f, -0f);
 		rightFrontMotor.configPeakOutputVoltage(+12f, -12f);
-		rightFrontMotor.changeControlMode(TalonControlMode.Position);
 		
 		leftFrontMotor.configNominalOutputVoltage(+0f, -0f);
 		leftFrontMotor.configPeakOutputVoltage(+12f, -12f);
-		leftFrontMotor.changeControlMode(TalonControlMode.Position);
 		
 		// I found that you do variable = SmartDashboard.getNumber("Enter a value: ");  
 		// will allow you to set values into the running program.  Which means we could 
 		// dynamically adjust the below values for PID  or for our miniPID when gyro turning.
 		
-		// these may not be needed
-//		rightFrontMotor.setProfile(0);
-//		rightFrontMotor.setF(0.0);
-//		rightFrontMotor.setP(0.1);
-//		rightFrontMotor.setI(0.0);
-//		rightFrontMotor.setD(0.0);
-//		
-//		leftFrontMotor.setProfile(0);
-//		leftFrontMotor.setF(0.0);
-//		leftFrontMotor.setP(0.1);
-//		leftFrontMotor.setI(0.0);
-//		leftFrontMotor.setD(0.0);
+		rightFrontMotor.setProfile(0);
+		rightFrontMotor.setF(0.0);
+		rightFrontMotor.setP(0.1);
+		rightFrontMotor.setI(0.0);
+		rightFrontMotor.setD(0.0);
+		
+		leftFrontMotor.setProfile(0);
+		leftFrontMotor.setF(0.0);
+		leftFrontMotor.setP(0.1);
+		leftFrontMotor.setI(0.0);
+		leftFrontMotor.setD(0.0);
 	}
 
-	public void getDistanceTraveled() {
+	  /**
+	   * Converts inches to number of encoder counts.
+	   *
+	   * @param inches	The value in inches to convert
+	   */
+	public double convertInchesToEncoderCount(int inches)
+	{
+		return inches * COUNTS_PER_INCH;
+	}
+	
+	  /**
+	   * Converts centimeters to number of encoder counts.
+	   *
+	   * @param centimeters	The value in centimeters to convert
+	   */
+	public double convertCentimetersToEncoder(int centimeters)
+	{
+		return centimeters * COUNTS_PER_CM;
+	}
+	
+	
+	public double getDistanceTraveled() {
 		robotDrive.arcadeDrive(0, 0);
 		if (robotDrive.isAlive() == true) {
-			driveSpeedEncoder.get();
-
+			return (leftFrontMotor.getPosition() + rightFrontMotor.getPosition()) / 2;
+		}
+		else {
+			return 0;
 		}
 	}
-//	  /**
-//	   * Arcade drive implements single stick driving. This function lets you directly provide
-//	   * joystick values from any source.
-//	   *
-//	   * @param moveValue     The value to use for forwards/backwards
-//	   * @param rotateValue   The value to use for the rotate right/left
-//	   * @param squaredInputs If set, decreases the sensitivity at low speeds
-//	   */
-//	  public void arcadeDrive(double moveValue, double rotateValue, boolean squaredInputs) {
-//	    // local variables to hold the computed PWM values for the motors
-////	    if (!kArcadeStandard_Reported) {
-////	      HAL.report(tResourceType.kResourceType_RobotDrive, getNumMotors(),
-////	          tInstances.kRobotDrive_ArcadeStandard);
-////	      kArcadeStandard_Reported = true;
-////	    }
-//
-//	    double leftMotorSpeed;
-//	    double rightMotorSpeed;
-//
-//	    moveValue = limit(moveValue);
-//	    rotateValue = limit(rotateValue);
-//
-//	    if (squaredInputs) {
-//	      // square the inputs (while preserving the sign) to increase fine control
-//	      // while permitting full power
-//	      if (moveValue >= 0.0) {
-//	        moveValue = moveValue * moveValue;
-//	      } else {
-//	        moveValue = -(moveValue * moveValue);
-//	      }
-//	      if (rotateValue >= 0.0) {
-//	        rotateValue = rotateValue * rotateValue;
-//	      } else {
-//	        rotateValue = -(rotateValue * rotateValue);
-//	      }
-//	    }
-//
-//	    if (moveValue > 0.0) {
-//	      if (rotateValue > 0.0) {
-//	        leftMotorSpeed = moveValue - rotateValue;
-//	        rightMotorSpeed = Math.max(moveValue, rotateValue);
-//	      } else {
-//	        leftMotorSpeed = Math.max(moveValue, -rotateValue);
-//	        rightMotorSpeed = moveValue + rotateValue;
-//	      }
-//	    } else {
-//	      if (rotateValue > 0.0) {
-//	        leftMotorSpeed = -Math.max(-moveValue, rotateValue);
-//	        rightMotorSpeed = moveValue + rotateValue;
-//	      } else {
-//	        leftMotorSpeed = moveValue - rotateValue;
-//	        rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
-//	      }
-//	    }
-//
-//	    //setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
-//	    leftFrontMotor.set(leftMotorSpeed);
-//	    rightFrontMotor.set(-rightMotorSpeed);
-//	    rightRearMotor.set(-rightMotorSpeed);
-//	    leftRearMotor.set(leftMotorSpeed);
-//	  }
-//
-//	  /**
-//	   * Arcade drive implements single stick driving. This function lets you directly provide
-//	   * joystick values from any source.
-//	   *
-//	   * @param moveValue   The value to use for fowards/backwards
-//	   * @param rotateValue The value to use for the rotate right/left
-//	   */
-//	  public void arcadeDrive(double moveValue, double rotateValue) {
-//	    arcadeDrive(moveValue, rotateValue, true);
-//	  }
 
+//	  /**
+//	   * Arcade drive implements single stick driving. This function lets you directly provide
+//	   * joystick values from any source.
+//	   *
+//	   * @param forward     The value to use for forwards/backwards
+//	   * @param turn        The value to use for the rotate right/left
+//	   */
 	public void arcadeDrive(double forward, double turn) {
-
 		robotDrive.arcadeDrive(forward, turn);
-
 	}
 
 	  /**
 	   * Provide tank steering using the stored robot configuration. This function lets you directly
 	   * provide joystick values from any source.
 	   *
-	   * @param leftValue     The value of the left stick.
-	   * @param rightValue    The value of the right stick.
-	   * @param squaredInputs Setting this parameter to true decreases the sensitivity at lower speeds
+	   * @param leftSpeed     The value of the left stick.
+	   * @param rightSpeed    The value of the right stick.
 	   */
-//	  public void tankDrive(double leftValue, double rightValue, boolean squaredInputs) {
-//
-////	    if (!kTank_Reported) {
-////	      HAL.report(tResourceType.kResourceType_RobotDrive, getNumMotors(),
-////	          tInstances.kRobotDrive_Tank);
-////	      kTank_Reported = true;
-////	    }
-//
-//	    // square the inputs (while preserving the sign) to increase fine control
-//	    // while permitting full power
-//	    leftValue = limit(leftValue);
-//	    rightValue = limit(rightValue);
-//	    if (squaredInputs) {
-//	      if (leftValue >= 0.0) {
-//	        leftValue = leftValue * leftValue;
-//	      } else {
-//	        leftValue = -(leftValue * leftValue);
-//	      }
-//	      if (rightValue >= 0.0) {
-//	        rightValue = rightValue * rightValue;
-//	      } else {
-//	        rightValue = -(rightValue * rightValue);
-//	      }
-//	    }
-//	   // setLeftRightMotorOutputs(leftValue, rightValue);
-//	    leftFrontMotor.set(leftValue);
-//	    rightFrontMotor.set(rightValue);
-//	    rightRearMotor.set(rightValue);
-//	    leftRearMotor.set(leftValue);
-//	    
-//	  }
-//
-//	  /**
-//	   * Provide tank steering using the stored robot configuration. This function lets you directly
-//	   * provide joystick values from any source.
-//	   *
-//	   * @param leftValue  The value of the left stick.
-//	   * @param rightValue The value of the right stick.
-//	   */
-//	  public void tankDrive(double leftValue, double rightValue) {
-//	    tankDrive(leftValue, rightValue, true);
-//	  }
-	  
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-
 		robotDrive.tankDrive(leftSpeed, rightSpeed);
-
 	}
 
 	@Override
@@ -275,31 +180,18 @@ public class Drive2903 extends Subsystem {
 
 	public void setPosition(long distanceToDrive) {
 		// TODO Auto-generated method stub
-//		leftFrontMotor.changeControlMode(TalonControlMode.Position);
+		rightFrontMotor.changeControlMode(TalonControlMode.Position);
+		rightFrontMotor.set(distanceToDrive);
 		leftFrontMotor.set(distanceToDrive);
 
 	}
 
 	public void setVelocity(double velocity) {
-//		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+		rightFrontMotor.set(velocity);
 		leftFrontMotor.set(velocity);
-
-		
 	}
 
-	  /**
-	   * Limit motor values to the -1.0 to +1.0 range.
-	   */
-	  protected static double limit(double num) {
-	    if (num > 1.0) {
-	      return 1.0;
-	    }
-	    if (num < -1.0) {
-	      return -1.0;
-	    }
-	    return num;
-	  }
-	  
 	  //Low to High gear
 	  
 	  public void changeToHighGear (){
@@ -310,44 +202,21 @@ public class Drive2903 extends Subsystem {
 		  Robot.pnuematicsSubsystem.lowGear();
 	  }
 	  
-//	  public double GetVoltage() {
-//		  return leftRearMotor.getBatteryVoltage();
-//	  }
-//	  
-	  int RightCount;
+		public double rightGetCount() {
+			return rightFrontMotor.getPosition();
+		}
 
-//		public int rightGetCount() {
-////			if (driveSpeedEncoder != null)
-////				return RightCount = driveSpeedEncoder.get();
-////			else
-//				return (int) rightFrontMotor.getPosition();
-//		}
+		public double rightGetRawCount() {
+			return rightFrontMotor.getEncPosition();
+		}
 
-		int RightRawCount;
 
-//		public int rightGetRawCount() {
-////			if (driveSpeedEncoder != null)
-////				return RightRawCount = driveSpeedEncoder.getRaw();
-////			else
-//				return (int) rightFrontMotor.getEncPosition();
-//		}
+		public double leftGetCount() {
+				return leftFrontMotor.getPosition();
+		}
 
-		int LeftCount;
-
-//		public int leftGetCount() {
-////			if (driveSpeedEncoder != null)
-////				return LeftCount = driveSpeedEncoder.get();
-////			else
-//				return (int) leftFrontMotor.getPosition();
-//		}
-
-		int LeftRawCount;
-
-//		public int leftGetRawcount() {
-////			if (driveSpeedEncoder != null)
-////				return LeftRawCount = driveSpeedEncoder.getRaw();
-////			else
-//				return (int) leftFrontMotor.getPosition();
-//		}
+		public double leftGetRawcount() {
+				return leftFrontMotor.getEncPosition();
+		}
 
 }
