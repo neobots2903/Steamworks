@@ -91,20 +91,37 @@ public class Drive2903 extends Subsystem {
 		rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
 		leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
 
-		rightFrontMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rightFrontMotor.reverseSensor(true);
-		rightFrontMotor.configEncoderCodesPerRev(1024);
+		rightFrontMotor.configEncoderCodesPerRev(256);
+		leftFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		leftFrontMotor.reverseSensor(false);
+		leftFrontMotor.configEncoderCodesPerRev(256);
 		
 		rightFrontMotor.configNominalOutputVoltage(+0f, -0f);
 		rightFrontMotor.configPeakOutputVoltage(+12f, -12f);
 		rightFrontMotor.changeControlMode(TalonControlMode.Position);
-		leftFrontMotor.setAllowableClosedLoopErr(0);
 		
-		leftFrontMotor.setProfile(0);
-		leftFrontMotor.setF(0.0);
-		leftFrontMotor.setP(0.1);
-		leftFrontMotor.setI(0.0);
-		leftFrontMotor.setD(0.0);
+		leftFrontMotor.configNominalOutputVoltage(+0f, -0f);
+		leftFrontMotor.configPeakOutputVoltage(+12f, -12f);
+		leftFrontMotor.changeControlMode(TalonControlMode.Position);
+		
+		// I found that you do variable = SmartDashboard.getNumber("Enter a value: ");  
+		// will allow you to set values into the running program.  Which means we could 
+		// dynamically adjust the below values for PID  or for our miniPID when gyro turning.
+		
+		// these may not be needed
+//		rightFrontMotor.setProfile(0);
+//		rightFrontMotor.setF(0.0);
+//		rightFrontMotor.setP(0.1);
+//		rightFrontMotor.setI(0.0);
+//		rightFrontMotor.setD(0.0);
+//		
+//		leftFrontMotor.setProfile(0);
+//		leftFrontMotor.setF(0.0);
+//		leftFrontMotor.setP(0.1);
+//		leftFrontMotor.setI(0.0);
+//		leftFrontMotor.setD(0.0);
 	}
 
 	public void getDistanceTraveled() {
