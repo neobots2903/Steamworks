@@ -56,7 +56,7 @@ public class GearPegPipeline2903 implements VisionPipeline {
 	    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	    camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
 	    
-	    visionThread = new VisionThread(camera, new Pipeline(), pipeline -> {
+	    visionThread = new VisionThread(camera, new GearPegPipeline2903(), pipeline -> {
 	        if (!pipeline.filterContoursOutput().isEmpty()) {
 	            Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 	            synchronized (imgLock) {
