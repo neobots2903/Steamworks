@@ -25,6 +25,7 @@ import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
+import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;

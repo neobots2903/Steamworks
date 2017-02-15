@@ -1,11 +1,12 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
 	import java.util.TimerTask;
-	import edu.wpi.first.wpilibj.I2C;
-	import edu.wpi.first.wpilibj.Timer;
-	import edu.wpi.first.wpilibj.I2C.Port;
-	import edu.wpi.first.wpilibj.PIDSource;
-	import edu.wpi.first.wpilibj.PIDSourceType;
+
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.Timer;
 
 	public class LIDAR2903 implements PIDSource{
 		private I2C i2c;

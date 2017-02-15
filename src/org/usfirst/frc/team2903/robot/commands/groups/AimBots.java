@@ -4,7 +4,7 @@ import org.usfirst.frc.team2903.robot.Robot;
 import org.usfirst.frc.team2903.robot.commands.commoners.HorizontalAim;
 import org.usfirst.frc.team2903.robot.commands.commoners.Shoot;
 import org.usfirst.frc.team2903.robot.commands.commoners.SpinUpShooter;
-import org.usfirst.frc.team2903.robot.commands.commoners.VerticalAim;
+import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -20,9 +20,9 @@ public class AimBots extends CommandGroup{
 		index = Robot.cameraSubsystem.GetBiggestAreaIndex();
 		
 		addParallel(new HorizontalAim(index));
-		addParallel(new VerticalAim(index));
+		addParallel(new GearAim(index));
 		addSequential(new HorizontalAim(index));
-		addSequential(new VerticalAim(index));
+		addSequential(new GearAim(index));
 		if (Shoot){
 			addSequential(new SpinUpShooter(true));
 			addSequential(new Shoot());

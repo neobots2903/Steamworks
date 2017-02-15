@@ -1,10 +1,7 @@
 package org.usfirst.frc.team2903.robot.commands;
 
 import org.usfirst.frc.team2903.robot.Robot;
-import org.usfirst.frc.team2903.robot.RobotMap;
-import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

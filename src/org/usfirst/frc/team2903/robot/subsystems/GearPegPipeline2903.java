@@ -1,32 +1,23 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.HashMap;
 
-import edu.wpi.first.wpilibj.vision.VisionPipeline;
-
-import org.opencv.core.*;
-import org.opencv.core.Core.*;
-import org.opencv.features2d.FeatureDetector;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.*;
-import org.opencv.objdetect.*;
-
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfInt;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-//import com.ctre.CANTalon;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.vision.VisionRunner;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.vision.VisionPipeline;
 import edu.wpi.first.wpilibj.vision.VisionThread;
 
 /**
@@ -36,19 +27,18 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
 *
 * @author GRIP
 */
-public class GearPegPipeline2903 implements VisionPipeline {
+public class GearPegPipeline2903 extends Subsystem implements VisionPipeline {
 
 	//Outputs
 	private Mat hslThresholdOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 	
-	private static final int IMG_WIDTH = 640;
-	private static final int IMG_HEIGHT = 480;
+	public static final int IMG_WIDTH = 640;
+	public static final int IMG_HEIGHT = 480;
 	
 	private VisionThread visionThread;
 	private double centerX = 0.0;
-	private RobotDrive drive;
 	
 	private final Object imgLock = new Object();
 	
@@ -65,23 +55,19 @@ public class GearPegPipeline2903 implements VisionPipeline {
 	        }
 	    });
 	    visionThread.start();
-	        
-	    drive = new RobotDrive(1, 2);
 	}
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 
-	public void autonomousPeriodic() {
+	public double getCenterX() {
 		double centerX;
 		synchronized (imgLock) {
 			centerX = this.centerX;
 		}
-		double turn = centerX - (IMG_WIDTH / 2);
-		drive.arcadeDrive(-0.6, turn * 0.005);
+		return centerX;
 	}
-	
 
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
@@ -226,5 +212,12 @@ public class GearPegPipeline2903 implements VisionPipeline {
 			if (ratio < minRatio || ratio > maxRatio) continue;
 			output.add(contour);
 		}
+	}
+
+
+	@Override
+	protected void initDefaultCommand() {
+		// TODO Auto-generated method stub
+		
 	}
 }

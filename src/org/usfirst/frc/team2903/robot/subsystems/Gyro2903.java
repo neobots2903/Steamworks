@@ -3,10 +3,10 @@ package org.usfirst.frc.team2903.robot.subsystems;
 import org.usfirst.frc.team2903.robot.RobotMap;
 import org.usfirst.frc.team2903.robot.drivers.ADIS16448_IMU;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 public class Gyro2903 extends Subsystem {
 	

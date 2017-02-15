@@ -1,17 +1,17 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
-
 import org.usfirst.frc.team2903.robot.Robot;
 import org.usfirst.frc.team2903.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 //import com.mindsensors.CANSD540;
 //import com.mindsensors.CANSD540.StopMode;
+
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drive2903 extends Subsystem {
 

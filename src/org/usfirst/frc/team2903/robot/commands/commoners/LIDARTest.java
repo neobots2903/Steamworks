@@ -1,8 +1,9 @@
 package org.usfirst.frc.team2903.robot.commands.commoners;
 
+import org.usfirst.frc.team2903.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team2903.robot.Robot;
 
 public class LIDARTest extends Command {
 

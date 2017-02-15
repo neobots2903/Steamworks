@@ -1,10 +1,9 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
 import org.usfirst.frc.team2903.robot.RobotMap;
+
 import com.ctre.CANTalon;
 
-
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class PickUp2903 extends Subsystem {
