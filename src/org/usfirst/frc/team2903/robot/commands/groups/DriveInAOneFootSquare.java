@@ -6,9 +6,9 @@ import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class DriveInAOneSecondSquare extends CommandGroup {
+public class DriveInAOneFootSquare extends CommandGroup {
 
-	public DriveInAOneSecondSquare(){
+	public DriveInAOneFootSquare(){
 		requires(Robot.driveSubsystem);
 		requires(Robot.gyroSubsystem);
 

@@ -17,6 +17,7 @@ import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightForDistance;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
+import org.usfirst.frc.team2903.robot.commands.groups.DriveForDistanceTest;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 
@@ -81,7 +82,12 @@ public class Robot extends IterativeRobot {
 //		shooterSubsystem = new Shooter2903();
 		
 		autoChooser = new SendableChooser();
-		autoChooser.addDefault("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
+		try {
+			autoChooser.addDefault("DriveForDistanceTest", new DriveForDistanceTest());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		autoChooser.addObject("DriveForward", new DriveStraightForDistance(12));
 		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));

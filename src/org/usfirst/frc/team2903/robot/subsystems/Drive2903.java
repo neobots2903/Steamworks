@@ -23,7 +23,7 @@ public class Drive2903 extends Subsystem {
 	static final double		PI						= 3.14159;
     static final double     COUNTS_PER_MOTOR_REV    = 256 ;    // eg: Grayhill 61R256
     static final double     DRIVE_GEAR_REDUCTION    = 3.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 3.0 ;     // For figuring circumference
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             												(WHEEL_DIAMETER_INCHES * PI);
     
@@ -74,18 +74,20 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setEncPosition(absolutePosition);		
 		
 		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		leftFrontMotor.changeControlMode(TalonControlMode.Follower);
-		rightRearMotor.changeControlMode(TalonControlMode.Follower);
-		leftRearMotor.changeControlMode(TalonControlMode.Follower);
+		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+		rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
+		leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
 		
 		// have the other motors follow the rightFrontMotor
-		leftFrontMotor.set(rightFrontMotor.getDeviceID());
-		leftRearMotor.set(rightFrontMotor.getDeviceID());
-		rightRearMotor.set(rightFrontMotor.getDeviceID());
+//		leftFrontMotor.set(rightFrontMotor.getDeviceID());
+//		leftRearMotor.set(rightFrontMotor.getDeviceID());
+//		rightRearMotor.set(rightFrontMotor.getDeviceID());
 		
 		// disable timeout safety on drives
 		rightFrontMotor.setSafetyEnabled(false);
 		rightFrontMotor.set(0);
+		leftFrontMotor.setSafetyEnabled(false);
+		leftFrontMotor.set(0);
 		
 		// configure the encoders
 		rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
@@ -106,17 +108,17 @@ public class Drive2903 extends Subsystem {
 		// will allow you to set values into the running program.  Which means we could 
 		// dynamically adjust the below values for PID  or for our miniPID when gyro turning.
 		
-		rightFrontMotor.setProfile(0);
-		rightFrontMotor.setF(0.0);
-		rightFrontMotor.setP(0.1);
-		rightFrontMotor.setI(0.0);
-		rightFrontMotor.setD(0.0);
-		
-		leftFrontMotor.setProfile(0);
-		leftFrontMotor.setF(0.0);
-		leftFrontMotor.setP(0.1);
-		leftFrontMotor.setI(0.0);
-		leftFrontMotor.setD(0.0);
+//		rightFrontMotor.setProfile(0);
+//		rightFrontMotor.setF(0.0);
+//		rightFrontMotor.setP(0.1);
+//		rightFrontMotor.setI(0.0);
+//		rightFrontMotor.setD(0.0);
+//		
+//		leftFrontMotor.setProfile(0);
+//		leftFrontMotor.setF(0.0);
+//		leftFrontMotor.setP(0.1);
+//		leftFrontMotor.setI(0.0);
+//		leftFrontMotor.setD(0.0);
 	}
 
 	  /**
@@ -181,14 +183,16 @@ public class Drive2903 extends Subsystem {
 	public void setPosition(long distanceToDrive) {
 		// TODO Auto-generated method stub
 		rightFrontMotor.changeControlMode(TalonControlMode.Position);
-		rightFrontMotor.set(distanceToDrive);
-		leftFrontMotor.set(distanceToDrive);
+		rightFrontMotor.set(-distanceToDrive);
+//		leftFrontMotor.changeControlMode(TalonControlMode.Position);
+//		leftFrontMotor.set(distanceToDrive);
 
 	}
 
 	public void setVelocity(double velocity) {
 		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
 		rightFrontMotor.set(velocity);
+		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
 		leftFrontMotor.set(velocity);
 	}
 
@@ -202,21 +206,21 @@ public class Drive2903 extends Subsystem {
 		  Robot.pnuematicsSubsystem.lowGear();
 	  }
 	  
-		public double rightGetCount() {
-			return rightFrontMotor.getPosition();
+		public int rightGetCount() {
+			return (int)rightFrontMotor.getPosition();
 		}
 
-		public double rightGetRawCount() {
-			return rightFrontMotor.getEncPosition();
+		public int rightGetRawCount() {
+			return (int)rightFrontMotor.getEncPosition();
 		}
 
 
-		public double leftGetCount() {
-				return leftFrontMotor.getPosition();
+		public int leftGetCount() {
+				return (int)leftFrontMotor.getPosition();
 		}
 
-		public double leftGetRawcount() {
-				return leftFrontMotor.getEncPosition();
+		public int leftGetRawcount() {
+				return (int)leftFrontMotor.getEncPosition();
 		}
 
 }

@@ -13,12 +13,15 @@ public class DriveStraightForDistance extends Command {
 	int CurrentEncoderPos;
 	int Distance;
 	
-	
-	static final double COUNTS_PER_MOTOR_REV = 1024; //Quad Encoder
-	static final double DRIVE_GEAR_REDUCTION = 1; 
-	static final double WHEEL_DIAMETER_INCHES = 12.5;
+	static final double		PI						= 3.14159;
+	static final double COUNTS_PER_MOTOR_REV = 256; //Quad Encoder
+	static final double DRIVE_GEAR_REDUCTION = 3; 
+	static final double WHEEL_DIAMETER_INCHES = 4.0;
 	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / 
 			(WHEEL_DIAMETER_INCHES * 3.141595));
+	 static final double 	CM_PER_INCH             = 2.54;
+	 static final double 	COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+				((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
 	
 	public DriveStraightForDistance(int distance)
 	{
@@ -27,7 +30,7 @@ public class DriveStraightForDistance extends Command {
 		requires(Robot.driveSubsystem);
 		
 		Distance = distance;
-//		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
 		TargetEncoderPos =  distance * (int) COUNTS_PER_INCH + CurrentEncoderPos; 
 		SmartDashboard.putNumber("DFCEP", CurrentEncoderPos);
 		SmartDashboard.putNumber("DF distance", distance);
@@ -39,9 +42,9 @@ public class DriveStraightForDistance extends Command {
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-		//Robot.driveSubsystem.setPosition(DistanceToDrive);
+		Robot.driveSubsystem.setPosition(TargetEncoderPos);
 
-//		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
 		TargetEncoderPos =  Distance * (int) COUNTS_PER_INCH + CurrentEncoderPos; 
 		SmartDashboard.putNumber("DFINITCEP", CurrentEncoderPos);
 		SmartDashboard.putNumber("DFINIT distance", Distance);
@@ -60,8 +63,8 @@ public class DriveStraightForDistance extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-//		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
-		SmartDashboard.putNumber("encoder position",CurrentEncoderPos);
+		CurrentEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+		SmartDashboard.putNumber("current position",CurrentEncoderPos);
 		SmartDashboard.putNumber("target position",TargetEncoderPos);
 		if (CurrentEncoderPos >= TargetEncoderPos){
 			Robot.driveSubsystem.arcadeDrive(0, 0);
