@@ -48,9 +48,9 @@ public class Teleop extends Command {
 	//		}			
 		
 		//drive straight error adjustment
-		if (Robot.joy1.getThrottle() < 1){
-			turn = turn + Robot.joy1.getThrottle() / 2;
-		}
+//		if (Robot.joy1.getThrottle() < 1){
+//			turn = turn + Robot.joy1.getThrottle() / 2;
+//		}
 		Robot.driveSubsystem.arcadeDrive(forward, turn);
 		//Robot.driveSubsystem.tankDrive(forward, forward);
 
@@ -71,6 +71,10 @@ public class Teleop extends Command {
 		if (Robot.joyOp.getRawButton(6)){
 			Robot.gearSubsystem.closeArms();
 		}
+		
+//		if(Robot.joyOp.getRawButton(2)){
+//			Robot.
+//		}
 		
 		/*if (Robot.joyOp.getRawButton(a)){
 				run shooter 

@@ -11,6 +11,7 @@ import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive2903 extends Subsystem {
 
@@ -75,13 +76,12 @@ public class Drive2903 extends Subsystem {
 		
 		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
 		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
-		leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
+		rightRearMotor.changeControlMode(TalonControlMode.Follower);
+		leftRearMotor.changeControlMode(TalonControlMode.Follower);
 		
 		// have the other motors follow the rightFrontMotor
-//		leftFrontMotor.set(rightFrontMotor.getDeviceID());
-//		leftRearMotor.set(rightFrontMotor.getDeviceID());
-//		rightRearMotor.set(rightFrontMotor.getDeviceID());
+		leftRearMotor.set(leftFrontMotor.getDeviceID());
+		rightRearMotor.set(rightFrontMotor.getDeviceID());
 		
 		// disable timeout safety on drives
 		rightFrontMotor.setSafetyEnabled(false);
@@ -93,9 +93,10 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rightFrontMotor.reverseSensor(true);
 		rightFrontMotor.configEncoderCodesPerRev(256);
-		leftFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		leftFrontMotor.setFeedbackDevice(FeedbackDevice.PulseWidth);
 		leftFrontMotor.reverseSensor(false);
 		leftFrontMotor.configEncoderCodesPerRev(256);
+		SmartDashboard.putNumber("blah", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
 		
 		// configure the output
 		rightFrontMotor.configNominalOutputVoltage(+0f, -0f);
@@ -171,6 +172,10 @@ public class Drive2903 extends Subsystem {
 	   * @param rightSpeed    The value of the right stick.
 	   */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
+		SmartDashboard.putNumber("right pinA status", rightFrontMotor.getPinStateQuadA());
+		SmartDashboard.putNumber("right pinB status", rightFrontMotor.getPinStateQuadB());
+		SmartDashboard.putNumber("left pinA status", leftFrontMotor.getPinStateQuadA());
+		SmartDashboard.putNumber("left pinB status", leftFrontMotor.getPinStateQuadB());
 		robotDrive.tankDrive(leftSpeed, rightSpeed);
 	}
 
@@ -184,8 +189,8 @@ public class Drive2903 extends Subsystem {
 		// TODO Auto-generated method stub
 		rightFrontMotor.changeControlMode(TalonControlMode.Position);
 		rightFrontMotor.set(-distanceToDrive);
-//		leftFrontMotor.changeControlMode(TalonControlMode.Position);
-//		leftFrontMotor.set(distanceToDrive);
+		leftFrontMotor.changeControlMode(TalonControlMode.Position);
+		leftFrontMotor.set(distanceToDrive);
 
 	}
 

@@ -13,21 +13,21 @@ public class DriveForDistanceTest extends CommandGroup {
 		requires(Robot.driveSubsystem);
 
 		addSequential(new DriveStraightForDistance(12));
-		Thread.sleep(1000);
-		addSequential(new DriveStraightForDistance(24));
-		Thread.sleep(1000);
-		addSequential(new DriveStraightForDistance(36));
-		Thread.sleep(1000);
-		addSequential(new DriveStraightForDistance(48));
-		Thread.sleep(1000);
-		addSequential(new DriveStraightForDistance(-48));
-		Thread.sleep(1000);
-		addSequential(new DriveStraightForDistance(-36));
-		Thread.sleep(1000);
-		addSequential(new DriveStraightForDistance(-24));
-		Thread.sleep(1000);
-		addSequential(new DriveStraightForDistance(-12));
-		Thread.sleep(1000);
+//		Thread.sleep(1000);
+//		addSequential(new DriveStraightForDistance(24));
+//		Thread.sleep(1000);
+//		addSequential(new DriveStraightForDistance(36));
+//		Thread.sleep(1000);
+//		addSequential(new DriveStraightForDistance(48));
+//		Thread.sleep(1000);
+//		addSequential(new DriveStraightForDistance(-48));
+//		Thread.sleep(1000);
+//		addSequential(new DriveStraightForDistance(-36));
+//		Thread.sleep(1000);
+//		addSequential(new DriveStraightForDistance(-24));
+//		Thread.sleep(1000);
+//		addSequential(new DriveStraightForDistance(-12));
+//		Thread.sleep(1000);
 
 	}
 	
