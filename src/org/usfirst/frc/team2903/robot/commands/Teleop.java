@@ -82,7 +82,7 @@ public class Teleop extends Command {
 		}
 		
 		if (Robot.joyOp.getRawButton(1)) {
-			Robot.shooterSubsystem.shoot(); 
+			Robot.shooterSubsystem.shoot();
 		}
 		
 //		if(Robot.joyOp.getRawButton(2)){

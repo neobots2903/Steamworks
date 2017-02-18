@@ -28,7 +28,7 @@ public class Shooter2903 extends Subsystem {
 		ShootMotor.enable();
 		// KickingMotor.enable();
 
-	} 
+	}
 
 	@Override
 	protected void initDefaultCommand() {
