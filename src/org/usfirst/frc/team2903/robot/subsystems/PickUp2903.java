@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class PickUp2903 extends Subsystem {
 	
-	// motor 
+	// motor
 	static CANTalon PickUpMotor;
 
 	public PickUp2903() {
