@@ -14,7 +14,8 @@ public class Teleop extends Command {
 	
 	public Teleop() {
 		requires(Robot.driveSubsystem);
-
+		requires(Robot.pickupSubsystem);
+		
 		// requires(Robot.pneumaticsSubsystem);
 	}
 
@@ -70,6 +71,14 @@ public class Teleop extends Command {
 		
 		if (Robot.joyOp.getRawButton(6)){
 			Robot.gearSubsystem.closeArms();
+		}
+		
+		if (Robot.joyOp.getRawButton(5)) {
+			Robot.pickupSubsystem.PickUp();
+		}
+		
+		if (Robot.joyOp.getRawButton(6)) {
+			Robot.pickupSubsystem.SpitOut();
 		}
 		
 //		if(Robot.joyOp.getRawButton(2)){

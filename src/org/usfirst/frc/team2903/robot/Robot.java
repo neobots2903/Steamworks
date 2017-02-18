@@ -27,6 +27,7 @@ import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
+import org.usfirst.frc.team2903.robot.subsystems.PickUp2903;
 import org.usfirst.frc.team2903.robot.subsystems.Pnuematics2903;
 
 
@@ -46,6 +47,7 @@ public class Robot extends IterativeRobot {
 	public static Pnuematics2903 pnuematicsSubsystem;
 	public static Gear2903 gearSubsystem;
 	public static LIDAR2903 lidarSubsystem;
+	public static PickUp2903 pickupSubsystem;
 	
 	Command autonomousCommand;
 	SendableChooser autoChooser;

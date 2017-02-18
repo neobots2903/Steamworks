@@ -32,11 +32,13 @@ public class PickUp2903 extends Subsystem {
 
 	public void PickUp() {
 		//Pick balls up 
+		PickUpMotor.set(0.5);
 	}
 
 	
 
 	public void SpitOut() {
 		//spit balls out
+		PickUpMotor.set(-0.5);
 	}
 }
