@@ -19,16 +19,19 @@ import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveForDistanceTest;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
-import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 
+import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
+import org.usfirst.frc.team2903.robot.subsystems.Encoder2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
+import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
 import org.usfirst.frc.team2903.robot.subsystems.PickUp2903;
 import org.usfirst.frc.team2903.robot.subsystems.Pnuematics2903;
+import org.usfirst.frc.team2903.robot.subsystems.Climber2903;
 
 
 /**
@@ -48,6 +51,7 @@ public class Robot extends IterativeRobot {
 	public static Gear2903 gearSubsystem;
 	public static LIDAR2903 lidarSubsystem;
 	public static PickUp2903 pickupSubsystem;
+	public static Climber2903 climberSubsystem;
 	
 	Command autonomousCommand;
 	SendableChooser autoChooser;
@@ -73,6 +77,7 @@ public class Robot extends IterativeRobot {
 		gyroSubsystem = new Gyro2903(gyroType);
 		minipidSubsystem = new MiniPID2903(3.5, 0, 0);
 		gearSubsystem = new Gear2903();
+		climberSubsystem = new Climber2903();
 		lidarSubsystem = new LIDAR2903(lidarPort);
 		
 		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
