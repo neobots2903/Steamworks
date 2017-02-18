@@ -15,7 +15,7 @@ public class RobotMap {
 	public static int LeftBottomMotor = 4;
 
 
-	//public static int climbingMotor = 35
+	
 
 	
 	// shooter motor

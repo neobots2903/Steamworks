@@ -41,4 +41,8 @@ public class Climber2903 extends Subsystem {
 		//spit balls out
 		ClimberMotor.set(-1);
 	}
+	
+	public void StopLift(){
+		ClimberMotor.set(0);
+	}
 }

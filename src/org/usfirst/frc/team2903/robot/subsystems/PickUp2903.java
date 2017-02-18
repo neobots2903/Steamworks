@@ -41,4 +41,9 @@ public class PickUp2903 extends Subsystem {
 		//spit balls out
 		PickUpMotor.set(-0.5);
 	}
+	
+	public void StopPickUp() {
+		//spit balls out
+		PickUpMotor.set(0);
+	}
 }

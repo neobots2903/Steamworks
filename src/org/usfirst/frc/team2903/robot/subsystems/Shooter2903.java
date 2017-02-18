@@ -36,19 +36,14 @@ public class Shooter2903 extends Subsystem {
 
 	}
 
-	public void selectGoalMode(boolean highGoal) {
-
-	}
-
 	public void shoot() {
 		ShootMotor.set(0.5);
 	}
-
-	public void enablePickupMode() {
-
+	
+	public void StopShoot() {
+		//spit balls out
+		ShootMotor.set(0);
 	}
 
-	public void disableShooter() {
-
-	}
+	
 }

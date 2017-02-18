@@ -75,7 +75,7 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setEncPosition(absolutePosition);		
 		
 		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		leftFrontMotor.changeControlMode(TalonControlMode.Follower);
+		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
 		rightRearMotor.changeControlMode(TalonControlMode.Follower);
 		leftRearMotor.changeControlMode(TalonControlMode.Follower);
 		

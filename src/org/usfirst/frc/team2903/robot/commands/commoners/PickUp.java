@@ -14,7 +14,7 @@ public class PickUp extends Command{
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-		Robot.shooterSubsystem.enablePickupMode();
+		//Robot.shooterSubsystem.enablePickupMode();
 	}
 
 	@Override
