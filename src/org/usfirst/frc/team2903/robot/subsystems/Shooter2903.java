@@ -40,7 +40,8 @@ public class Shooter2903 extends Subsystem {
 
 	}
 
-	public void enableLowGoalMode() {
+	public void shoot() {
+		ShootMotor.set(0.5);
 	}
 
 	public void enablePickupMode() {
