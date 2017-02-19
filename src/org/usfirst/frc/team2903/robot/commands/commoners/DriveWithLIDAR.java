@@ -4,6 +4,7 @@ import org.usfirst.frc.team2903.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public  class DriveWithLIDAR extends Command{
 	Timer timer = new Timer();
@@ -20,6 +21,7 @@ public  class DriveWithLIDAR extends Command{
 	protected void initialize(){
 		//TODO Auto-generated method stub
 		Robot.lidarSubsystem.start();
+		SmartDashboard.putNumber("LIDAR Distance From Object", distanceFromWall);
 		timer.reset();
 		timer.start();
 	}

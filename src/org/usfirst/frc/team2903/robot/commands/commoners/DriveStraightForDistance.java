@@ -32,8 +32,8 @@ public class DriveStraightForDistance extends Command {
 		requires(Robot.driveSubsystem);
 		
 		Distance = distance;
-		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetCount());
-		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetCount();
+		CurrentRightEncoderPos = (Robot.driveSubsystem.rightGetCount());
+		CurrentLeftEncoderPos = Math.abs(Robot.driveSubsystem.leftGetCount());
 		TargetEncoderPos =  distance * (int) COUNTS_PER_INCH + CurrentRightEncoderPos; 
 		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
@@ -51,10 +51,10 @@ public class DriveStraightForDistance extends Command {
 		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetCount());
 		CurrentLeftEncoderPos = Math.abs(Robot.driveSubsystem.leftGetCount());
 		TargetEncoderPos =  Distance * (int) COUNTS_PER_INCH + CurrentRightEncoderPos; 
-		SmartDashboard.putNumber("Right init", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("Left init", CurrentLeftEncoderPos);
-		SmartDashboard.putNumber("DFINIT distance", Distance);
-		SmartDashboard.putNumber("DFINITTEP", TargetEncoderPos);
+//		SmartDashboard.putNumber("Right init", CurrentRightEncoderPos);
+//		SmartDashboard.putNumber("Left init", CurrentLeftEncoderPos);
+//		SmartDashboard.putNumber("DFINIT distance", Distance);
+//		SmartDashboard.putNumber("DFINITTEP", TargetEncoderPos);
 
 
 	}
@@ -69,10 +69,10 @@ public class DriveStraightForDistance extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetCount());
-		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetCount();
-		SmartDashboard.putNumber("current right position",CurrentRightEncoderPos);
-		SmartDashboard.putNumber("current left position",CurrentLeftEncoderPos);
+		CurrentRightEncoderPos = (Robot.driveSubsystem.rightGetCount());
+		CurrentLeftEncoderPos = Math.abs(Robot.driveSubsystem.leftGetCount());
+//		SmartDashboard.putNumber("current right position",CurrentRightEncoderPos);
+//		SmartDashboard.putNumber("current left position",CurrentLeftEncoderPos);
 		SmartDashboard.putNumber("target position",TargetEncoderPos);
 		if (CurrentRightEncoderPos >= TargetEncoderPos){
 			Robot.driveSubsystem.arcadeDrive(0, 0);

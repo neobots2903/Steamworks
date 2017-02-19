@@ -23,7 +23,7 @@ public class Drive2903 extends Subsystem {
 
 	static final double		PI						= 3.14159;
     static final double     COUNTS_PER_MOTOR_REV    = 256 ;    // eg: Grayhill 61R256
-    static final double     DRIVE_GEAR_REDUCTION    = 3.0 ;     // This is < 1.0 if geared UP
+    static final double     DRIVE_GEAR_REDUCTION    = 0.3 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             												(WHEEL_DIAMETER_INCHES * PI);
@@ -74,12 +74,13 @@ public class Drive2903 extends Subsystem {
 		absolutePosition = rightFrontMotor.getPulseWidthPosition() & 0xFFF;
 		rightFrontMotor.setEncPosition(absolutePosition);		
 		
+		
 		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
 		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		rightRearMotor.changeControlMode(TalonControlMode.Follower);
-		leftRearMotor.changeControlMode(TalonControlMode.Follower);
+		rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
+		leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
 		
-		// have the other motors follow the rightFrontMotor
+		// have the rear motors follow the ones in front
 		leftRearMotor.set(leftFrontMotor.getDeviceID());
 		rightRearMotor.set(rightFrontMotor.getDeviceID());
 		
@@ -93,10 +94,10 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rightFrontMotor.reverseSensor(true);
 		rightFrontMotor.configEncoderCodesPerRev(256);
-		leftFrontMotor.setFeedbackDevice(FeedbackDevice.PulseWidth);
+		leftFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		leftFrontMotor.reverseSensor(false);
 		leftFrontMotor.configEncoderCodesPerRev(256);
-		SmartDashboard.putNumber("blah", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
+		SmartDashboard.putNumber("Feedback Status", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
 		
 		// configure the output
 		rightFrontMotor.configNominalOutputVoltage(+0f, -0f);
@@ -172,10 +173,13 @@ public class Drive2903 extends Subsystem {
 	   * @param rightSpeed    The value of the right stick.
 	   */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		SmartDashboard.putNumber("right pinA status", rightFrontMotor.getPinStateQuadA());
-		SmartDashboard.putNumber("right pinB status", rightFrontMotor.getPinStateQuadB());
-		SmartDashboard.putNumber("left pinA status", leftFrontMotor.getPinStateQuadA());
-		SmartDashboard.putNumber("left pinB status", leftFrontMotor.getPinStateQuadB());
+//		SmartDashboard.putNumber("right pinA status", rightFrontMotor.getPinStateQuadA());
+//		SmartDashboard.putNumber("right pinB status", rightFrontMotor.getPinStateQuadB());
+//		SmartDashboard.putNumber("left pinA status", leftFrontMotor.getPinStateQuadA());
+//		SmartDashboard.putNumber("left pinB status", leftFrontMotor.getPinStateQuadB());
+		SmartDashboard.putNumber("Left Encoder", leftFrontMotor.getEncPosition());
+		SmartDashboard.putNumber("Right Encoder", rightFrontMotor.getEncPosition());
+		
 		robotDrive.tankDrive(leftSpeed, rightSpeed);
 	}
 

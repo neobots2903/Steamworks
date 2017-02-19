@@ -18,6 +18,7 @@ import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightForDistanc
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveForDistanceTest;
+import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
@@ -29,6 +30,10 @@ import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
+
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
+
 import org.usfirst.frc.team2903.robot.subsystems.PickUp2903;
 import org.usfirst.frc.team2903.robot.subsystems.Pnuematics2903;
 import org.usfirst.frc.team2903.robot.subsystems.Climber2903;
@@ -43,6 +48,11 @@ import org.usfirst.frc.team2903.robot.subsystems.Climber2903;
  */
 public class Robot extends IterativeRobot {
 
+//	CANTalon leftFrontMotor;
+//	CANTalon leftRearMotor;
+//	CANTalon rightFrontMotor;
+//	CANTalon rightRearMotor;
+	
 	public static Drive2903 driveSubsystem;
 	public static Shooter2903 shooterSubsystem;
 	public static Gyro2903 gyroSubsystem;
@@ -85,19 +95,22 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
 		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
 		SmartDashboard.putNumber("kD", minipidSubsystem.getD());
+		
+		SmartDashboard.putNumber("LIDAR Distance From Object", 0);
 
 //		cameraSubsystem = new CameraVision2903();
 
 //		shooterSubsystem = new Shooter2903();
 		
 		autoChooser = new SendableChooser();
-		try {
-			autoChooser.addDefault("DriveForDistanceTest", new DriveForDistanceTest());
-		} catch (InterruptedException e) {
+		//try {
+			autoChooser.addDefault("DriveWithLIDAR", new DriveWithLIDAR());
+		//} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		autoChooser.addObject("DriveForward", new DriveStraightForDistance(12));
+		//	e.printStackTrace();
+		//}
+		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
+		autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
 		SmartDashboard.putData("AutoChooser", autoChooser);
@@ -118,6 +131,11 @@ public class Robot extends IterativeRobot {
 		// schedule the autonomous command (example)
 			autonomousCommand = (Command) autoChooser.getSelected();
 			autonomousCommand.start();
+			
+//			rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+//			leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+//			rightRearMotor.changeControlMode(TalonControlMode.Follower);
+//			leftRearMotor.changeControlMode(TalonControlMode.Follower);
 	}
 
 	/**
@@ -134,6 +152,11 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+		
+//		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+//		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+//		rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
+//		leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
 	}
 
 	/**

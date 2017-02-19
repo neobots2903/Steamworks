@@ -78,14 +78,16 @@ public class Teleop extends Command {
 			Robot.climberSubsystem.StopLift();
 		}
 		
-		//Operator
-		if (Robot.joyOp.getRawButton(5)){
+		if (Robot.joy1.getRawButton(5)){
 			Robot.gearSubsystem.openArms();
 		}
 		
-		if (Robot.joyOp.getRawButton(6)){
+		if (Robot.joy1.getRawButton(6)){
 			Robot.gearSubsystem.closeArms();
 		}
+		
+		//Operator
+	
 		
 		if (Robot.joyOp.getRawButton(5)) {
 			Robot.pickupSubsystem.PickUp();
@@ -100,6 +102,8 @@ public class Teleop extends Command {
 		
 		if (Robot.joyOp.getRawButton(1)) {
 			Robot.shooterSubsystem.shoot();
+		} else {
+			Robot.shooterSubsystem.StopShoot();
 		}
 		
 
