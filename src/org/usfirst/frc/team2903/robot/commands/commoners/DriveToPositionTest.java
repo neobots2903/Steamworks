@@ -53,8 +53,8 @@ public class DriveToPositionTest extends Command {
 		TargetEncoderPos =  (Distance * (int) COUNTS_PER_INCH) + Math.abs(Robot.driveSubsystem.rightGetRawCount()); 
 		
 		SmartDashboard.putNumber("Right ", Math.abs(Robot.driveSubsystem.rightGetRawCount()));
-		SmartDashboard.putNumber("DF distance", Distance);
-		SmartDashboard.putNumber("DF Target", TargetEncoderPos);
+		SmartDashboard.putNumber("DP distance", Distance);
+		SmartDashboard.putNumber("DP Target", TargetEncoderPos);
 
 		HighLimit = TargetEncoderPos + ErrorLimit;
 		LowLimit = TargetEncoderPos - ErrorLimit;
@@ -65,8 +65,7 @@ public class DriveToPositionTest extends Command {
 
 	@Override
 	protected void execute() {
-		SmartDashboard.putNumber("current right position", Math.abs(Robot.driveSubsystem.rightGetRawCount()));
-		SmartDashboard.putNumber("target position",TargetEncoderPos);
+		SmartDashboard.putNumber("DP curpos", Math.abs(Robot.driveSubsystem.rightGetRawCount()));
 	}
 
 	@Override
