@@ -2,6 +2,8 @@ package org.usfirst.frc.team2903.robot.commands;
 
 import org.usfirst.frc.team2903.robot.Robot;
 
+import com.ctre.CANTalon.TalonControlMode;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -21,6 +23,8 @@ public class Teleop extends Command {
 
 	protected void initialize() {
 		// Robot.elevatorSubsystem.encoder.reset();
+		Robot.driveSubsystem.setTeleopMode();
+
 	}
 	
 	/*
@@ -64,30 +68,24 @@ public class Teleop extends Command {
 			Robot.driveSubsystem.changeToLowGear();
 		}
 		
-		if (Robot.joy1.getRawButton(7)) {
+		if (Robot.joy1.getRawButton(8)) {
 			Robot.climberSubsystem.LiftOff();
 		}
 		else{
 			Robot.climberSubsystem.StopLift();
 		}
-		
-		if (Robot.joy1.getRawButton(8)) {
-			Robot.climberSubsystem.Fall();
-		}
-		else{
-			Robot.climberSubsystem.StopLift();
-		}
-		
-		if (Robot.joy1.getRawButton(5)){
+	
+	
+		//Operator
+	
+		if (Robot.joyOp.getRawButton(3)){
 			Robot.gearSubsystem.openArms();
 		}
 		
-		if (Robot.joy1.getRawButton(6)){
+		if (Robot.joyOp.getRawButton(2)){
 			Robot.gearSubsystem.closeArms();
 		}
 		
-		//Operator
-	
 		
 		if (Robot.joyOp.getRawButton(5)) {
 			Robot.pickupSubsystem.PickUp();

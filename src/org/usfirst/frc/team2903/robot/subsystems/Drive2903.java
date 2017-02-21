@@ -22,8 +22,8 @@ public class Drive2903 extends Subsystem {
 	CANTalon rightRearMotor;
 
 	static final double		PI						= 3.14159;
-    static final double     COUNTS_PER_MOTOR_REV    = 256 ;    // eg: Grayhill 61R256
-    static final double     DRIVE_GEAR_REDUCTION    = 0.3 ;     // This is < 1.0 if geared UP
+    static final double     COUNTS_PER_MOTOR_REV    = 1024 ;    // eg: Grayhill 61R256
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             												(WHEEL_DIAMETER_INCHES * PI);
@@ -75,14 +75,11 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setEncPosition(absolutePosition);		
 		
 		
-		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
-		leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
+//		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+//		leftFrontMotor.changeControlMode(TalonControlMode.Follower);
+//		rightRearMotor.changeControlMode(TalonControlMode.Follower);
+//		leftRearMotor.changeControlMode(TalonControlMode.Follower);
 		
-		// have the rear motors follow the ones in front
-		leftRearMotor.set(leftFrontMotor.getDeviceID());
-		rightRearMotor.set(rightFrontMotor.getDeviceID());
 		
 		// disable timeout safety on drives
 		rightFrontMotor.setSafetyEnabled(false);
@@ -173,12 +170,8 @@ public class Drive2903 extends Subsystem {
 	   * @param rightSpeed    The value of the right stick.
 	   */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-//		SmartDashboard.putNumber("right pinA status", rightFrontMotor.getPinStateQuadA());
-//		SmartDashboard.putNumber("right pinB status", rightFrontMotor.getPinStateQuadB());
-//		SmartDashboard.putNumber("left pinA status", leftFrontMotor.getPinStateQuadA());
-//		SmartDashboard.putNumber("left pinB status", leftFrontMotor.getPinStateQuadB());
-		SmartDashboard.putNumber("Left Encoder", leftFrontMotor.getEncPosition());
-		SmartDashboard.putNumber("Right Encoder", rightFrontMotor.getEncPosition());
+		SmartDashboard.putNumber("Left Encoder", leftGetRawCount());
+		SmartDashboard.putNumber("Right Encoder", rightGetRawCount());
 		
 		robotDrive.tankDrive(leftSpeed, rightSpeed);
 	}
@@ -189,6 +182,51 @@ public class Drive2903 extends Subsystem {
 
 	}
 
+	public void setAutoMode()
+	{
+		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
+		Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
+		
+		// have the motors follow rightFrontMotor
+		rightFrontMotor.set(0);
+		leftFrontMotor.set(0);
+		leftRearMotor.set(leftFrontMotor.getDeviceID());
+		rightRearMotor.set(rightFrontMotor.getDeviceID());
+
+
+	}
+	
+	public void setAutoPositionMode()
+	{
+		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.Position);
+		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Position);
+		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
+		Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
+		
+		// have the motors follow rightFrontMotor
+		rightFrontMotor.set(0);
+		leftFrontMotor.set(0);
+		leftRearMotor.set(leftFrontMotor.getDeviceID());
+		rightRearMotor.set(rightFrontMotor.getDeviceID());
+
+
+	}
+
+	
+	public void setTeleopMode() {
+		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
+		Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
+		
+		leftRearMotor.set(0);
+		rightRearMotor.set(0);
+		leftFrontMotor.set(0);
+		rightFrontMotor.set(0);
+
+	}
 	public void setPosition(long distanceToDrive) {
 		// TODO Auto-generated method stub
 		rightFrontMotor.changeControlMode(TalonControlMode.Position);
@@ -215,6 +253,12 @@ public class Drive2903 extends Subsystem {
 		  Robot.pnuematicsSubsystem.lowGear();
 	  }
 	  
+	  public void driveReset() {
+		  rightFrontMotor.setPosition(0);
+		  leftFrontMotor.setPosition(0);
+		  rightFrontMotor.setEncPosition(0);
+	  }
+	  
 		public int rightGetCount() {
 			return (int)rightFrontMotor.getPosition();
 		}
@@ -228,7 +272,7 @@ public class Drive2903 extends Subsystem {
 				return (int)leftFrontMotor.getPosition();
 		}
 
-		public int leftGetRawcount() {
+		public int leftGetRawCount() {
 				return (int)leftFrontMotor.getEncPosition();
 		}
 

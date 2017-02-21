@@ -8,15 +8,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveStraightForDistance extends Command {
 
 	// TODO update for two encoders with average of the two and gyro 
-	
+
+	double HighLimit;
+	double LowLimit;
+	double ErrorLimit = 6;
+
 	int TargetEncoderPos;
 	int CurrentRightEncoderPos;
 	int CurrentLeftEncoderPos;
-	int Distance;
+	private int Distance;
 	
+	double MinMotorSpeed = 0.3;
+
 	static final double		PI						= 3.14159;
-	static final double COUNTS_PER_MOTOR_REV = 256; //Quad Encoder
-	static final double DRIVE_GEAR_REDUCTION = 0.11; 
+	static final double COUNTS_PER_MOTOR_REV = 1024; //Quad Encoder
+	static final double DRIVE_GEAR_REDUCTION = 1.0; 
 	static final double WHEEL_DIAMETER_INCHES = 4.0;
 	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / 
 			(WHEEL_DIAMETER_INCHES * 3.141595));
@@ -30,16 +36,9 @@ public class DriveStraightForDistance extends Command {
 		super("DriveForward");
 		
 		requires(Robot.driveSubsystem);
-		
+		Robot.driveSubsystem.driveReset();
+		Robot.driveSubsystem.setAutoMode();
 		Distance = distance;
-		CurrentRightEncoderPos = (Robot.driveSubsystem.rightGetCount());
-		CurrentLeftEncoderPos = Math.abs(Robot.driveSubsystem.leftGetCount());
-		TargetEncoderPos =  distance * (int) COUNTS_PER_INCH + CurrentRightEncoderPos; 
-		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
-		SmartDashboard.putNumber("DF distance", distance);
-		SmartDashboard.putNumber("DFTEP", TargetEncoderPos);
-		 		
 	}
 	
 	
@@ -48,46 +47,94 @@ public class DriveStraightForDistance extends Command {
 		// TODO Auto-generated method stub
 		//Robot.driveSubsystem.setPosition(TargetEncoderPos);
 
-		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetCount());
-		CurrentLeftEncoderPos = Math.abs(Robot.driveSubsystem.leftGetCount());
-		TargetEncoderPos =  Distance * (int) COUNTS_PER_INCH + CurrentRightEncoderPos; 
-//		SmartDashboard.putNumber("Right init", CurrentRightEncoderPos);
-//		SmartDashboard.putNumber("Left init", CurrentLeftEncoderPos);
-//		SmartDashboard.putNumber("DFINIT distance", Distance);
-//		SmartDashboard.putNumber("DFINITTEP", TargetEncoderPos);
+		Robot.driveSubsystem.driveReset();
+		Robot.driveSubsystem.setAutoMode();
+		
+		
+		// get current encoder counts
+		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+		CurrentLeftEncoderPos = Math.abs(Robot.driveSubsystem.leftGetRawCount());
+		
+		// calculate target position
+		TargetEncoderPos =  (Distance * (int) COUNTS_PER_INCH) + Math.abs(Robot.driveSubsystem.rightGetRawCount()); 
+		
+		SmartDashboard.putNumber("Right ", Math.abs(Robot.driveSubsystem.rightGetRawCount()));
+		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
+		SmartDashboard.putNumber("DF distance", Distance);
+		SmartDashboard.putNumber("DF Target", TargetEncoderPos);
 
+		// setup the PID system
+		Robot.minipidSubsystem.reset();
+		Robot.minipidSubsystem.setSetpoint(TargetEncoderPos);
+		Robot.minipidSubsystem.setOutputLimits(-80, 80);
+
+		HighLimit = TargetEncoderPos + ErrorLimit;
+		LowLimit = TargetEncoderPos - ErrorLimit;
+		
+		Robot.minipidSubsystem.setP(0.2);
+		Robot.minipidSubsystem.setI(0);
+		Robot.minipidSubsystem.setD(0);
+		
+	
+		
 
 	}
 
+	public int getDistance() {
+		return Distance;
+	}
+
+
+	public void setDistance(int distance) {
+		Distance = distance;
+	}
+
+
 	@Override
 	protected void execute() {
+		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+		double MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
+		
+		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed)
+			MotorSpeed = MinMotorSpeed;
+		else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0)
+			MotorSpeed = -MinMotorSpeed;
+		
 		// TODO Auto-generated method stub
-		Robot.driveSubsystem.tankDrive(0.5, -0.5);
+		Robot.driveSubsystem.tankDrive(MotorSpeed, -MotorSpeed);
 
 	}
 
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		CurrentRightEncoderPos = (Robot.driveSubsystem.rightGetCount());
-		CurrentLeftEncoderPos = Math.abs(Robot.driveSubsystem.leftGetCount());
-//		SmartDashboard.putNumber("current right position",CurrentRightEncoderPos);
+		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
+		CurrentLeftEncoderPos = Math.abs(Robot.driveSubsystem.leftGetRawCount());
+		
+		SmartDashboard.putNumber("current right position", Math.abs(Robot.driveSubsystem.rightGetRawCount()));
 //		SmartDashboard.putNumber("current left position",CurrentLeftEncoderPos);
 		SmartDashboard.putNumber("target position",TargetEncoderPos);
-		if (CurrentRightEncoderPos >= TargetEncoderPos){
-			Robot.driveSubsystem.arcadeDrive(0, 0);
+		
+		if (Math.abs(Robot.driveSubsystem.rightGetRawCount()) >= LowLimit && Math.abs(Robot.driveSubsystem.rightGetRawCount()) <= HighLimit ) 
 			return true;
-		}
-		return false;
+		else
+			return false;
+
+//		if (Math.abs(Robot.driveSubsystem.rightGetRawCount()) >= TargetEncoderPos){
+//			Robot.driveSubsystem.arcadeDrive(0, 0);
+//			return true;
+//		}
+//		return false;
 	}
 
 	@Override
 	protected void end() {
 		Robot.driveSubsystem.arcadeDrive(0, 0);
-		CurrentRightEncoderPos = 0;
-		TargetEncoderPos = 0;
+//		CurrentRightEncoderPos = 0;
+//		TargetEncoderPos = 0;
 		// TODO Auto-generated method stub
-
+		//putting drives back into teleop mode
+		Robot.driveSubsystem.setTeleopMode();
 	}
 
 	@Override

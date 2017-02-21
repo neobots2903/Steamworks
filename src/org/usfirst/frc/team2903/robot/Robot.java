@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightForDistance;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
+import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveForDistanceTest;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
@@ -103,13 +104,15 @@ public class Robot extends IterativeRobot {
 //		shooterSubsystem = new Shooter2903();
 		
 		autoChooser = new SendableChooser();
-		//try {
-			autoChooser.addDefault("DriveWithLIDAR", new DriveWithLIDAR());
-		//} catch (InterruptedException e) {
+		try {
+			autoChooser.addDefault("DriveForDistanceTest", new DriveForDistanceTest());
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}
+			e.printStackTrace();
+		}
 		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
+		autoChooser.addObject("GearAim", new GearAim());
+		autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
 		autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
