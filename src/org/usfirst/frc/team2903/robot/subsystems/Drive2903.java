@@ -31,20 +31,20 @@ public class Drive2903 extends Subsystem {
     static final double 	CM_PER_INCH             = 2.54;
     static final double 	COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
     													((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
-	
-
-
-	public enum DriveType {
-		ArcadeMode1Joystick,
-		// ArcadeMode2Joystick,
-		ArcadeModeJoyOp,
-		// ArcadeModeJoyOp2,
-		// TankDriveJoysticks,
-		// TankDriveJoyOp
-	}
-
-	// drive mode selection
-	public DriveType driveType;
+    
+    static final double 	TARGET_SPEED			= 1500;		// revolutions per minute
+    static final double 	MIN_PER_SEC				= 0.0167;  // minute to second ratio
+    static final double		SEC_PER_TVE				= 0.1;	   // Seconds per 10 velocity measurement periods (100ms)
+    static final double 	NATIVE_UNITS_PER_TVE	= TARGET_SPEED * MIN_PER_SEC * SEC_PER_TVE * COUNTS_PER_MOTOR_REV;
+    static final double		FULL_FORWARD			= 255;
+    
+    // TARGET_SPEED needs to be determined from the maximum speed from the self-test display
+    // while running in teleop.  We probably only want to use 80% of that speed to make sure 
+    // that we can achieve the value
+    
+    // F-GAIN = FULL FORWARD / NATIVE_UNITS_PER_TVE
+    
+    // FULL FORWARD comes from the SELF-TEST for Motor Controller 1 or 3
 
 	public RobotDrive robotDrive;
 	
@@ -64,21 +64,11 @@ public class Drive2903 extends Subsystem {
 		
 		robotDrive = new RobotDrive(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
 		
-		// set the drive type
-		driveType = DriveType.ArcadeMode1Joystick;
-
-		
 		// talon position set up 
 		int absolutePosition = leftFrontMotor.getPulseWidthPosition() & 0xFFF;
 		leftFrontMotor.setEncPosition(absolutePosition);
 		absolutePosition = rightFrontMotor.getPulseWidthPosition() & 0xFFF;
 		rightFrontMotor.setEncPosition(absolutePosition);		
-		
-		
-//		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-//		leftFrontMotor.changeControlMode(TalonControlMode.Follower);
-//		rightRearMotor.changeControlMode(TalonControlMode.Follower);
-//		leftRearMotor.changeControlMode(TalonControlMode.Follower);
 		
 		
 		// disable timeout safety on drives
@@ -102,22 +92,6 @@ public class Drive2903 extends Subsystem {
 		
 		leftFrontMotor.configNominalOutputVoltage(+0f, -0f);
 		leftFrontMotor.configPeakOutputVoltage(+12f, -12f);
-		
-		// I found that you do variable = SmartDashboard.getNumber("Enter a value: ");  
-		// will allow you to set values into the running program.  Which means we could 
-		// dynamically adjust the below values for PID  or for our miniPID when gyro turning.
-		
-//		rightFrontMotor.setProfile(0);
-//		rightFrontMotor.setF(0.0);
-//		rightFrontMotor.setP(0.1);
-//		rightFrontMotor.setI(0.0);
-//		rightFrontMotor.setD(0.0);
-//		
-//		leftFrontMotor.setProfile(0);
-//		leftFrontMotor.setF(0.0);
-//		leftFrontMotor.setP(0.1);
-//		leftFrontMotor.setI(0.0);
-//		leftFrontMotor.setD(0.0);
 	}
 
 	  /**
@@ -151,13 +125,13 @@ public class Drive2903 extends Subsystem {
 		}
 	}
 
-//	  /**
-//	   * Arcade drive implements single stick driving. This function lets you directly provide
-//	   * joystick values from any source.
-//	   *
-//	   * @param forward     The value to use for forwards/backwards
-//	   * @param turn        The value to use for the rotate right/left
-//	   */
+	  /**
+	   * Arcade drive implements single stick driving. This function lets you directly provide
+	   * joystick values from any source.
+	   *
+	   * @param forward     The value to use for forwards/backwards
+	   * @param turn        The value to use for the rotate right/left
+	   */
 	public void arcadeDrive(double forward, double turn) {
 		robotDrive.arcadeDrive(forward, turn);
 	}
@@ -194,26 +168,36 @@ public class Drive2903 extends Subsystem {
 		leftFrontMotor.set(0);
 		leftRearMotor.set(leftFrontMotor.getDeviceID());
 		rightRearMotor.set(rightFrontMotor.getDeviceID());
-
-
 	}
 	
 	public void setAutoPositionMode()
 	{
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.Position);
-		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Position);
+		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Follower);
 		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
 		Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
 		
 		// have the motors follow rightFrontMotor
 		rightFrontMotor.set(0);
-		leftFrontMotor.set(0);
-		leftRearMotor.set(leftFrontMotor.getDeviceID());
+		leftRearMotor.set(rightFrontMotor.getDeviceID());
+		leftRearMotor.set(rightFrontMotor.getDeviceID());
 		rightRearMotor.set(rightFrontMotor.getDeviceID());
 
+		// Enable PID control on the talon
+		rightFrontMotor.enableControl(); 		
+		
+		//Reset the encoder to zero as its current position
+		rightFrontMotor.setPosition(0);
 
+		/* set closed loop gains in slot0 */
+		rightFrontMotor.setProfile(0);
+		rightFrontMotor.setF(FULL_FORWARD / NATIVE_UNITS_PER_TVE);  // this needs to be FULL-FOWARD / NATIVE UNITS)
+		rightFrontMotor.setP(0);
+		rightFrontMotor.setI(0);
+		rightFrontMotor.setD(0);
+		rightFrontMotor.setMotionMagicCruiseVelocity(0); 
+		rightFrontMotor.setMotionMagicAcceleration(0);
 	}
-
 	
 	public void setTeleopMode() {
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
@@ -230,10 +214,7 @@ public class Drive2903 extends Subsystem {
 	public void setPosition(long distanceToDrive) {
 		// TODO Auto-generated method stub
 		rightFrontMotor.changeControlMode(TalonControlMode.Position);
-		rightFrontMotor.set(-distanceToDrive);
-		leftFrontMotor.changeControlMode(TalonControlMode.Position);
-		leftFrontMotor.set(distanceToDrive);
-
+		rightFrontMotor.set(distanceToDrive);
 	}
 
 	public void setVelocity(double velocity) {
@@ -244,7 +225,6 @@ public class Drive2903 extends Subsystem {
 	}
 
 	  //Low to High gear
-	  
 	  public void changeToHighGear (){
 		  Robot.pnuematicsSubsystem.highGear();
 	  }
@@ -257,6 +237,7 @@ public class Drive2903 extends Subsystem {
 		  rightFrontMotor.setPosition(0);
 		  leftFrontMotor.setPosition(0);
 		  rightFrontMotor.setEncPosition(0);
+		  leftFrontMotor.setEncPosition(0);
 	  }
 	  
 		public int rightGetCount() {

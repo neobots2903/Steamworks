@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2903.robot.commands.Teleop;
+import org.usfirst.frc.team2903.robot.commands.commoners.DriveToPositionTest;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
@@ -110,6 +111,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
 		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
+		autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
 		SmartDashboard.putData("AutoChooser", autoChooser);
 
 		teleopCommand = new Teleop();
