@@ -16,7 +16,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.InterruptableSensorBase;
@@ -125,7 +124,7 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, LiveWind
   private AtomicBoolean m_freed = new AtomicBoolean(false);
 
   private SPI m_spi;
-  private DigitalOutput m_reset;
+  //private DigitalOutput m_reset;
   private DigitalInput m_interrupt;
 
   // Sample from the IMU
@@ -139,8 +138,8 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, LiveWind
     public double mag_x;
     public double mag_y;
     public double mag_z;
-    public double baro;
-    public double temp;
+//    public double baro;
+//    public double temp;
     public double dt;
 
     // Swap axis as appropriate for yaw axis selection
@@ -455,8 +454,8 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, LiveWind
           sample.mag_x = mag_x;
           sample.mag_y = mag_y;
           sample.mag_z = mag_z;
-          sample.baro = baro;
-          sample.temp = temp;
+//          sample.baro = baro;
+//          sample.temp = temp;
           sample.dt = dt;
           m_samples_put_index += 1;
           if (m_samples_put_index == m_samples.length) {

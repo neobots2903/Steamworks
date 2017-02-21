@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2903.robot.commands.Teleop;
-import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightForDistance;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
@@ -24,16 +23,11 @@ import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
-import org.usfirst.frc.team2903.robot.subsystems.Encoder2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
-import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
-
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
 
 import org.usfirst.frc.team2903.robot.subsystems.PickUp2903;
 import org.usfirst.frc.team2903.robot.subsystems.Pnuematics2903;
@@ -65,7 +59,7 @@ public class Robot extends IterativeRobot {
 	public static Climber2903 climberSubsystem;
 	
 	Command autonomousCommand;
-	SendableChooser autoChooser;
+	SendableChooser<Command> autoChooser;
 	Command teleopCommand;
 	public static CameraVision2903 cameraSubsystem;
 
@@ -103,7 +97,7 @@ public class Robot extends IterativeRobot {
 
 //		shooterSubsystem = new Shooter2903();
 		
-		autoChooser = new SendableChooser();
+		autoChooser = new SendableChooser<Command>();
 		try {
 			autoChooser.addDefault("DriveForDistanceTest", new DriveForDistanceTest());
 		} catch (InterruptedException e) {

@@ -71,8 +71,6 @@ public class TurnWithGyro extends Command{
 	@Override
 	protected void execute() {
 		double gyroAngle = (Robot.gyroSubsystem.GyroPosition()*-1.0);
-		boolean turnLeft = false;
-		
 		MotorSpeed = Robot.minipidSubsystem.getOutput(gyroAngle, TargetAngle) / 100;
 		
 		SmartDashboard.putNumber("TurnWithGyro", gyroAngle);

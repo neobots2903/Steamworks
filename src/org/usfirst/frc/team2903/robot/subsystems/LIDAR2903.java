@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.Timer;
 		private final int LIDAR_DISTANCE_REGISTER = 0x8f;
 		
 		private final int RESET_FPGA_CMD = 0x00;
-		private final int DISTANCE_NOBIAS_CMD = 0x03;
 		private final int DISTANCE_BIAS_CMD = 0x04;
 		
 		public LIDAR2903(Port port) {
