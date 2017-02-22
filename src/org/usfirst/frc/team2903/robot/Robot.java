@@ -21,7 +21,7 @@ import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveForDistanceTest;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
-
+import org.usfirst.frc.team2903.robot.commands.groups.MiddleGear;
 import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
@@ -102,18 +102,19 @@ public class Robot extends IterativeRobot {
 		try {
 			autoChooser.addDefault("DriveToPosition", new DriveToPositionTest(12));
 			autoChooser.addObject("DriveForDistanceTest", new DriveForDistanceTest());
+			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
+			autoChooser.addObject("GearAim", new GearAim());
+			autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
+			autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
+			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
+			autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
+			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
+			autoChooser.addObject("MiddleGear", new MiddleGear()); 
+			SmartDashboard.putData("AutoChooser", autoChooser);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-		autoChooser.addObject("GearAim", new GearAim());
-		autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
-		autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
-		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
-		autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
-		SmartDashboard.putData("AutoChooser", autoChooser);
 
 		teleopCommand = new Teleop();
 
