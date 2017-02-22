@@ -78,11 +78,11 @@ public class Teleop extends Command {
 		double shaker = Robot.joyOp.getY();
 		Robot.shooterSubsystem.shaker(shaker);
 		
-		if (Robot.joyOp.getRawButton(3)){
+		if (Robot.joyOp.getRawButton(2)){
 			Robot.gearSubsystem.openArms();
 		}
 		
-		if (Robot.joyOp.getRawButton(2)){
+		if (Robot.joyOp.getRawButton(3)){
 			Robot.gearSubsystem.closeArms();
 		}
 		

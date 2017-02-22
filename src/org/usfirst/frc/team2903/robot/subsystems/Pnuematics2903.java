@@ -19,7 +19,7 @@ public class Pnuematics2903 {
 		highGearShift.set(false);
 		lowGearShift.set(true);
 	}
-	public void openarms()
+	public void closearms()
 	{
 		if (gearArmsClosed.get()){
 			gearArmsClosed.set(false);
@@ -27,7 +27,7 @@ public class Pnuematics2903 {
 		}
 	}
 	
-	public void closearms()
+	public void openarms()
 	{
 		if (gearArmsOpen.get()){
 			gearArmsOpen.set(false);

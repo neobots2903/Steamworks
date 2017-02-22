@@ -6,11 +6,14 @@ package org.usfirst.frc.team2903.robot.commands.commoners;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 
+import edu.wpi.first.wpilibj.command.Command;
+
 /**
  * @author robotics
  *
  */
-public class DriveStraightWithGyro {
+public class DriveStraightWithGyro extends Command {
+	
 	public static void GyroPID(Drive2903 driveSubsystem, Gyro2903 gyroSubsystem) {
 		double targetAngle = 0;
 		double gyroAngle = gyroSubsystem.GyroPosition() % 360;
@@ -41,5 +44,11 @@ public class DriveStraightWithGyro {
 			
 		}
 
+	}
+
+	@Override
+	protected boolean isFinished() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
