@@ -23,7 +23,7 @@ public class Drive2903 extends Subsystem {
 
 	static final double		PI						= 3.14159;
     static final double     COUNTS_PER_MOTOR_REV    = 1024 ;    // eg: Grayhill 61R256
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
+    static final double     DRIVE_GEAR_REDUCTION    = 1.1 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             												(WHEEL_DIAMETER_INCHES * PI);
@@ -184,6 +184,15 @@ public class Drive2903 extends Subsystem {
 	
 	public void setAutoPositionMode()
 	{
+		Robot.driveSubsystem.rightFrontMotor.reset();
+		Robot.driveSubsystem.rightFrontMotor.enable();
+		Robot.driveSubsystem.rightRearMotor.reset();
+		Robot.driveSubsystem.rightRearMotor.enable();
+		Robot.driveSubsystem.leftFrontMotor.reset();
+		Robot.driveSubsystem.leftFrontMotor.enable();
+		Robot.driveSubsystem.leftRearMotor.reset();
+		Robot.driveSubsystem.leftRearMotor.enable();
+		
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.Position);
 		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Follower);
 		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
@@ -258,7 +267,7 @@ public class Drive2903 extends Subsystem {
 		}
 
 		public int rightGetRawCount() {
-			return (int)rightFrontMotor.getEncPosition() - lastRightRawCount;
+			return (int)rightFrontMotor.getEncPosition(); // - lastRightRawCount;
 		}
 
 
@@ -267,7 +276,7 @@ public class Drive2903 extends Subsystem {
 		}
 
 		public int leftGetRawCount() {
-				return (int)leftFrontMotor.getEncPosition() - lastLeftRawCount;
+				return (int)leftFrontMotor.getEncPosition(); // -lastLeftRawCount;
 		}
 
 		public void setLastRightRaw(int lastRawCount) {

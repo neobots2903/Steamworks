@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class MiddleGear extends CommandGroup{
 	
-	public MiddleGear(boolean Shoot) {
+	public MiddleGear() {
 		requires(Robot.driveSubsystem);
 		
 		addSequential(new DriveToPositionTest(78));
