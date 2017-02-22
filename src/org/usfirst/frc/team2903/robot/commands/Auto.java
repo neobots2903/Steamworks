@@ -67,9 +67,6 @@ public class Auto extends Command {
 		// drive the robot, only providing the turn speed
 		Robot.driveSubsystem.robotDrive.arcadeDrive(0,output);
 		//Robot.driveSubsystem.tankDrive(-output, output);
-		
-		// display the outptu speed on debug display
-		SmartDashboard.putNumber("auto output=", output);
 	}
 
 	/*

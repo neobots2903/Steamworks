@@ -92,7 +92,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
 		SmartDashboard.putNumber("kD", minipidSubsystem.getD());
 		
-		SmartDashboard.putNumber("LIDAR Distance From Object", 0);
+		SmartDashboard.putNumber("LIDAR Distance From Object", lidarSubsystem.getDistance());
 
 //		cameraSubsystem = new CameraVision2903();
 
@@ -100,7 +100,8 @@ public class Robot extends IterativeRobot {
 		
 		autoChooser = new SendableChooser<Command>();
 		try {
-			autoChooser.addDefault("DriveForDistanceTest", new DriveForDistanceTest());
+			autoChooser.addDefault("DriveToPosition", new DriveToPositionTest(12));
+			autoChooser.addObject("DriveForDistanceTest", new DriveForDistanceTest());
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

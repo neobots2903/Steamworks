@@ -18,8 +18,9 @@ public class RobotMap {
 	
 
 	
-	// shooter motor
+	// shooter mechanisim
 	public static int shootMotor = 5;
+	public static int shakeMotor = 8;
 	
 	
 	// Pick Up

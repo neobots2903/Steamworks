@@ -32,11 +32,11 @@ public class Drive2903 extends Subsystem {
     static final double 	COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
     													((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
     
-    static final double 	TARGET_SPEED			= 1500;		// revolutions per minute
+    static final double 	TARGET_SPEED			= 144;		// revolutions per minute
     static final double 	MIN_PER_SEC				= 0.0167;  // minute to second ratio
     static final double		SEC_PER_TVE				= 0.1;	   // Seconds per 10 velocity measurement periods (100ms)
     static final double 	NATIVE_UNITS_PER_TVE	= TARGET_SPEED * MIN_PER_SEC * SEC_PER_TVE * COUNTS_PER_MOTOR_REV;
-    static final double		FULL_FORWARD			= 255;
+    static final double		FULL_FORWARD			= 1023;
     
     // TARGET_SPEED needs to be determined from the maximum speed from the self-test display
     // while running in teleop.  We probably only want to use 80% of that speed to make sure 
@@ -168,6 +168,12 @@ public class Drive2903 extends Subsystem {
 		leftFrontMotor.set(0);
 		leftRearMotor.set(leftFrontMotor.getDeviceID());
 		rightRearMotor.set(rightFrontMotor.getDeviceID());
+		
+		//Reset the encoder to zero as its current position
+		rightFrontMotor.setPosition(0);
+		rightFrontMotor.setEncPosition(0);
+		leftFrontMotor.setPosition(0);
+		leftFrontMotor.setEncPosition(0);
 	}
 	
 	public void setAutoPositionMode()
@@ -188,6 +194,7 @@ public class Drive2903 extends Subsystem {
 		
 		//Reset the encoder to zero as its current position
 		rightFrontMotor.setPosition(0);
+		rightFrontMotor.setEncPosition(0);
 
 		/* set closed loop gains in slot0 */
 		rightFrontMotor.setProfile(0);

@@ -41,8 +41,6 @@ public class Teleop extends Command {
 		//Driver
 		double forward = Robot.joy1.getX();
 		double turn = Robot.joy1.getY();
-		SmartDashboard.putNumber("Forward", forward);
-		SmartDashboard.putNumber("Turn", turn);
 //		if (-errorTurn >= turn && turn <= errorTurn) {
 //			double angle = Robot.gyroSubsystem.GyroPosition() % circleDegrees;
 //			angle = angle / circleDegrees;

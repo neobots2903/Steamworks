@@ -12,6 +12,7 @@ public class Shooter2903 extends Subsystem {
 
 	// shooter and kicker talons
 	static CANTalon shootMotor;
+	static CANTalon shakeMotor;
 	// static CANTalon KickingMotor;
 
 	
@@ -46,9 +47,7 @@ public class Shooter2903 extends Subsystem {
 
 	public void shoot() {
 		shootMotor.set(0.62);
-		//if(ShootMotor.get() = optimalSpeed){
-		//	kick 
-		//}
+		shakeMotor.set(0.31);
 	}
 	
 	public void StopShoot() {
