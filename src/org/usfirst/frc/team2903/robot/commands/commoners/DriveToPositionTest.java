@@ -83,13 +83,14 @@ public class DriveToPositionTest extends Command {
 	@Override
 	protected void end() {
 		// stop the robot
+		Robot.driveSubsystem.setLastRightRaw(Robot.driveSubsystem.rightGetRawCount());
 		Robot.driveSubsystem.arcadeDrive(0, 0);
 	}
 
 	@Override
 	protected void interrupted() {
 		// stop the robot
-		Robot.driveSubsystem.arcadeDrive(0, 0);
+		end();
 	}
 
 }

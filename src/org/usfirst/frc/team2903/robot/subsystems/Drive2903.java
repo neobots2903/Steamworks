@@ -47,6 +47,8 @@ public class Drive2903 extends Subsystem {
     // FULL FORWARD comes from the SELF-TEST for Motor Controller 1 or 3
 
 	public RobotDrive robotDrive;
+	private int lastRightRawCount;
+	private int lastLeftRawCount;
 	
 	public Drive2903() {
 
@@ -92,6 +94,10 @@ public class Drive2903 extends Subsystem {
 		
 		leftFrontMotor.configNominalOutputVoltage(+0f, -0f);
 		leftFrontMotor.configPeakOutputVoltage(+12f, -12f);
+		
+		// Initialize the raw counts
+		lastRightRawCount = 0;
+		lastLeftRawCount = 0;
 	}
 
 	  /**
@@ -252,7 +258,7 @@ public class Drive2903 extends Subsystem {
 		}
 
 		public int rightGetRawCount() {
-			return (int)rightFrontMotor.getEncPosition();
+			return (int)rightFrontMotor.getEncPosition() - lastRightRawCount;
 		}
 
 
@@ -261,7 +267,15 @@ public class Drive2903 extends Subsystem {
 		}
 
 		public int leftGetRawCount() {
-				return (int)leftFrontMotor.getEncPosition();
+				return (int)leftFrontMotor.getEncPosition() - lastLeftRawCount;
+		}
+
+		public void setLastRightRaw(int lastRawCount) {
+			lastRightRawCount = lastRawCount;
+		}
+
+		public void setLastLeftRaw(int lastRawCount) {
+			lastLeftRawCount = lastRawCount;
 		}
 
 }

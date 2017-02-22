@@ -9,15 +9,25 @@ import com.ctre.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Shooter2903 extends Subsystem {
+	
+	
+static final double		PI						= 3.14159;
+	
+	static final double COUNTS_PER_MOTOR_REV = 1024; //Quad Encoder
+	static final double DRIVE_GEAR_REDUCTION = 1.1; 
+	static final double WHEEL_DIAMETER_INCHES = 4.0;
+	static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * PI;
+	
+	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / 
+			(WHEEL_DIAMETER_INCHES * 3.141595));
 
 	// shooter and kicker talons
 	static CANTalon shootMotor;
 	static CANTalon shakeMotor;
-	// static CANTalon KickingMotor;
 
 	
 	//variables 
-	static final double optimalSpeed = 0.75;
+	static final double optimalSpeed = 0.62;
 
 	public Shooter2903() {
 
@@ -25,6 +35,7 @@ public class Shooter2903 extends Subsystem {
 
 		
 		shootMotor = new CANTalon(RobotMap.shootMotor);
+		shakeMotor = new CANTalon(RobotMap.shakeMotor);
 		shootMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		shootMotor.changeControlMode(TalonControlMode.PercentVbus);
 		
@@ -34,6 +45,7 @@ public class Shooter2903 extends Subsystem {
 		shootMotor.setF (0);
 		
 		// enable the motors
+		shakeMotor.enable();
 		shootMotor.enable();
 		// KickingMotor.enable();
 
@@ -47,8 +59,12 @@ public class Shooter2903 extends Subsystem {
 
 	public void shoot() {
 		shootMotor.set(0.62);
-		shakeMotor.set(0.31);
 	}
+	
+	public void shaker(double shakerSpeed){
+		shakeMotor.set(shakerSpeed);
+	}
+
 	
 	public void StopShoot() {
 		//spit balls out

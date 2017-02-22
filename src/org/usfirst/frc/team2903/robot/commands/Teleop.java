@@ -41,6 +41,7 @@ public class Teleop extends Command {
 		//Driver
 		double forward = Robot.joy1.getX();
 		double turn = Robot.joy1.getY();
+		
 //		if (-errorTurn >= turn && turn <= errorTurn) {
 //			double angle = Robot.gyroSubsystem.GyroPosition() % circleDegrees;
 //			angle = angle / circleDegrees;
@@ -73,7 +74,10 @@ public class Teleop extends Command {
 	
 	
 		//Operator
-	
+		
+		double shaker = Robot.joyOp.getY();
+		Robot.shooterSubsystem.shaker(shaker);
+		
 		if (Robot.joyOp.getRawButton(3)){
 			Robot.gearSubsystem.openArms();
 		}
@@ -98,7 +102,9 @@ public class Teleop extends Command {
 			Robot.shooterSubsystem.shoot();
 		} else {
 			Robot.shooterSubsystem.StopShoot();
-		}
+		}		
+
+		
 		
 
 //		if(Robot.joyOp.getRawButton(2)){
