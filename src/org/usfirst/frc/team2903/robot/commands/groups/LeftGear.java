@@ -9,7 +9,7 @@ public class LeftGear extends CommandGroup {
 	public LeftGear(){
 		requires(Robot.driveSubsystem);
 		requires(Robot.gyroSubsystem);
-		requires(Robot.cameraSubsystem);
+	//	requires(Robot.cameraSubsystem);
 
 		
 		

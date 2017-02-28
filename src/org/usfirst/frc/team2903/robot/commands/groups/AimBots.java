@@ -17,7 +17,7 @@ public class AimBots extends CommandGroup{
 	public AimBots(boolean Shoot) {
 		
 		super("AimBots");
-		index = Robot.cameraSubsystem.GetBiggestAreaIndex();
+		//index = Robot.cameraSubsystem.GetBiggestAreaIndex();
 		
 		addParallel(new HorizontalAim(index));
 		addParallel(new GearAim());

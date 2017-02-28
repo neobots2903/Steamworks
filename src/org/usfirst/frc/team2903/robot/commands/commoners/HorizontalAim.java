@@ -13,15 +13,15 @@ public class HorizontalAim extends Command {
 		super("HorizontalAim");
 		this.index = index;
 		requires(Robot.driveSubsystem);
-		requires(Robot.cameraSubsystem);
+	//	requires(Robot.cameraSubsystem);
 		requires(Robot.gyroSubsystem);
 	}
 
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-		double HorizontalAngle = Robot.cameraSubsystem.GetHorizontalAngle(index);
-		turnGyro = new TurnWithGyro(HorizontalAngle);
+	//	double HorizontalAngle = Robot.cameraSubsystem.GetHorizontalAngle(index);
+//		turnGyro = new TurnWithGyro(HorizontalAngle);
 		turnGyro.start();
 	}
 
