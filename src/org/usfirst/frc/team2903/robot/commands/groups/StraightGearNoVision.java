@@ -14,7 +14,7 @@ public class StraightGearNoVision extends CommandGroup {
 		requires(Robot.driveSubsystem);
 		requires(Robot.gyroSubsystem);
 		
-		Robot.gyroSubsystem.reset();
+		//Robot.gyroSubsystem.reset();
 		Robot.gyroSubsystem.Calibrate();
 		
 		addSequential(new DriveForTime(3.2));

@@ -13,8 +13,7 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
-import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.VisionPipeline;
@@ -43,7 +42,7 @@ public class GearPegPipeline2903 extends Subsystem implements VisionPipeline {
 	private final Object imgLock = new Object();
 	
 	public GearPegPipeline2903() {
-	    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+	    AxisCamera camera = CameraServer.getInstance().addAxisCamera("10.29.3.56");
 	    camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
 	    
 	    visionThread = new VisionThread(camera, new GearPegPipeline2903(), pipeline -> {

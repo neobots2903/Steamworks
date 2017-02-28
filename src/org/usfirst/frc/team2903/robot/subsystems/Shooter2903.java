@@ -58,7 +58,8 @@ static final double		PI						= 3.14159;
 	}
 
 	public void shoot() {
-		shootMotor.set(0.62);
+		//shootMotor.set(0.62);
+		shootMotor.set(0.5);
 	}
 	
 	public void shaker(double shakerSpeed){

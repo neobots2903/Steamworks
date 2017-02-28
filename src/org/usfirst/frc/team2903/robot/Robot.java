@@ -4,6 +4,8 @@ package org.usfirst.frc.team2903.robot;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -23,13 +25,14 @@ import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.commands.groups.MiddleGear;
 import org.usfirst.frc.team2903.robot.commands.groups.StraightGearNoVision;
-import org.usfirst.frc.team2903.robot.subsystems.CameraVision2903;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
+import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
+
 
 import org.usfirst.frc.team2903.robot.subsystems.PickUp2903;
 import org.usfirst.frc.team2903.robot.subsystems.Pnuematics2903;
@@ -44,11 +47,6 @@ import org.usfirst.frc.team2903.robot.subsystems.Climber2903;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
-//	CANTalon leftFrontMotor;
-//	CANTalon leftRearMotor;
-//	CANTalon rightFrontMotor;
-//	CANTalon rightRearMotor;
 	
 	public static Drive2903 driveSubsystem;
 	public static Shooter2903 shooterSubsystem;
@@ -59,11 +57,11 @@ public class Robot extends IterativeRobot {
 	public static LIDAR2903 lidarSubsystem;
 	public static PickUp2903 pickupSubsystem;
 	public static Climber2903 climberSubsystem;
+	public static GearPegPipeline2903 gearPegSubsystem;
 	
 	Command autonomousCommand;
 	SendableChooser<Command> autoChooser;
 	Command teleopCommand;
-	public static CameraVision2903 cameraSubsystem;
 
 	public static Joystick joyOp = new Joystick(0);
 	Button triggerKick = new JoystickButton(joyOp, 1);
@@ -95,9 +93,6 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putNumber("LIDAR Distance From Object", lidarSubsystem.getDistance());
 
-//		cameraSubsystem = new CameraVision2903();
-
-//		shooterSubsystem = new Shooter2903();
 		
 		autoChooser = new SendableChooser<Command>();
 		try {
@@ -119,11 +114,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("AutoChooser", autoChooser);
 
 		teleopCommand = new Teleop();
-
-		//CameraServer server = CameraServer.getInstance();
-		//server.setQuality(50);
-		//server.startAutomaticCapture();
-
+		//Initializes camera server PLEASE DON'T TOUCH OR NO CAMERA 4 U
+		CameraServer.getInstance().addAxisCamera("10.29.3.56");
 	}
 
 	public void disabledPeriodic() {
