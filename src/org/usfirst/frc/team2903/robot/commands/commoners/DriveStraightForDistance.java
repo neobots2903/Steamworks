@@ -2,6 +2,7 @@ package org.usfirst.frc.team2903.robot.commands.commoners;
 
 import org.usfirst.frc.team2903.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,6 +20,7 @@ public class DriveStraightForDistance extends Command {
 	private int Distance;
 	
 	double MinMotorSpeed = 0.3;
+	private double Kp = 0.03;
 
 	static final double		PI						= 3.14159;
 	static final double COUNTS_PER_MOTOR_REV = 1024; //Quad Encoder
@@ -36,6 +38,8 @@ public class DriveStraightForDistance extends Command {
 		super("DriveForward");
 		
 		requires(Robot.driveSubsystem);
+		requires(Robot.gyroSubsystem);
+		
 		Robot.driveSubsystem.driveReset();
 		Robot.driveSubsystem.setAutoMode();
 		Distance = distance;
@@ -50,6 +54,9 @@ public class DriveStraightForDistance extends Command {
 		Robot.driveSubsystem.driveReset();
 		Robot.driveSubsystem.setAutoMode();
 		
+		// initialize the gyro
+		Robot.gyroSubsystem.reset();
+		Robot.gyroSubsystem.Calibrate();
 		
 		// get current encoder counts
 		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
@@ -99,10 +106,12 @@ public class DriveStraightForDistance extends Command {
 			MotorSpeed = MinMotorSpeed;
 		else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0)
 			MotorSpeed = -MinMotorSpeed;
+
+		double angle = Robot.gyroSubsystem.GyroPosition();
 		
 		// TODO Auto-generated method stub
-		Robot.driveSubsystem.tankDrive(MotorSpeed, -MotorSpeed);
-
+		Robot.driveSubsystem.tankDrive(MotorSpeed, -angle * Kp);
+		Timer.delay(0.01);
 	}
 
 	@Override

@@ -100,18 +100,19 @@ public class Robot extends IterativeRobot {
 			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
 			autoChooser.addObject("MiddleGear", new MiddleGear());
 			autoChooser.addObject("DriveForDistanceTest", new DriveForDistanceTest());
+			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
+			autoChooser.addObject("GearAim", new GearAim());
+			autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
+			autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
+			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
+			autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
+			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
+			autoChooser.addObject("MiddleGear", new MiddleGear()); 
+			SmartDashboard.putData("AutoChooser", autoChooser);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-		autoChooser.addObject("GearAim", new GearAim());
-		autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
-		autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
-		autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-		autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
-		autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
-		SmartDashboard.putData("AutoChooser", autoChooser);
 
 		teleopCommand = new Teleop();
 		//Initializes camera server PLEASE DON'T TOUCH OR NO CAMERA 4 U

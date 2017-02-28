@@ -81,10 +81,10 @@ public class Drive2903 extends Subsystem {
 		
 		// configure the encoders
 		rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		rightFrontMotor.reverseSensor(true);
+		rightFrontMotor.reverseSensor(true);		// this seems like it should be false
 		rightFrontMotor.configEncoderCodesPerRev(256);
 		leftFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		leftFrontMotor.reverseSensor(false);
+		leftFrontMotor.reverseSensor(false);  		// this seems like it should be true
 		leftFrontMotor.configEncoderCodesPerRev(256);
 		SmartDashboard.putNumber("Feedback Status", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
 		
@@ -182,26 +182,25 @@ public class Drive2903 extends Subsystem {
 		leftFrontMotor.setEncPosition(0);
 	}
 	
-	public void setAutoPositionMode()
+	public void setAutoPositionMode() {
+		setAutoPositionMode(false);
+	}
+	
+	/**
+	 * This will set the primary motor controller on the right side to position mode.  Optionally, it can
+	 * put the left side into position mode as well.  By default, it will leave the left side in follower mode
+	 * 
+	 * @param bothSides		if true, sets the left side into position mode
+	 * 						if false, sets the left side into follower mode
+	 */
+	public void setAutoPositionMode(boolean bothSides)
 	{
-		Robot.driveSubsystem.rightFrontMotor.reset();
-		Robot.driveSubsystem.rightFrontMotor.enable();
-		Robot.driveSubsystem.rightRearMotor.reset();
-		Robot.driveSubsystem.rightRearMotor.enable();
-		Robot.driveSubsystem.leftFrontMotor.reset();
-		Robot.driveSubsystem.leftFrontMotor.enable();
-		Robot.driveSubsystem.leftRearMotor.reset();
-		Robot.driveSubsystem.leftRearMotor.enable();
-		
+		// set the right side primary to position and the secondary to follower
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.Position);
-		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Follower);
 		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
-		Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
 		
 		// have the motors follow rightFrontMotor
 		rightFrontMotor.set(0);
-		leftRearMotor.set(rightFrontMotor.getDeviceID());
-		leftRearMotor.set(rightFrontMotor.getDeviceID());
 		rightRearMotor.set(rightFrontMotor.getDeviceID());
 
 		// Enable PID control on the talon
@@ -219,6 +218,44 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setD(0);
 		rightFrontMotor.setMotionMagicCruiseVelocity(0); 
 		rightFrontMotor.setMotionMagicAcceleration(0);
+
+		// both sides are going to be monitoring position
+		if (bothSides) {
+			// put left primary into position mode and the secondary to follower
+			Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Position);
+			Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
+			
+			// left side follows right front motor
+			leftFrontMotor.set(0);
+			leftRearMotor.set(leftFrontMotor.getDeviceID());
+			
+			// Enable PID control on the talon
+			leftFrontMotor.enableControl(); 		
+			
+			//Reset the encoder to zero as its current position
+			leftFrontMotor.setPosition(0);
+			leftFrontMotor.setEncPosition(0);
+
+			/* set closed loop gains in slot0 */
+			leftFrontMotor.setProfile(0);
+			leftFrontMotor.setF(FULL_FORWARD / NATIVE_UNITS_PER_TVE);  // this needs to be FULL-FOWARD / NATIVE UNITS)
+			leftFrontMotor.setP(0);
+			leftFrontMotor.setI(0);
+			leftFrontMotor.setD(0);
+			leftFrontMotor.setMotionMagicCruiseVelocity(0); 
+			leftFrontMotor.setMotionMagicAcceleration(0);
+		} 
+		
+		// only the right side is monitoring position, left side follows right side
+		else {
+			// put left side into follower mode
+			Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Follower);
+			Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
+			
+			// left side follows right front motor
+			leftFrontMotor.set(rightFrontMotor.getDeviceID());
+			leftRearMotor.set(rightFrontMotor.getDeviceID());
+		}
 	}
 	
 	public void setTeleopMode() {
@@ -232,6 +269,7 @@ public class Drive2903 extends Subsystem {
 		leftFrontMotor.set(0);
 		rightFrontMotor.set(0);
 
+		
 	}
 	public void setPosition(long distanceToDrive) {
 		// TODO Auto-generated method stub

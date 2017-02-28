@@ -16,7 +16,7 @@ public class DriveToPositionTest extends Command {
 	int TargetEncoderPos;
 	int CurrentRightEncoderPos;
 	int CurrentLeftEncoderPos;
-	private int Distance;
+	private double Distance;
 	
 	double MinMotorSpeed = 0.3;
 
@@ -31,7 +31,7 @@ public class DriveToPositionTest extends Command {
 			(WHEEL_DIAMETER_INCHES * 3.141595));
 
 	//distance in inches 
-	public DriveToPositionTest(int distance)
+	public DriveToPositionTest(double distance)
 	{
 		super("DriveToPositionTest");
 		
@@ -50,7 +50,7 @@ public class DriveToPositionTest extends Command {
 		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
 		
 		// calculate target position
-		TargetEncoderPos =  (Distance * (int) COUNTS_PER_INCH) + Math.abs(Robot.driveSubsystem.rightGetRawCount()); 
+		TargetEncoderPos =  (int) ((Distance * COUNTS_PER_INCH) + Math.abs(Robot.driveSubsystem.rightGetRawCount())); 
 		
 		SmartDashboard.putNumber("Right ", Math.abs(Robot.driveSubsystem.rightGetRawCount()));
 		SmartDashboard.putNumber("DP distance", Distance);
