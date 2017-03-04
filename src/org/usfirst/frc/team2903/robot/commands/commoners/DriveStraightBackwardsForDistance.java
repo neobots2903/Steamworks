@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveStraightForDistance extends Command {
+public class DriveStraightBackwardsForDistance extends Command {
 
 	// TODO update for two encoders with average of the two and gyro 
 
@@ -21,7 +21,6 @@ public class DriveStraightForDistance extends Command {
 	
 	double MinMotorSpeed = 0.3;
 	private double Kp = 0.03;
-	private double MotorSpeed;
 
 	static final double		PI						= 3.14159;
 	static final double COUNTS_PER_MOTOR_REV = 4096; //Quad Encoder
@@ -34,7 +33,7 @@ public class DriveStraightForDistance extends Command {
 				((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
 	
 	 //distance in inches 
-	public DriveStraightForDistance(int distance)
+	public DriveStraightBackwardsForDistance(int distance)
 	{
 		requires(Robot.driveSubsystem);
 		requires(Robot.gyroSubsystem);
@@ -52,6 +51,10 @@ public class DriveStraightForDistance extends Command {
 
 		Robot.driveSubsystem.driveReset();
 		Robot.driveSubsystem.setAutoMode();
+		
+		// initialize the gyro
+		Robot.gyroSubsystem.reset();
+		Robot.gyroSubsystem.Calibrate();
 		
 		// get current encoder counts
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
@@ -99,7 +102,7 @@ public class DriveStraightForDistance extends Command {
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
 
-		MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
+		double MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
 		
 		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed)
 			MotorSpeed = MinMotorSpeed;
@@ -126,9 +129,8 @@ public class DriveStraightForDistance extends Command {
 		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("current left position",CurrentLeftEncoderPos);
 		SmartDashboard.putNumber("target position",TargetEncoderPos);
-		SmartDashboard.putNumber("MOTOR SPEED",MotorSpeed);
 		
-		if ( (CurrentRightEncoderPos >= LowLimit && CurrentRightEncoderPos <= HighLimit) || Math.abs(MotorSpeed) <= 0.3) 
+		if (CurrentRightEncoderPos >= LowLimit && CurrentRightEncoderPos <= HighLimit ) 
 			return true;
 		else
 			return false;

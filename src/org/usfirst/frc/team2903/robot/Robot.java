@@ -19,6 +19,7 @@ import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveToPositionTest;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
+import org.usfirst.frc.team2903.robot.commands.commoners.LIDARTest;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveForDistanceTest;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
@@ -93,10 +94,14 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putNumber("LIDAR Distance From Object", lidarSubsystem.getDistance());
 
+		// initialize the gyro
+		gyroSubsystem.reset();
+		gyroSubsystem.Calibrate();
 		
 		autoChooser = new SendableChooser<Command>();
 		try {
 			autoChooser.addDefault("StraightGearNoVision", new StraightGearNoVision());
+			autoChooser.addDefault("LIDARtest", new LIDARTest());
 			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
 			autoChooser.addObject("MiddleGear", new MiddleGear());
 			autoChooser.addObject("DriveForDistanceTest", new DriveForDistanceTest());

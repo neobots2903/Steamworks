@@ -49,6 +49,7 @@ public class Drive2903 extends Subsystem {
 	public RobotDrive robotDrive;
 	private int lastRightRawCount;
 	private int lastLeftRawCount;
+	private boolean autoPositionBothSides;
 	
 	public Drive2903() {
 
@@ -61,43 +62,11 @@ public class Drive2903 extends Subsystem {
 		
 		rightFrontMotor.setInverted(false);
 		rightRearMotor.setInverted(false);
-		leftFrontMotor.setInverted(true);
-		leftRearMotor.setInverted(true);
+		leftFrontMotor.setInverted(false);
+		leftRearMotor.setInverted(false);
 		
 		robotDrive = new RobotDrive(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
-		
-		// talon position set up 
-		int absolutePosition = leftFrontMotor.getPulseWidthPosition() & 0xFFF;
-		leftFrontMotor.setEncPosition(absolutePosition);
-		absolutePosition = rightFrontMotor.getPulseWidthPosition() & 0xFFF;
-		rightFrontMotor.setEncPosition(absolutePosition);		
-		
-		
-		// disable timeout safety on drives
-		rightFrontMotor.setSafetyEnabled(false);
-		rightFrontMotor.set(0);
-		leftFrontMotor.setSafetyEnabled(false);
-		leftFrontMotor.set(0);
-		
-		// configure the encoders
-		rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		rightFrontMotor.reverseSensor(true);		// this seems like it should be false
-		rightFrontMotor.configEncoderCodesPerRev(256);
-		leftFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		leftFrontMotor.reverseSensor(false);  		// this seems like it should be true
-		leftFrontMotor.configEncoderCodesPerRev(256);
-		SmartDashboard.putNumber("Feedback Status", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
-		
-		// configure the output
-		rightFrontMotor.configNominalOutputVoltage(+0f, -0f);
-		rightFrontMotor.configPeakOutputVoltage(+12f, -12f);
-		
-		leftFrontMotor.configNominalOutputVoltage(+0f, -0f);
-		leftFrontMotor.configPeakOutputVoltage(+12f, -12f);
-		
-		// Initialize the raw counts
-		lastRightRawCount = 0;
-		lastLeftRawCount = 0;
+		driveReset();
 	}
 
 	  /**
@@ -131,6 +100,9 @@ public class Drive2903 extends Subsystem {
 		}
 	}
 
+	public void drive(double forward, double turn) {
+		robotDrive.drive(forward, turn);
+	}
 	  /**
 	   * Arcade drive implements single stick driving. This function lets you directly provide
 	   * joystick values from any source.
@@ -179,11 +151,11 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setPosition(0);
 		rightFrontMotor.setEncPosition(0);
 		leftFrontMotor.setPosition(0);
-		leftFrontMotor.setEncPosition(0);
-	}
+		leftFrontMotor.setEncPosition(0);	}
 	
 	public void setAutoPositionMode() {
 		setAutoPositionMode(false);
+		autoPositionBothSides = false;
 	}
 	
 	/**
@@ -195,9 +167,17 @@ public class Drive2903 extends Subsystem {
 	 */
 	public void setAutoPositionMode(boolean bothSides)
 	{
+		
+		autoPositionBothSides = bothSides;
+		
 		// set the right side primary to position and the secondary to follower
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.Position);
 		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
+		
+		// talon position set up 
+		int absolutePosition = rightFrontMotor.getPulseWidthPosition() & 0xFFF;
+		rightFrontMotor.setEncPosition(absolutePosition);		
+		
 		
 		// have the motors follow rightFrontMotor
 		rightFrontMotor.set(0);
@@ -211,13 +191,15 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setEncPosition(0);
 
 		/* set closed loop gains in slot0 */
+		rightFrontMotor.setAllowableClosedLoopErr(0);
 		rightFrontMotor.setProfile(0);
-		rightFrontMotor.setF(FULL_FORWARD / NATIVE_UNITS_PER_TVE);  // this needs to be FULL-FOWARD / NATIVE UNITS)
-		rightFrontMotor.setP(0);
+//		rightFrontMotor.setF(FULL_FORWARD / NATIVE_UNITS_PER_TVE);  // this needs to be FULL-FOWARD / NATIVE UNITS)
+		rightFrontMotor.setF(0);  // this needs to be FULL-FOWARD / NATIVE UNITS)
+		rightFrontMotor.setP(0.1);
 		rightFrontMotor.setI(0);
 		rightFrontMotor.setD(0);
-		rightFrontMotor.setMotionMagicCruiseVelocity(0); 
-		rightFrontMotor.setMotionMagicAcceleration(0);
+//		rightFrontMotor.setMotionMagicCruiseVelocity(0); 
+//		rightFrontMotor.setMotionMagicAcceleration(0);
 
 		// both sides are going to be monitoring position
 		if (bothSides) {
@@ -225,6 +207,10 @@ public class Drive2903 extends Subsystem {
 			Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Position);
 			Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
 			
+			// talon position set up 
+			absolutePosition = leftFrontMotor.getPulseWidthPosition() & 0xFFF;
+			leftFrontMotor.setEncPosition(absolutePosition);
+		
 			// left side follows right front motor
 			leftFrontMotor.set(0);
 			leftRearMotor.set(leftFrontMotor.getDeviceID());
@@ -275,6 +261,10 @@ public class Drive2903 extends Subsystem {
 		// TODO Auto-generated method stub
 		rightFrontMotor.changeControlMode(TalonControlMode.Position);
 		rightFrontMotor.set(distanceToDrive);
+		if (autoPositionBothSides) {
+			leftFrontMotor.changeControlMode(TalonControlMode.Position);
+			leftFrontMotor.set(distanceToDrive);
+		}
 	}
 
 	public void setVelocity(double velocity) {
@@ -294,6 +284,30 @@ public class Drive2903 extends Subsystem {
 	  }
 	  
 	  public void driveReset() {
+			// disable timeout safety on drives
+			rightFrontMotor.setSafetyEnabled(false);
+			leftFrontMotor.setSafetyEnabled(false);
+			
+			// configure the encoders
+			rightFrontMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+			rightFrontMotor.reverseSensor(true);		
+//			rightFrontMotor.configEncoderCodesPerRev(256);
+			leftFrontMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+			leftFrontMotor.reverseSensor(false);  		
+//			leftFrontMotor.configEncoderCodesPerRev(256);
+			SmartDashboard.putNumber("Feedback Status", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
+			
+			// configure the output
+			rightFrontMotor.configNominalOutputVoltage(+0f, -0f);
+			rightFrontMotor.configPeakOutputVoltage(+12f, -12f);
+			
+			leftFrontMotor.configNominalOutputVoltage(+0f, -0f);
+			leftFrontMotor.configPeakOutputVoltage(+12f, -12f);
+			
+			// Initialize the raw counts
+			lastRightRawCount = 0;
+			lastLeftRawCount = 0;
+		  
 		  rightFrontMotor.setPosition(0);
 		  leftFrontMotor.setPosition(0);
 		  rightFrontMotor.setEncPosition(0);
@@ -305,7 +319,7 @@ public class Drive2903 extends Subsystem {
 		}
 
 		public int rightGetRawCount() {
-			return (int)rightFrontMotor.getEncPosition(); // - lastRightRawCount;
+			return (int)-rightFrontMotor.getEncPosition(); // - lastRightRawCount;
 		}
 
 
@@ -323,6 +337,14 @@ public class Drive2903 extends Subsystem {
 
 		public void setLastLeftRaw(int lastRawCount) {
 			lastLeftRawCount = lastRawCount;
+		}
+		
+		public boolean isRightEncoderPresent() {
+			return rightFrontMotor.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != null;
+		}
+
+		public boolean isLeftEncoderPresent() {
+			return leftFrontMotor.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != null;
 		}
 
 }
