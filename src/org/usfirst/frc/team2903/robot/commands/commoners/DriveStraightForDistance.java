@@ -26,7 +26,8 @@ public class DriveStraightForDistance extends Command {
 	boolean ourJobIsDoneHere = false;
 
 	double MinMotorSpeed = 0.3;
-	private double Kp = 0.03;
+
+	private double Kp = 0.2;
 	private double MotorSpeed;
 
 	static final double PI = 3.14159;
@@ -78,7 +79,7 @@ public class DriveStraightForDistance extends Command {
 		HighLimit = TargetEncoderPos + ErrorLimit;
 		LowLimit = TargetEncoderPos - ErrorLimit;
 
-		Robot.minipidSubsystem.setP(0.2);
+		Robot.minipidSubsystem.setP(Kp);
 		Robot.minipidSubsystem.setI(0);
 		Robot.minipidSubsystem.setD(0);
 
@@ -145,16 +146,26 @@ public class DriveStraightForDistance extends Command {
 			// check to see if we have registered the same encoder count
 			// mulitple times in a row
 			if (sameEncoderCount > MAX_SAME_ENCODER_COUNT) {
-				ourJobIsDoneHere = true;
+				/*
+				 * We could adjust the motor speed for each time we see the same
+				 * encoder count max times, but only if the motor speed is not 0
+				 */
+				if (MotorSpeed != 0) {
+					// increase minimum motor speed by 5% and reset the same count
+					MinMotorSpeed += 0.05;
+					sameEncoderCount = 0;
+				} else {
+					ourJobIsDoneHere = true;
+				}
 			}
 		}
 
 		/*
 		 * This change will only stop the robot if the PID loop allows the robot
 		 * to go past our target position. This violates the ability of the PID
-		 * loop to correct its position. Check out the change I suggest above, which adds a 
-		 * check to see if we've seen the same encoder position multiple times and we can
-		 * increase the limit to whatever works. 
+		 * loop to correct its position. Check out the change I suggest above,
+		 * which adds a check to see if we've seen the same encoder position
+		 * multiple times and we can increase the limit to whatever works.
 		 */
 		if (!ourJobIsDoneHere) {
 			if (Distance > 0) {
