@@ -21,7 +21,7 @@ public  class DriveWithLIDAR extends Command{
 	protected void initialize(){
 		//TODO Auto-generated method stub
 		Robot.lidarSubsystem.start();
-		SmartDashboard.putNumber("LIDAR Distance From Object", distanceFromWall);
+		//SmartDashboard.putNumber("LIDAR Distance From Object", distanceFromWall);
 		timer.reset();
 		timer.start();
 	}

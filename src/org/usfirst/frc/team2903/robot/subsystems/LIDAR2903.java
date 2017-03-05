@@ -70,9 +70,29 @@ import edu.wpi.first.wpilibj.Timer;
 			updater = new java.util.Timer();
 		}
 		
+		public int getStatus() {
+			byte [] status_array = new byte[1];
+			
+			int status = 0;
+			
+			i2c.read(0x01,  1,  status_array);
+			
+			status += status_array[0];
+			
+			return status;
+			
+		}
+		
 		// Update distance variable
 		public void update() {
 			i2c.write(LIDAR_CONFIG_REGISTER, DISTANCE_BIAS_CMD); // Initiate measurement
+//			byte[] status = new byte[1];
+//			int statusByte;
+//			i2c.read(0x01, 1, status);
+//			statusByte = status[0];
+//			while ((statusByte & 0x1) == 0) {
+//				i2c.read(0x01, 1, status);
+//			}
 			Timer.delay(0.04); // Delay for measurement to be taken
 			i2c.read(LIDAR_DISTANCE_REGISTER, 2, distance); // Read in measurement
 			Timer.delay(0.005); // Delay to prevent over polling

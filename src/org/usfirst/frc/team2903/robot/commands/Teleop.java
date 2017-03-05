@@ -31,7 +31,7 @@ public class Teleop extends Command {
 	 * the performance of the robot.
 	 */
 	protected void execute() {
-			
+		SmartDashboard.putNumber("TurnWithGyro", Robot.gyroSubsystem.GyroPosition());
 		/*
 		 * Drive the robot arcade style.  
 		 * X-axis -- forward and reverse

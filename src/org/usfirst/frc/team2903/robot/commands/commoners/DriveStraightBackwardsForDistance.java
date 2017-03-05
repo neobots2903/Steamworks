@@ -63,10 +63,10 @@ public class DriveStraightBackwardsForDistance extends Command {
 		// calculate target position
 		TargetEncoderPos =  (Distance * (int) COUNTS_PER_INCH);// + Robot.driveSubsystem.rightGetRawCount(); 
 		
-		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
-		SmartDashboard.putNumber("DF distance", Distance);
-		SmartDashboard.putNumber("DF Target", TargetEncoderPos);
+//		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
+//		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
+//		SmartDashboard.putNumber("DF distance", Distance);
+//		SmartDashboard.putNumber("DF Target", TargetEncoderPos);
 
 		// setup the PID system
 		Robot.minipidSubsystem.reset();
@@ -111,9 +111,9 @@ public class DriveStraightBackwardsForDistance extends Command {
 
 		double angle = Robot.gyroSubsystem.GyroPosition();
 	
-		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
-		SmartDashboard.putNumber("Angle", angle);
+		//SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
+		//SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
+		//SmartDashboard.putNumber("Angle", angle);
 		
 		// TODO Auto-generated method stub
 		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, -angle * Kp);
@@ -126,9 +126,9 @@ public class DriveStraightBackwardsForDistance extends Command {
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
 		
-		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("current left position",CurrentLeftEncoderPos);
-		SmartDashboard.putNumber("target position",TargetEncoderPos);
+//		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
+//		SmartDashboard.putNumber("current left position",CurrentLeftEncoderPos);
+//		SmartDashboard.putNumber("target position",TargetEncoderPos);
 		
 		if (CurrentRightEncoderPos >= LowLimit && CurrentRightEncoderPos <= HighLimit ) 
 			return true;

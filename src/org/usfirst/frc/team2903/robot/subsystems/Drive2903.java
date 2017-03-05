@@ -122,8 +122,8 @@ public class Drive2903 extends Subsystem {
 	   * @param rightSpeed    The value of the right stick.
 	   */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		SmartDashboard.putNumber("Left Encoder", leftGetRawCount());
-		SmartDashboard.putNumber("Right Encoder", rightGetRawCount());
+//		SmartDashboard.putNumber("Left Encoder", leftGetRawCount());
+//		SmartDashboard.putNumber("Right Encoder", rightGetRawCount());
 		
 		robotDrive.tankDrive(leftSpeed, rightSpeed);
 	}
@@ -295,7 +295,7 @@ public class Drive2903 extends Subsystem {
 			leftFrontMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 			leftFrontMotor.reverseSensor(false);  		
 //			leftFrontMotor.configEncoderCodesPerRev(256);
-			SmartDashboard.putNumber("Feedback Status", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
+			//SmartDashboard.putNumber("Feedback Status", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
 			
 			// configure the output
 			rightFrontMotor.configNominalOutputVoltage(+0f, -0f);

@@ -19,6 +19,8 @@ public class DriveStraightForDistance extends Command {
 	int CurrentLeftEncoderPos;
 	private int Distance;
 	
+	boolean ourJobIsDoneHere = false;
+	
 	double MinMotorSpeed = 0.3;
 	private double Kp = 0.03;
 	private double MotorSpeed;
@@ -60,10 +62,10 @@ public class DriveStraightForDistance extends Command {
 		// calculate target position
 		TargetEncoderPos =  (Distance * (int) COUNTS_PER_INCH);// + Robot.driveSubsystem.rightGetRawCount(); 
 		
-		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
-		SmartDashboard.putNumber("DF distance", Distance);
-		SmartDashboard.putNumber("DF Target", TargetEncoderPos);
+//		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
+//		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
+//		SmartDashboard.putNumber("DF distance", Distance);
+//		SmartDashboard.putNumber("DF Target", TargetEncoderPos);
 
 		// setup the PID system
 		Robot.minipidSubsystem.reset();
@@ -77,9 +79,7 @@ public class DriveStraightForDistance extends Command {
 		Robot.minipidSubsystem.setI(0);
 		Robot.minipidSubsystem.setD(0);
 		
-	
-		
-
+		ourJobIsDoneHere = false;
 	}
 
 	public int getDistance() {
@@ -101,19 +101,19 @@ public class DriveStraightForDistance extends Command {
 
 		MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
 		
-		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed)
+		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed) 
 			MotorSpeed = MinMotorSpeed;
-		else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0)
+		 else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0) 
 			MotorSpeed = -MinMotorSpeed;
 
 		double angle = Robot.gyroSubsystem.GyroPosition();
 	
 		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
-		SmartDashboard.putNumber("Angle", angle);
+//		SmartDashboard.putNumber("Angle", angle);
 		
 		// TODO Auto-generated method stub
-		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, -angle * Kp);
+		Robot.driveSubsystem.arcadeDrive(-MotorSpeed,0);// -angle * Kp);
 		Timer.delay(0.01);
 	}
 
@@ -123,12 +123,21 @@ public class DriveStraightForDistance extends Command {
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
 		
-		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("current left position",CurrentLeftEncoderPos);
+//		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
+//		SmartDashboard.putNumber("current left position",CurrentLeftEncoderPos);
 		SmartDashboard.putNumber("target position",TargetEncoderPos);
-		SmartDashboard.putNumber("MOTOR SPEED",MotorSpeed);
+//		SmartDashboard.putNumber("MOTOR SPEED",MotorSpeed);
+		if (Distance > 0) {
+			if (CurrentRightEncoderPos >= TargetEncoderPos && TargetEncoderPos != 0)
+				ourJobIsDoneHere = true;
+			} else if (Distance < 0) {
+			if (CurrentRightEncoderPos <= TargetEncoderPos && TargetEncoderPos != 0)
+				ourJobIsDoneHere = true;
+			} else {
+				ourJobIsDoneHere = true;
+			}
 		
-		if ( (CurrentRightEncoderPos >= LowLimit && CurrentRightEncoderPos <= HighLimit) || Math.abs(MotorSpeed) <= 0.3) 
+		if (ourJobIsDoneHere == true) 
 			return true;
 		else
 			return false;
@@ -148,6 +157,7 @@ public class DriveStraightForDistance extends Command {
 		// TODO Auto-generated method stub
 		//putting drives back into teleop mode
 		Robot.driveSubsystem.setTeleopMode();
+		ourJobIsDoneHere = false;
 	}
 
 	@Override
