@@ -22,8 +22,8 @@ public class Drive2903 extends Subsystem {
 	CANTalon rightRearMotor;
 
 	static final double		PI						= 3.14159;
-    static final double     COUNTS_PER_MOTOR_REV    = 1024 ;    // eg: Grayhill 61R256
-    static final double     DRIVE_GEAR_REDUCTION    = 1.1 ;     // This is < 1.0 if geared UP
+    static final int     COUNTS_PER_MOTOR_REV    = 360 ;    // eg: Grayhill 61R256
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             												(WHEEL_DIAMETER_INCHES * PI);
@@ -289,12 +289,12 @@ public class Drive2903 extends Subsystem {
 			leftFrontMotor.setSafetyEnabled(false);
 			
 			// configure the encoders
-			rightFrontMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+			rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 			rightFrontMotor.reverseSensor(true);		
-//			rightFrontMotor.configEncoderCodesPerRev(256);
-			leftFrontMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+//			rightFrontMotor.configEncoderCodesPerRev(COUNTS_PER_MOTOR_REV);
+			leftFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 			leftFrontMotor.reverseSensor(false);  		
-//			leftFrontMotor.configEncoderCodesPerRev(256);
+//			leftFrontMotor.configEncoderCodesPerRev(COUNTS_PER_MOTOR_REV);
 			//SmartDashboard.putNumber("Feedback Status", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
 			
 			// configure the output

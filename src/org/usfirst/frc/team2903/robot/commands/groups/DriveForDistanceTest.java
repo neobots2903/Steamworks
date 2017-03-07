@@ -13,8 +13,8 @@ public class DriveForDistanceTest extends CommandGroup {
 	public DriveForDistanceTest() throws InterruptedException{
 		requires(Robot.driveSubsystem);
 
-		addSequential(new DriveStraightForDistance(120));
-		addSequential(new DriveStraightForDistance(-120));
+		addSequential(new DriveStraightForDistance(12));
+		//addSequential(new DriveStraightForDistance(-12));
 	}
 	
 }

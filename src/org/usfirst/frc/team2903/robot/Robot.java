@@ -84,7 +84,7 @@ public class Robot extends IterativeRobot {
 		driveSubsystem = new Drive2903();
 		Gyro2903.GYRO_TYPE gyroType = Gyro2903.GYRO_TYPE.SPI;
 		gyroSubsystem = new Gyro2903(gyroType);
-		minipidSubsystem = new MiniPID2903(3.5, 0, 0);
+		minipidSubsystem = new MiniPID2903(3.5, 0, 0.8);
 		gearSubsystem = new Gear2903();
 		shooterSubsystem = new Shooter2903();
 		pickupSubsystem = new PickUp2903();

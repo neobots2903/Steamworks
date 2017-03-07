@@ -31,8 +31,8 @@ public class DriveStraightForDistance extends Command {
 	private double MotorSpeed;
 
 	static final double PI = 3.14159;
-	static final double COUNTS_PER_MOTOR_REV = 4096; // Quad Encoder
-	static final double DRIVE_GEAR_REDUCTION = 0.5;
+	static final double COUNTS_PER_MOTOR_REV = 360; // Quad Encoder
+	static final double DRIVE_GEAR_REDUCTION = 4.0;
 	static final double WHEEL_DIAMETER_INCHES = 6.0;
 	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)
 			/ (WHEEL_DIAMETER_INCHES * 3.141595));
@@ -79,9 +79,9 @@ public class DriveStraightForDistance extends Command {
 		HighLimit = TargetEncoderPos + ErrorLimit;
 		LowLimit = TargetEncoderPos - ErrorLimit;
 
-		Robot.minipidSubsystem.setP(Kp);
-		Robot.minipidSubsystem.setI(0);
-		Robot.minipidSubsystem.setD(0);
+//		Robot.minipidSubsystem.setP(Kp);
+//		Robot.minipidSubsystem.setI(0);
+//		Robot.minipidSubsystem.setD(0);
 
 		ourJobIsDoneHere = false;
 	}
@@ -157,27 +157,6 @@ public class DriveStraightForDistance extends Command {
 				} else {
 					ourJobIsDoneHere = true;
 				}
-			}
-		}
-
-		/*
-		 * This change will only stop the robot if the PID loop allows the robot
-		 * to go past our target position. This violates the ability of the PID
-		 * loop to correct its position. Check out the change I suggest above,
-		 * which adds a check to see if we've seen the same encoder position
-		 * multiple times and we can increase the limit to whatever works.
-		 */
-		if (!ourJobIsDoneHere) {
-			if (Distance > 0) {
-				if (CurrentRightEncoderPos >= TargetEncoderPos && TargetEncoderPos != 0) {
-					ourJobIsDoneHere = true;
-				}
-			} else if (Distance < 0) {
-				if (CurrentRightEncoderPos <= TargetEncoderPos && TargetEncoderPos != 0) {
-					ourJobIsDoneHere = true;
-				}
-			} else {
-				ourJobIsDoneHere = true;
 			}
 		}
 
