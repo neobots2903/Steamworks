@@ -70,7 +70,7 @@ public class TurnWithGyro extends Command{
 
 	@Override
 	protected void execute() {
-		double gyroAngle = (Robot.gyroSubsystem.GyroPosition()*-1.0);
+		double gyroAngle = (Robot.gyroSubsystem.GyroPosition());
 		MotorSpeed = Robot.minipidSubsystem.getOutput(gyroAngle, TargetAngle) / 100;
 		
 		SmartDashboard.putNumber("TurnWithGyro", gyroAngle);
@@ -102,7 +102,7 @@ public class TurnWithGyro extends Command{
 		
 		SmartDashboard.putNumber("Taget Angle", TargetAngle);
 		SmartDashboard.putNumber("MotorSpeed = ", MotorSpeed);
-		Robot.driveSubsystem.tankDrive(-MotorSpeed, -MotorSpeed);
+		Robot.driveSubsystem.tankDrive(-MotorSpeed, MotorSpeed);
 //		if (!turnLeft)
 //			// turn right
 //			Robot.driveSubsystem.tankDrive(MotorSpeed * -1.0, MotorSpeed * -1.0);
@@ -115,7 +115,7 @@ public class TurnWithGyro extends Command{
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		double gyroAngle = (Robot.gyroSubsystem.GyroPosition()*-1.0);
+		double gyroAngle = (Robot.gyroSubsystem.GyroPosition());
 		
 		if (gyroAngle >= LowLimit && gyroAngle <= HighLimit ) 
 			return true;

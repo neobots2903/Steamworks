@@ -29,10 +29,11 @@ public class DriveStraightForDistance extends Command {
 
 	private double Kp = 0.2;
 	private double MotorSpeed;
+	private double StartAngle;
 
 	static final double PI = 3.14159;
-	static final double COUNTS_PER_MOTOR_REV = 360; // Quad Encoder
-	static final double DRIVE_GEAR_REDUCTION = 4.0;
+	static final double COUNTS_PER_MOTOR_REV = 1024; // Quad Encoder
+	static final double DRIVE_GEAR_REDUCTION = 2.0;
 	static final double WHEEL_DIAMETER_INCHES = 6.0;
 	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)
 			/ (WHEEL_DIAMETER_INCHES * 3.141595));
@@ -61,6 +62,8 @@ public class DriveStraightForDistance extends Command {
 		// get current encoder counts
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
+		
+		StartAngle = Robot.gyroSubsystem.GyroPosition();
 
 		// calculate target position
 		TargetEncoderPos = (Distance * (int) COUNTS_PER_INCH);// +
@@ -106,15 +109,15 @@ public class DriveStraightForDistance extends Command {
 			MotorSpeed = MinMotorSpeed;
 		else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0)
 			MotorSpeed = -MinMotorSpeed;
-
-		double angle = Robot.gyroSubsystem.GyroPosition();
+		
+		double angle = StartAngle - Robot.gyroSubsystem.GyroPosition();
 
 		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
 		// SmartDashboard.putNumber("Angle", angle);
 
 		// TODO Auto-generated method stub
-		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, 0);// -angle * Kp);
+		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, -angle * Kp);
 		Timer.delay(0.01);
 	}
 
@@ -157,6 +160,20 @@ public class DriveStraightForDistance extends Command {
 				} else {
 					ourJobIsDoneHere = true;
 				}
+			}
+		}
+		
+		if (!ourJobIsDoneHere) {
+			if (Distance > 0) {
+				if (CurrentRightEncoderPos >= TargetEncoderPos && TargetEncoderPos != 0) {
+					ourJobIsDoneHere = true;
+				}
+			} else if (Distance < 0) {
+				if (CurrentRightEncoderPos <= TargetEncoderPos && TargetEncoderPos != 0) {
+					ourJobIsDoneHere = true;
+				}
+			} else {
+				ourJobIsDoneHere = true;
 			}
 		}
 
