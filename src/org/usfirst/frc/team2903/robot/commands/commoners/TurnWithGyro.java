@@ -20,9 +20,9 @@ public class TurnWithGyro extends Command{
 	
 	double HighLimit;
 	double LowLimit;
-	double ErrorLimit = 1.0;
+	double ErrorLimit = 0.45;
 	double MotorSpeed = 0.6;
-	double MinMotorSpeed = 0.3;
+	double MinMotorSpeed = 0.5;
 	double ReadjustMotorSpeed = 0;
 	boolean PreviousTurnLeft = false;
 	boolean TurnLeft = false;
@@ -65,7 +65,7 @@ public class TurnWithGyro extends Command{
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-//		Robot.gyroSubsystem.gyro.reset();
+		Robot.gyroSubsystem.reset();
 	}
 
 	@Override

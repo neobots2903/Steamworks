@@ -22,6 +22,7 @@ public class Teleop extends Command {
 	protected void initialize() {
 		// Robot.elevatorSubsystem.encoder.reset();
 		Robot.driveSubsystem.setTeleopMode();
+		Robot.gyroSubsystem.reset();
 
 	}
 	

@@ -27,19 +27,26 @@ public class DriveStraightForDistance extends Command {
 
 	double MinMotorSpeed = 0.3;
 
-	private double Kp = 0.2;
+	private double Kp = 0.3;
 	private double MotorSpeed;
 	private double StartAngle;
 
-	static final double PI = 3.14159;
-	static final double COUNTS_PER_MOTOR_REV = 1024; // Quad Encoder
-	static final double DRIVE_GEAR_REDUCTION = 2.0;
-	static final double WHEEL_DIAMETER_INCHES = 6.0;
-	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)
-			/ (WHEEL_DIAMETER_INCHES * 3.141595));
-	static final double CM_PER_INCH = 2.54;
-	static final double COUNTS_PER_CM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)
-			/ ((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
+	static final double		PI						= 3.14159;
+    static final int     COUNTS_PER_MOTOR_REV    = 1024 ;    // eg: Grayhill 61R256
+    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 6.0 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            												(WHEEL_DIAMETER_INCHES * PI);
+    
+    static final double 	CM_PER_INCH             = 2.54;
+    static final double 	COUNTS_PER_CM           = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    													((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
+    
+    static final double 	TARGET_SPEED			= 144;		// revolutions per minute
+    static final double 	MIN_PER_SEC				= 0.0167;  // minute to second ratio
+    static final double		SEC_PER_TVE				= 0.1;	   // Seconds per 10 velocity measurement periods (100ms)
+    static final double 	NATIVE_UNITS_PER_TVE	= TARGET_SPEED * MIN_PER_SEC * SEC_PER_TVE * COUNTS_PER_MOTOR_REV;
+    static final double		FULL_FORWARD			= 1023;
 
 	// distance in inches
 	public DriveStraightForDistance(int distance) {
@@ -55,10 +62,12 @@ public class DriveStraightForDistance extends Command {
 	protected void initialize() {
 		// TODO Auto-generated method stub
 		// Robot.driveSubsystem.setPosition(TargetEncoderPos);
-
+		
 		Robot.driveSubsystem.driveReset();
 		Robot.driveSubsystem.setAutoMode();
 
+		Robot.gyroSubsystem.reset();
+		
 		// get current encoder counts
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
@@ -110,11 +119,11 @@ public class DriveStraightForDistance extends Command {
 		else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0)
 			MotorSpeed = -MinMotorSpeed;
 		
-		double angle = StartAngle - Robot.gyroSubsystem.GyroPosition();
+		double angle = -(StartAngle - Robot.gyroSubsystem.GyroPosition());
 
 		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos);
-		// SmartDashboard.putNumber("Angle", angle);
+		SmartDashboard.putNumber("Angle", angle);
 
 		// TODO Auto-generated method stub
 		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, -angle * Kp);
@@ -148,19 +157,19 @@ public class DriveStraightForDistance extends Command {
 
 			// check to see if we have registered the same encoder count
 			// mulitple times in a row
-			if (sameEncoderCount > MAX_SAME_ENCODER_COUNT) {
-				/*
-				 * We could adjust the motor speed for each time we see the same
-				 * encoder count max times, but only if the motor speed is not 0
-				 */
-				if (MotorSpeed != 0) {
-					// increase minimum motor speed by 5% and reset the same count
-					MinMotorSpeed += 0.05;
-					sameEncoderCount = 0;
-				} else {
-					ourJobIsDoneHere = true;
-				}
-			}
+//			if (sameEncoderCount > MAX_SAME_ENCODER_COUNT) {
+//				/*
+//				 * We could adjust the motor speed for each time we see the same
+//				 * encoder count max times, but only if the motor speed is not 0
+//				 */
+//				if (MotorSpeed != 0) {
+//					// increase minimum motor speed by 5% and reset the same count
+//					MinMotorSpeed += 0.05;
+//					sameEncoderCount = 0;
+//				} else {
+//					ourJobIsDoneHere = true;
+//				}
+//			}
 		}
 		
 		if (!ourJobIsDoneHere) {
