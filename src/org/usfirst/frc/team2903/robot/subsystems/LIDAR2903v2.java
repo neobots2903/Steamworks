@@ -1,7 +1,5 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.TimerTask;
 
 import edu.wpi.first.wpilibj.I2C;

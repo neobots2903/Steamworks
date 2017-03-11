@@ -14,16 +14,16 @@ public class LIDARTest extends Command {
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-		Robot.lidarV2Subsystem.start();
+		Robot.lidarSubsystem.start();
 	}
 
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
 //		SmartDashboard.putNumber("i2c status",  Robot.lidarSubsystem.getStatus());
-		SmartDashboard.putBoolean("Update ", Robot.lidarV2Subsystem.updateDistance());
-		SmartDashboard.putNumber("Distance ", Robot.lidarV2Subsystem.getDistance());
-		SmartDashboard.putNumber("Update Time ", Robot.lidarV2Subsystem.updateTime());
+//		SmartDashboard.putBoolean("Update ", Robot.lidarV2Subsystem.updateDistance());
+		SmartDashboard.putNumber("Distance ", Robot.lidarSubsystem.getDistance());
+//		SmartDashboard.putNumber("Update Time ", Robot.lidarV2Subsystem.updateTime());
 	}
 
 	@Override
@@ -35,13 +35,13 @@ public class LIDARTest extends Command {
 	@Override
 	protected void end() {
 		// TODO Auto-generated method stub
-		Robot.lidarV2Subsystem.stop();
+		Robot.lidarSubsystem.stop();
 	}
 
 	@Override
 	protected void interrupted() {
 		// TODO Auto-generated method stub
-		Robot.lidarV2Subsystem.stop();
+		Robot.lidarSubsystem.stop();
 	}
 
 }

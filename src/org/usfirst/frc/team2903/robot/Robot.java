@@ -4,9 +4,6 @@ package org.usfirst.frc.team2903.robot;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -34,6 +31,7 @@ import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903v2;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
+import org.usfirst.frc.team2903.robot.subsystems.Vision2903;
 import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
 
 
@@ -69,10 +67,15 @@ public class Robot extends IterativeRobot {
 
 	public static Joystick joyOp = new Joystick(0);
 	Button triggerKick = new JoystickButton(joyOp, 1);
+	public static Vision2903 camera;
 
 	public static Joystick joy1 = new Joystick(1);
 
 	public static Port lidarPort = I2C.Port.kOnboard;
+	
+	public static final int IMG_WIDTH = 640;
+	public static final int IMG_HEIGHT = 480;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -125,7 +128,9 @@ public class Robot extends IterativeRobot {
 
 		teleopCommand = new Teleop();
 		//Initializes camera server PLEASE DON'T TOUCH OR NO CAMERA 4 U
-		CameraServer.getInstance().addAxisCamera("10.29.3.56");
+//		camera = new Vision2903("10.29.3.56");
+//		camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+
 	}
 
 	public void disabledPeriodic() {
