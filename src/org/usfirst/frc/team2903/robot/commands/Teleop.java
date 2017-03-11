@@ -78,6 +78,7 @@ public class Teleop extends Command {
 		
 		double shaker = Robot.joyOp.getY();
 		Robot.shooterSubsystem.shaker(shaker);
+		Robot.shooterSubsystem.GateControl();
 		
 		if (Robot.joyOp.getRawButton(2)){
 			Robot.gearSubsystem.openArms();
