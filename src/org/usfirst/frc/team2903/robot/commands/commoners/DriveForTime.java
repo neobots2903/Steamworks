@@ -4,7 +4,6 @@ import org.usfirst.frc.team2903.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public  class DriveForTime extends Command{
 	double TimeForDistance;
@@ -40,7 +39,7 @@ public  class DriveForTime extends Command{
 		
 		gyroAngle = Robot.gyroSubsystem.GyroPosition();
 		
-		SmartDashboard.putNumber("gyroAngle ", gyroAngle);
+		//SmartDashboard.putNumber("gyroAngle ", gyroAngle);
 		if (lowAngleLimit >= gyroAngle && gyroAngle >= highAngleLimit) {
 			if (gyroAngle > 0) {
 				turnSpeed = -0.5;
@@ -55,7 +54,7 @@ public  class DriveForTime extends Command{
 		}
 		// TODO Auto-generated method stub
 		//DriveStraightWithGyro.GyroPID(Robot.driveSubsystem, Robot.gyroSubsystem);
-		SmartDashboard.putNumber("turnSpeed", turnSpeed);
+		//SmartDashboard.putNumber("turnSpeed", turnSpeed);
 		Robot.driveSubsystem.tankDrive(0.8+(turnSpeed/2), -0.8+(turnSpeed/2));
 		//Robot.driveSubsystem.arcadeDrive(0, -0.8);
 		TimeForDistance = timer.get();

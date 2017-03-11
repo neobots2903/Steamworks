@@ -22,6 +22,7 @@ public class Teleop extends Command {
 	protected void initialize() {
 		// Robot.elevatorSubsystem.encoder.reset();
 		Robot.driveSubsystem.setTeleopMode();
+		Robot.gyroSubsystem.reset();
 
 	}
 	
@@ -31,7 +32,7 @@ public class Teleop extends Command {
 	 * the performance of the robot.
 	 */
 	protected void execute() {
-			
+		SmartDashboard.putNumber("TurnWithGyro", Robot.gyroSubsystem.GyroPosition());
 		/*
 		 * Drive the robot arcade style.  
 		 * X-axis -- forward and reverse
@@ -39,8 +40,8 @@ public class Teleop extends Command {
 		 */
 		
 		//Driver
-		double forward = Robot.joy1.getX();
-		double turn = Robot.joy1.getY();
+		double forward = Robot.joy1.getY();
+		double turn = Robot.joy1.getX();
 		
 //		if (-errorTurn >= turn && turn <= errorTurn) {
 //			double angle = Robot.gyroSubsystem.GyroPosition() % circleDegrees;
@@ -77,6 +78,7 @@ public class Teleop extends Command {
 		
 		double shaker = Robot.joyOp.getY();
 		Robot.shooterSubsystem.shaker(shaker);
+		Robot.shooterSubsystem.GateControl();
 		
 		if (Robot.joyOp.getRawButton(2)){
 			Robot.gearSubsystem.openArms();

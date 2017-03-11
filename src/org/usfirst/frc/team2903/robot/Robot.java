@@ -4,8 +4,6 @@ package org.usfirst.frc.team2903.robot;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -19,6 +17,7 @@ import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveToPositionTest;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
+import org.usfirst.frc.team2903.robot.commands.commoners.LIDARTest;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveForDistanceTest;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
@@ -29,8 +28,10 @@ import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
+import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903v2;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
+import org.usfirst.frc.team2903.robot.subsystems.Vision2903;
 import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
 
 
@@ -55,6 +56,7 @@ public class Robot extends IterativeRobot {
 	public static Pnuematics2903 pnuematicsSubsystem;
 	public static Gear2903 gearSubsystem;
 	public static LIDAR2903 lidarSubsystem;
+	public static LIDAR2903v2 lidarV2Subsystem;
 	public static PickUp2903 pickupSubsystem;
 	public static Climber2903 climberSubsystem;
 	public static GearPegPipeline2903 gearPegSubsystem;
@@ -65,10 +67,15 @@ public class Robot extends IterativeRobot {
 
 	public static Joystick joyOp = new Joystick(0);
 	Button triggerKick = new JoystickButton(joyOp, 1);
+	public static Vision2903 camera;
 
 	public static Joystick joy1 = new Joystick(1);
 
 	public static Port lidarPort = I2C.Port.kOnboard;
+	
+	public static final int IMG_WIDTH = 640;
+	public static final int IMG_HEIGHT = 480;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -86,17 +93,22 @@ public class Robot extends IterativeRobot {
 		pickupSubsystem = new PickUp2903();
 		climberSubsystem = new Climber2903();
 		lidarSubsystem = new LIDAR2903(lidarPort);
+		lidarV2Subsystem = new LIDAR2903v2(lidarPort);
 		
-		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
-		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
-		SmartDashboard.putNumber("kD", minipidSubsystem.getD());
+//		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
+//		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
+//		SmartDashboard.putNumber("kD", minipidSubsystem.getD());
 		
-		SmartDashboard.putNumber("LIDAR Distance From Object", lidarSubsystem.getDistance());
+//		SmartDashboard.putNumber("LIDAR Distance From Object", lidarSubsystem.getDistance());
 
+		// initialize the gyro
+		gyroSubsystem.reset();
+		gyroSubsystem.Calibrate();
 		
 		autoChooser = new SendableChooser<Command>();
 		try {
 			autoChooser.addDefault("StraightGearNoVision", new StraightGearNoVision());
+			autoChooser.addDefault("LIDARtest", new LIDARTest());
 			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
 			autoChooser.addObject("MiddleGear", new MiddleGear());
 			autoChooser.addObject("DriveForDistanceTest", new DriveForDistanceTest());
@@ -116,7 +128,9 @@ public class Robot extends IterativeRobot {
 
 		teleopCommand = new Teleop();
 		//Initializes camera server PLEASE DON'T TOUCH OR NO CAMERA 4 U
-		CameraServer.getInstance().addAxisCamera("10.29.3.56");
+//		camera = new Vision2903("10.29.3.56");
+//		camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+
 	}
 
 	public void disabledPeriodic() {
@@ -177,4 +191,8 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
+	
+	public static void disable() {
+	}
+
 }

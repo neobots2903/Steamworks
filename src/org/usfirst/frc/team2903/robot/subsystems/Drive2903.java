@@ -11,7 +11,6 @@ import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive2903 extends Subsystem {
 
@@ -49,6 +48,7 @@ public class Drive2903 extends Subsystem {
 	public RobotDrive robotDrive;
 	private int lastRightRawCount;
 	private int lastLeftRawCount;
+	private boolean autoPositionBothSides;
 	
 	public Drive2903() {
 
@@ -131,6 +131,9 @@ public class Drive2903 extends Subsystem {
 		}
 	}
 
+	public void drive(double forward, double turn) {
+		robotDrive.drive(forward, turn);
+	}
 	  /**
 	   * Arcade drive implements single stick driving. This function lets you directly provide
 	   * joystick values from any source.
@@ -150,8 +153,8 @@ public class Drive2903 extends Subsystem {
 	   * @param rightSpeed    The value of the right stick.
 	   */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		SmartDashboard.putNumber("Left Encoder", leftGetRawCount());
-		SmartDashboard.putNumber("Right Encoder", rightGetRawCount());
+//		SmartDashboard.putNumber("Left Encoder", leftGetRawCount());
+//		SmartDashboard.putNumber("Right Encoder", rightGetRawCount());
 		
 		robotDrive.tankDrive(leftSpeed, rightSpeed);
 	}
@@ -179,11 +182,11 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setPosition(0);
 		rightFrontMotor.setEncPosition(0);
 		leftFrontMotor.setPosition(0);
-		leftFrontMotor.setEncPosition(0);
-	}
+		leftFrontMotor.setEncPosition(0);	}
 	
 	public void setAutoPositionMode() {
 		setAutoPositionMode(false);
+		autoPositionBothSides = false;
 	}
 	
 	/**
@@ -195,9 +198,17 @@ public class Drive2903 extends Subsystem {
 	 */
 	public void setAutoPositionMode(boolean bothSides)
 	{
+		
+		autoPositionBothSides = bothSides;
+		
 		// set the right side primary to position and the secondary to follower
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.Position);
 		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
+		
+		// talon position set up 
+		int absolutePosition = rightFrontMotor.getPulseWidthPosition() & 0xFFF;
+		rightFrontMotor.setEncPosition(absolutePosition);		
+		
 		
 		// have the motors follow rightFrontMotor
 		rightFrontMotor.set(0);
@@ -211,13 +222,15 @@ public class Drive2903 extends Subsystem {
 		rightFrontMotor.setEncPosition(0);
 
 		/* set closed loop gains in slot0 */
+		rightFrontMotor.setAllowableClosedLoopErr(0);
 		rightFrontMotor.setProfile(0);
-		rightFrontMotor.setF(FULL_FORWARD / NATIVE_UNITS_PER_TVE);  // this needs to be FULL-FOWARD / NATIVE UNITS)
-		rightFrontMotor.setP(0);
+//		rightFrontMotor.setF(FULL_FORWARD / NATIVE_UNITS_PER_TVE);  // this needs to be FULL-FOWARD / NATIVE UNITS)
+		rightFrontMotor.setF(0);  // this needs to be FULL-FOWARD / NATIVE UNITS)
+		rightFrontMotor.setP(0.1);
 		rightFrontMotor.setI(0);
 		rightFrontMotor.setD(0);
-		rightFrontMotor.setMotionMagicCruiseVelocity(0); 
-		rightFrontMotor.setMotionMagicAcceleration(0);
+//		rightFrontMotor.setMotionMagicCruiseVelocity(0); 
+//		rightFrontMotor.setMotionMagicAcceleration(0);
 
 		// both sides are going to be monitoring position
 		if (bothSides) {
@@ -225,6 +238,10 @@ public class Drive2903 extends Subsystem {
 			Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Position);
 			Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
 			
+			// talon position set up 
+			absolutePosition = leftFrontMotor.getPulseWidthPosition() & 0xFFF;
+			leftFrontMotor.setEncPosition(absolutePosition);
+		
 			// left side follows right front motor
 			leftFrontMotor.set(0);
 			leftRearMotor.set(leftFrontMotor.getDeviceID());
@@ -275,6 +292,10 @@ public class Drive2903 extends Subsystem {
 		// TODO Auto-generated method stub
 		rightFrontMotor.changeControlMode(TalonControlMode.Position);
 		rightFrontMotor.set(distanceToDrive);
+		if (autoPositionBothSides) {
+			leftFrontMotor.changeControlMode(TalonControlMode.Position);
+			leftFrontMotor.set(distanceToDrive);
+		}
 	}
 
 	public void setVelocity(double velocity) {
@@ -294,6 +315,30 @@ public class Drive2903 extends Subsystem {
 	  }
 	  
 	  public void driveReset() {
+			// disable timeout safety on drives
+			rightFrontMotor.setSafetyEnabled(false);
+			leftFrontMotor.setSafetyEnabled(false);
+			
+			// configure the encoders
+			rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			rightFrontMotor.reverseSensor(true);		
+//			rightFrontMotor.configEncoderCodesPerRev(COUNTS_PER_MOTOR_REV);
+			leftFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			leftFrontMotor.reverseSensor(false);  		
+//			leftFrontMotor.configEncoderCodesPerRev(COUNTS_PER_MOTOR_REV);
+			//SmartDashboard.putNumber("Feedback Status", CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent.value);
+			
+			// configure the output
+			rightFrontMotor.configNominalOutputVoltage(+0f, -0f);
+			rightFrontMotor.configPeakOutputVoltage(+12f, -12f);
+			
+			leftFrontMotor.configNominalOutputVoltage(+0f, -0f);
+			leftFrontMotor.configPeakOutputVoltage(+12f, -12f);
+			
+			// Initialize the raw counts
+			lastRightRawCount = 0;
+			lastLeftRawCount = 0;
+		  
 		  rightFrontMotor.setPosition(0);
 		  leftFrontMotor.setPosition(0);
 		  rightFrontMotor.setEncPosition(0);
@@ -305,7 +350,7 @@ public class Drive2903 extends Subsystem {
 		}
 
 		public int rightGetRawCount() {
-			return (int)rightFrontMotor.getEncPosition(); // - lastRightRawCount;
+			return (int)-rightFrontMotor.getEncPosition(); // - lastRightRawCount;
 		}
 
 
@@ -323,6 +368,14 @@ public class Drive2903 extends Subsystem {
 
 		public void setLastLeftRaw(int lastRawCount) {
 			lastLeftRawCount = lastRawCount;
+		}
+		
+		public boolean isRightEncoderPresent() {
+			return rightFrontMotor.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != null;
+		}
+
+		public boolean isLeftEncoderPresent() {
+			return leftFrontMotor.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != null;
 		}
 
 }

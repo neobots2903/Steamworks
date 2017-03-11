@@ -5,8 +5,8 @@ import org.usfirst.frc.team2903.robot.drivers.ADIS16448_IMU;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Gyro2903 extends Subsystem {
 	
@@ -37,7 +37,7 @@ public class Gyro2903 extends Subsystem {
 			break;
 
 		case SPI:
-			spi = new ADXRS450_Gyro();
+			spi = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 			break;
 
 		case IMU:
@@ -66,7 +66,7 @@ public class Gyro2903 extends Subsystem {
 
 		gyroAngle = gyroAngle % 360;
 		
-		SmartDashboard.putNumber("gyroAngle", gyroAngle);
+		//SmartDashboard.putNumber("gyroAngle", gyroAngle);
 		return gyroAngle;
 		
 	}

@@ -9,7 +9,6 @@ public class StraightGear extends CommandGroup {
 	public StraightGear() {
 		requires(Robot.driveSubsystem);
 		requires(Robot.gyroSubsystem);
-	//	requires(Robot.cameraSubsystem);
 
 	}
 

@@ -20,7 +20,10 @@ public class LIDARTest extends Command {
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
+//		SmartDashboard.putNumber("i2c status",  Robot.lidarSubsystem.getStatus());
+//		SmartDashboard.putBoolean("Update ", Robot.lidarV2Subsystem.updateDistance());
 		SmartDashboard.putNumber("Distance ", Robot.lidarSubsystem.getDistance());
+//		SmartDashboard.putNumber("Update Time ", Robot.lidarV2Subsystem.updateTime());
 	}
 
 	@Override
