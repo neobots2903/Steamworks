@@ -56,7 +56,6 @@ public class DriveStraightForDistance extends Command {
 		
 		// initialize the gyro
 		Robot.gyroSubsystem.reset();
-		Robot.gyroSubsystem.Calibrate();
 		
 		// get current encoder counts
 		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
