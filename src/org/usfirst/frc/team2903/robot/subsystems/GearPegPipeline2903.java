@@ -31,10 +31,6 @@ public class GearPegPipeline2903 extends Subsystem implements VisionPipeline {
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 
-	public GearPegPipeline2903() {
-		SmartDashboard.putString("HERE ", "HERE!!!!!");
-	}
-
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
@@ -49,7 +45,7 @@ public class GearPegPipeline2903 extends Subsystem implements VisionPipeline {
 		Mat hslThresholdInput = source0;
 		double[] hslThresholdHue = { 62.776082878208065, 96.71143289171262 };
 		double[] hslThresholdSaturation = { 167.40107913669064, 255.0 };
-		double[] hslThresholdLuminance = { 55.03597122302158, 161.4419795221843 };
+		double[] hslThresholdLuminance = { 37.03597122302158, 161.4419795221843 };
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance,
 				hslThresholdOutput);
 

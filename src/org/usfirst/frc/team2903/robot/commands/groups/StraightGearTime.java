@@ -8,9 +8,9 @@ import org.usfirst.frc.team2903.robot.commands.commoners.OpenArms;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class StraightGearNoVision extends CommandGroup {
+public class StraightGearTime extends CommandGroup {
 
-	public StraightGearNoVision() {
+	public StraightGearTime() {
 		requires(Robot.driveSubsystem);
 		requires(Robot.gyroSubsystem);
 		

@@ -14,16 +14,16 @@ public class DriveInAOneFootSquare extends CommandGroup {
 
 		Robot.gyroSubsystem.Calibrate();
 		//addSequential(new TurnWithGyro(0));
-		addSequential(new DriveStraightForDistance(12));
+		addSequential(new DriveStraightForDistance(12, true));
 		addSequential(new TurnWithGyro(90));
 		Robot.gyroSubsystem.reset();
-		addSequential(new DriveStraightForDistance(12));
+		addSequential(new DriveStraightForDistance(12, true));
 		addSequential(new TurnWithGyro(180));
 		Robot.gyroSubsystem.reset();
-		addSequential(new DriveStraightForDistance(12));
+		addSequential(new DriveStraightForDistance(12, true));
 		addSequential(new TurnWithGyro(270));
 		Robot.gyroSubsystem.reset();
-		addSequential(new DriveStraightForDistance(12));
+		addSequential(new DriveStraightForDistance(12, true));
 //		addSequential(new TurnWithGyro(360));
 		Robot.gyroSubsystem.reset();
 		

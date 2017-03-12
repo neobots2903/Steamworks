@@ -249,12 +249,15 @@ public class Drive2903 extends Subsystem {
 		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
 		Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
 		
+//		rightFrontMotor.setInverted(false);
+//		rightRearMotor.setInverted(false);
+//		leftFrontMotor.setInverted(false);
+//		leftRearMotor.setInverted(false);
+		
 		leftRearMotor.set(0);
 		rightRearMotor.set(0);
 		leftFrontMotor.set(0);
 		rightFrontMotor.set(0);
-
-		
 	}
 	public void setPosition(long distanceToDrive) {
 		// TODO Auto-generated method stub
