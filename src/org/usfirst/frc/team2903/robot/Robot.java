@@ -19,11 +19,12 @@ import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
 import org.usfirst.frc.team2903.robot.commands.commoners.LIDARTest;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
-import org.usfirst.frc.team2903.robot.commands.groups.DriveForDistanceTest;
+import org.usfirst.frc.team2903.robot.commands.groups.LeftGear;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.commands.groups.MiddleGear;
-import org.usfirst.frc.team2903.robot.commands.groups.StraightGearNoVision;
+import org.usfirst.frc.team2903.robot.commands.groups.RightGear;
+import org.usfirst.frc.team2903.robot.commands.groups.StraightGearTime;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
@@ -107,19 +108,19 @@ public class Robot extends IterativeRobot {
 		
 		autoChooser = new SendableChooser<Command>();
 		try {
-			autoChooser.addDefault("StraightGearNoVision", new StraightGearNoVision());
-			autoChooser.addDefault("LIDARtest", new LIDARTest());
-			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
-			autoChooser.addObject("MiddleGear", new MiddleGear());
-			autoChooser.addObject("DriveForDistanceTest", new DriveForDistanceTest());
-			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-			autoChooser.addObject("GearAim", new GearAim());
-			autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
-			autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
-			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-			autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
-			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
-			autoChooser.addObject("MiddleGear", new MiddleGear()); 
+			autoChooser.addObject("LeftGear", new LeftGear());
+//			autoChooser.addDefault("LIDARtest", new LIDARTest());
+//			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
+//			autoChooser.addObject("MiddleGear", new MiddleGear());
+			autoChooser.addDefault("RightGear", new RightGear());
+//			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
+			autoChooser.addObject("MiddleGear", new GearAim());
+//			autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
+//			autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
+//			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
+//			autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
+//			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
+//			autoChooser.addObject("MiddleGear", new MiddleGear()); 
 			SmartDashboard.putData("AutoChooser", autoChooser);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

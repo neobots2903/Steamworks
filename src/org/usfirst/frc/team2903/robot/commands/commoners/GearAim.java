@@ -14,13 +14,14 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
 public class GearAim extends Command {
 
 	private double centerX = 0.0;
-	public static final int error = 2;
+	public static final int error = 3;
+	public static final double maxSpeed = 0.6;
+	public static final double minSpeed = 0.45;
 
 	private Object imgLock = new Object();
 	private VisionThread visionThread;
 
 	public GearAim() {
-		super("GearAim");
 		requires(Robot.driveSubsystem);
 
 	}
@@ -40,7 +41,6 @@ public class GearAim extends Command {
 				}
 		});
 		visionThread.start();
-//		centerX = 0;
 	}
 
 	public double getCenterX() {
@@ -59,18 +59,29 @@ public class GearAim extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		double localCenterX = getCenterX() / 2;
-		// double turn = centerX - (IMG_WIDTH / 2);
-		double turn = ((Robot.IMG_WIDTH / 2) - Math.abs(localCenterX)) / (Robot.IMG_WIDTH / 2);
-		if (localCenterX < 0) {
-			turn = -turn;
+		double localCenterX = getCenterX();
+		double distanceFromCenter = (localCenterX - (Robot.IMG_WIDTH / 2));
+		double turn = distanceFromCenter / (Robot.IMG_WIDTH / 2);
+		if (Math.abs(turn) > maxSpeed) {
+			if (turn < 0)
+				turn = -maxSpeed;
+			else 
+				turn = maxSpeed;
+		} else if (Math.abs(turn) < minSpeed) {
+			if (turn < 0)
+				turn = -minSpeed;
+			else 
+				turn = minSpeed;
 		}
+			
 		SmartDashboard.putNumber("turn (for vision) ", turn);
-		if (localCenterX > error || localCenterX < -error) {
-			// Robot.driveSubsystem.arcadeDrive(0, turn);
+		SmartDashboard.putNumber("Distance from center ", distanceFromCenter);
+		if (Math.abs(distanceFromCenter) > error) {
+			
+			Robot.driveSubsystem.arcadeDrive(0, turn);
 			return false;
 		} else {
-			return false;
+			return true;
 		}
 	}
 
