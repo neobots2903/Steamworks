@@ -14,13 +14,15 @@ public class Shooter2903 extends Subsystem {
 	static final double PI = 3.14159;
 
 	static final double COUNTS_PER_MOTOR_REV = 1024; // Quad Encoder
-	static final double DRIVE_GEAR_REDUCTION = 1.1;
+	static final double DRIVE_GEAR_REDUCTION = 1.0;
 	static final double WHEEL_DIAMETER_INCHES = 4.0;
 	static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * PI;
 
 	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)
 			/ (WHEEL_DIAMETER_INCHES * 3.141595));
 
+	static final double SHOOT_SPEED = 0.5;
+	
 	// gate positions
 	static final double OPEN_GATE_POSITION = 0;
 	static final double CLOSED_GATE_POSITION = 1;
@@ -31,16 +33,14 @@ public class Shooter2903 extends Subsystem {
 	private Servo gate;
 
 	// variables
-	static final double optimalSpeed = 0.62;
+	static final double OPTIMAL_SPEED = 0.62;
 
 	public Shooter2903() {
-
-		super("Shooter2903");
-
 		shootMotor = new CANTalon(RobotMap.shootMotor);
 		shakeMotor = new CANTalon(RobotMap.shakeMotor);
 		gate = new Servo(1);
 		shootMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		
 		shootMotor.changeControlMode(TalonControlMode.PercentVbus);
 
 		shootMotor.configNominalOutputVoltage(+0.0f, -0.0f);
@@ -51,8 +51,6 @@ public class Shooter2903 extends Subsystem {
 		// enable the motors
 		shakeMotor.enable();
 		shootMotor.enable();
-		// KickingMotor.enable();
-
 	}
 
 	@Override
@@ -62,8 +60,7 @@ public class Shooter2903 extends Subsystem {
 	}
 
 	public void shoot() {
-		// shootMotor.set(0.62);
-		shootMotor.set(0.5);
+		shootMotor.set(OPTIMAL_SPEED);
 	}
 
 	public void shaker(double shakerSpeed) {
@@ -89,7 +86,7 @@ public class Shooter2903 extends Subsystem {
 
 	public void GateControl() {
 		// controls gate opening and closing
-		if (shootMotor.get() == optimalSpeed){
+		if (shootMotor.get() >= OPTIMAL_SPEED){
 			OpenGate();
 		}
 		else{

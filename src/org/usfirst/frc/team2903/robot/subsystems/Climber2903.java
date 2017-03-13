@@ -7,21 +7,16 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Climber2903 extends Subsystem {
-	
+
 	// motor
 	static CANTalon ClimberMotor;
 
 	public Climber2903() {
-		
-		super("Climber2903");
-		
 		// instantiate the talon motor controllers
 		ClimberMotor = new CANTalon(RobotMap.WinchMotor);
 
-		
 		// enable the motors
 		ClimberMotor.enable();
-		
 	}
 
 	@Override
@@ -31,18 +26,16 @@ public class Climber2903 extends Subsystem {
 	}
 
 	public void LiftOff() {
-		//Pick balls up 
+		// Pick balls up
 		ClimberMotor.set(-1);
 	}
 
-	
-
 	public void Fall() {
-		//spit balls out
+		// spit balls out
 		ClimberMotor.set(1);
 	}
-	
-	public void StopLift(){
+
+	public void StopLift() {
 		ClimberMotor.set(0);
 	}
 }

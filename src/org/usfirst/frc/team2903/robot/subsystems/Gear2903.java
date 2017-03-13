@@ -6,31 +6,17 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Gear2903 extends Subsystem {
 
-
-	public Gear2903() {
-		
-		super("Gear2903");
-		
-		
-	}
-	
-	//gear delivery system
-	public void openArms (){
+	// gear delivery system
+	public void openArms() {
 		Robot.pnuematicsSubsystem.openarms();
 	}
-	
-	public void closeArms (){
+
+	public void closeArms() {
 		Robot.pnuematicsSubsystem.closearms();
 	}
-	
 
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-
 	}
-
-	
-	
 
 }

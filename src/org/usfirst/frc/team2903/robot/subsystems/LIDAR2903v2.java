@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
- * This is the class that defines the LIDAR sensor and how it is supposed to work.
+ * This is the class that defines the LIDAR sensor and how it is supposed to
+ * work.
  * 
  * @author Manu S.
  * 
  */
-public class LIDAR2903v2
-{
+public class LIDAR2903v2 {
 
 	private I2C i2c;
 	private byte[] distance;
@@ -25,8 +25,7 @@ public class LIDAR2903v2
 
 	private long lastUpdateTime;
 
-	public LIDAR2903v2(Port port)
-	{
+	public LIDAR2903v2(Port port) {
 		i2c = new I2C(port, LIDAR_ADDR);
 
 		distance = new byte[2];
@@ -35,40 +34,36 @@ public class LIDAR2903v2
 		updater = new java.util.Timer();
 	}
 
-	public void start()
-	{
+	public void start() {
 		updater.scheduleAtFixedRate(new LIDARUpdater(), 0, 100);
 	}
 
-	public void start(int period)
-	{
+	public void start(int period) {
 		updater.scheduleAtFixedRate(new LIDARUpdater(), 0, period);
 	}
 
-	public void stop()
-	{
+	public void stop() {
 		updater.cancel();
 		updater = new java.util.Timer();
 	}
 
-	public long updateTime()
-	{
-		return(System.currentTimeMillis() - lastUpdateTime);
+	public long updateTime() {
+		return (System.currentTimeMillis() - lastUpdateTime);
 	}
 
 	/**
-	 * This method uses the updated distance array and converts it to an intelligible number that
-	 * represents the distance the LIDAR reads in inches.
+	 * This method uses the updated distance array and converts it to an
+	 * intelligible number that represents the distance the LIDAR reads in
+	 * inches.
 	 * 
 	 * @return the distance to the object most directly in the LIDAR's path
 	 */
-	public int getDistance()
-	{
+	public int getDistance() {
 		return (int) Integer.toUnsignedLong(distance[0] << 8) + Byte.toUnsignedInt(distance[1]);
-//		ByteBuffer buffer = ByteBuffer.wrap(distance);
-//		buffer.order(ByteOrder.LITTLE_ENDIAN);
-//		int result = buffer.getShort();
-//		return result;
+		// ByteBuffer buffer = ByteBuffer.wrap(distance);
+		// buffer.order(ByteOrder.LITTLE_ENDIAN);
+		// int result = buffer.getShort();
+		// return result;
 	}
 
 	/**
@@ -76,11 +71,9 @@ public class LIDAR2903v2
 	 * 
 	 * @return true - if the distance was read; false otherwise
 	 */
-	public boolean updateDistance()
-	{
+	public boolean updateDistance() {
 		Timer.delay(0.1);
-		if(System.currentTimeMillis() - lastUpdateTime >= 100)
-		{
+		if (System.currentTimeMillis() - lastUpdateTime >= 100) {
 			i2c.write(LIDAR_CONFIG_REGISTER, 0x04);
 			Timer.delay(0.04);
 			i2c.read(LIDAR_DISTANCE_REGISTER, 2, distance);
@@ -92,25 +85,20 @@ public class LIDAR2903v2
 	}
 
 	/**
-	 * This small class helps the LIDAR time how often it reads in information so that it doesnt
-	 * overload itself.
+	 * This small class helps the LIDAR time how often it reads in information
+	 * so that it doesnt overload itself.
 	 * 
 	 * @author Manu S.
 	 * 
 	 */
-	private class LIDARUpdater extends TimerTask
-	{
+	private class LIDARUpdater extends TimerTask {
 		@Override
-		public void run()
-		{
-			while(true)
-			{
+		public void run() {
+			while (true) {
 				updateDistance();
-				try
-				{
+				try {
 					Thread.sleep(10);
-				} catch(InterruptedException e)
-				{
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}

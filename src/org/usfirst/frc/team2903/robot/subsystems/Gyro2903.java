@@ -9,29 +9,25 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Gyro2903 extends Subsystem {
-	
 
 	public enum GYRO_TYPE {
-		ANALOG,
-		SPI,
-		IMU
+		ANALOG, SPI, IMU
 	};
-	
+
 	ADIS16448_IMU imu;
 	ADXRS450_Gyro spi;
 	AnalogGyro gyro;
-	
+
 	double gyroAngle;
 	GYRO_TYPE gyroToUse;
-	
+
 	// initialize the gyro subsystem
 	// if you want to use the ADI IMU pass useIMU as true
 	// if you want to use the ADI SPI gyro, pass useIMU as false
 	public Gyro2903(GYRO_TYPE gyroType) {
 		gyroToUse = gyroType;
-		
-		switch (gyroType)
-		{
+
+		switch (gyroType) {
 		case ANALOG:
 			gyro = new AnalogGyro(RobotMap.AnalogGyro);
 			break;
@@ -41,16 +37,15 @@ public class Gyro2903 extends Subsystem {
 			break;
 
 		case IMU:
-			imu = new ADIS16448_IMU();			
+			imu = new ADIS16448_IMU();
 			break;
 		}
 	}
 
 	// return the gyro position
-	//	limits the angle to 360.
+	// limits the angle to 360.
 	public double GyroPosition() {
-		switch (gyroToUse)
-		{
+		switch (gyroToUse) {
 		case ANALOG:
 			gyroAngle = gyro.getAngle();
 			break;
@@ -60,22 +55,20 @@ public class Gyro2903 extends Subsystem {
 			break;
 
 		case IMU:
-			gyroAngle = imu.getAngleZ();		
+			gyroAngle = imu.getAngleZ();
 			break;
 		}
 
 		gyroAngle = gyroAngle % 360;
-		
-		//SmartDashboard.putNumber("gyroAngle", gyroAngle);
+
+		// SmartDashboard.putNumber("gyroAngle", gyroAngle);
 		return gyroAngle;
-		
+
 	}
-	
+
 	// Calibrate the gyro
-	public void Calibrate()
-	{
-		switch (gyroToUse)
-		{
+	public void Calibrate() {
+		switch (gyroToUse) {
 		case ANALOG:
 			gyro.calibrate();
 			break;
@@ -89,8 +82,7 @@ public class Gyro2903 extends Subsystem {
 			break;
 		}
 	}
-	
-	
+
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
@@ -99,8 +91,7 @@ public class Gyro2903 extends Subsystem {
 
 	// reset the gyro
 	public void reset() {
-		switch (gyroToUse)
-		{
+		switch (gyroToUse) {
 		case ANALOG:
 			gyro.reset();
 			break;

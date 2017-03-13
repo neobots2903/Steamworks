@@ -15,9 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TurnWithGyro extends Command{
 
 	double TargetAngle = 0;
-
 	double CumulativeAngle = 0;
-	
 	double HighLimit;
 	double LowLimit;
 	double ErrorLimit = 0.45;
@@ -26,7 +24,6 @@ public class TurnWithGyro extends Command{
 	double ReadjustMotorSpeed = 0;
 	boolean PreviousTurnLeft = false;
 	boolean TurnLeft = false;
-	
 	double AccumulatedAngle = 0;
 
 	public TurnWithGyro(double targetangle) {
@@ -54,9 +51,6 @@ public class TurnWithGyro extends Command{
 	public void setTargetAngle(double targetAngle) {
 		TargetAngle = targetAngle;
 
-		// adjust angle down to one circle
-		//TargetAngle = TargetAngle
-
 		// set the limits for adjustment
 		HighLimit = TargetAngle + ErrorLimit;
 		LowLimit = TargetAngle - ErrorLimit;
@@ -64,7 +58,6 @@ public class TurnWithGyro extends Command{
 
 	@Override
 	protected void initialize() {
-		// TODO Auto-generated method stub
 		Robot.gyroSubsystem.reset();
 	}
 
@@ -74,27 +67,7 @@ public class TurnWithGyro extends Command{
 		MotorSpeed = Robot.minipidSubsystem.getOutput(gyroAngle, TargetAngle) / 100;
 		
 		SmartDashboard.putNumber("TurnWithGyro", gyroAngle);
-		
-		// TODO Auto-generated method stub
-//		if (TargetAngle <= 0) {
-//			if (gyroAngle > TargetAngle)
-//				turnLeft = true;
-//			if (gyroAngle < TargetAngle)
-//				turnLeft = false;
-//		}
-//		else{
-//			if (gyroAngle > TargetAngle)
-//				turnLeft = false;
-//			if (gyroAngle < TargetAngle)
-//				turnLeft = true;
-//		}
-//		
-//		// we are readjusting the angle, lower the readjustment speed
-//		if (turnLeft != PreviousTurnLeft) {
-//			MotorSpeed = ReadjustMotorSpeed;
-//			PreviousTurnLeft = turnLeft;
-//		}
-		
+
 		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed)
 			MotorSpeed = MinMotorSpeed;
 		else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0)
@@ -103,18 +76,10 @@ public class TurnWithGyro extends Command{
 		SmartDashboard.putNumber("Taget Angle", TargetAngle);
 		SmartDashboard.putNumber("MotorSpeed = ", MotorSpeed);
 		Robot.driveSubsystem.tankDrive(-MotorSpeed, MotorSpeed);
-//		if (!turnLeft)
-//			// turn right
-//			Robot.driveSubsystem.tankDrive(MotorSpeed * -1.0, MotorSpeed * -1.0);
-//		else 
-//			// turn left
-//			Robot.driveSubsystem.tankDrive(MotorSpeed, MotorSpeed);
-		
 	}
 
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
 		double gyroAngle = (Robot.gyroSubsystem.GyroPosition());
 		
 		if (gyroAngle >= LowLimit && gyroAngle <= HighLimit ) 
@@ -125,14 +90,12 @@ public class TurnWithGyro extends Command{
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-		
+		Robot.driveSubsystem.tankDrive(0, 0);
 	}
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
+		end();
 	}
 
 }

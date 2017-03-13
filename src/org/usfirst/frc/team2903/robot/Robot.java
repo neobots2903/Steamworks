@@ -14,32 +14,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2903.robot.commands.Teleop;
-import org.usfirst.frc.team2903.robot.commands.commoners.DriveToPositionTest;
-import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
-import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
-import org.usfirst.frc.team2903.robot.commands.commoners.LIDARTest;
-import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.LeftGear;
-import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
-import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
 import org.usfirst.frc.team2903.robot.commands.groups.MiddleGear;
 import org.usfirst.frc.team2903.robot.commands.groups.RightGear;
-import org.usfirst.frc.team2903.robot.commands.groups.StraightGearTime;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
-import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903v2;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
-import org.usfirst.frc.team2903.robot.subsystems.Vision2903;
 import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
-
 
 import org.usfirst.frc.team2903.robot.subsystems.PickUp2903;
 import org.usfirst.frc.team2903.robot.subsystems.Pnuematics2903;
 import org.usfirst.frc.team2903.robot.subsystems.Climber2903;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -49,7 +37,7 @@ import org.usfirst.frc.team2903.robot.subsystems.Climber2903;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	
+
 	public static Drive2903 driveSubsystem;
 	public static Shooter2903 shooterSubsystem;
 	public static Gyro2903 gyroSubsystem;
@@ -57,23 +45,21 @@ public class Robot extends IterativeRobot {
 	public static Pnuematics2903 pnuematicsSubsystem;
 	public static Gear2903 gearSubsystem;
 	public static LIDAR2903 lidarSubsystem;
-	public static LIDAR2903v2 lidarV2Subsystem;
 	public static PickUp2903 pickupSubsystem;
 	public static Climber2903 climberSubsystem;
 	public static GearPegPipeline2903 gearPegSubsystem;
-	
+
 	Command autonomousCommand;
 	SendableChooser<Command> autoChooser;
 	Command teleopCommand;
 
 	public static Joystick joyOp = new Joystick(0);
 	Button triggerKick = new JoystickButton(joyOp, 1);
-	public static Vision2903 camera;
 
 	public static Joystick joy1 = new Joystick(1);
 
 	public static Port lidarPort = I2C.Port.kOnboard;
-	
+
 	public static final int IMG_WIDTH = 640;
 	public static final int IMG_HEIGHT = 480;
 
@@ -83,7 +69,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void robotInit() {
 
-		pnuematicsSubsystem = new Pnuematics2903 ();
+		pnuematicsSubsystem = new Pnuematics2903();
 
 		driveSubsystem = new Drive2903();
 		Gyro2903.GYRO_TYPE gyroType = Gyro2903.GYRO_TYPE.SPI;
@@ -94,33 +80,23 @@ public class Robot extends IterativeRobot {
 		pickupSubsystem = new PickUp2903();
 		climberSubsystem = new Climber2903();
 		lidarSubsystem = new LIDAR2903(lidarPort);
-		lidarV2Subsystem = new LIDAR2903v2(lidarPort);
-		
-//		SmartDashboard.putNumber("kP", minipidSubsystem.getP());
-//		SmartDashboard.putNumber("kI", minipidSubsystem.getI());
-//		SmartDashboard.putNumber("kD", minipidSubsystem.getD());
-		
-//		SmartDashboard.putNumber("LIDAR Distance From Object", lidarSubsystem.getDistance());
+
+		// SmartDashboard.putNumber("kP", minipidSubsystem.getP());
+		// SmartDashboard.putNumber("kI", minipidSubsystem.getI());
+		// SmartDashboard.putNumber("kD", minipidSubsystem.getD());
+
+		// SmartDashboard.putNumber("LIDAR Distance From Object",
+		// lidarSubsystem.getDistance());
 
 		// initialize the gyro
 		gyroSubsystem.reset();
 		gyroSubsystem.Calibrate();
-		
+
 		autoChooser = new SendableChooser<Command>();
 		try {
+			autoChooser.addDefault("MiddleGear", new MiddleGear());
 			autoChooser.addObject("LeftGear", new LeftGear());
-//			autoChooser.addDefault("LIDARtest", new LIDARTest());
-//			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
-//			autoChooser.addObject("MiddleGear", new MiddleGear());
-			autoChooser.addDefault("RightGear", new RightGear());
-//			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-			autoChooser.addObject("MiddleGear", new GearAim());
-//			autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
-//			autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
-//			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-//			autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
-//			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
-//			autoChooser.addObject("MiddleGear", new MiddleGear()); 
+			autoChooser.addObject("RightGear", new RightGear());
 			SmartDashboard.putData("AutoChooser", autoChooser);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -128,10 +104,6 @@ public class Robot extends IterativeRobot {
 		}
 
 		teleopCommand = new Teleop();
-		//Initializes camera server PLEASE DON'T TOUCH OR NO CAMERA 4 U
-//		camera = new Vision2903("10.29.3.56");
-//		camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
-
 	}
 
 	public void disabledPeriodic() {
@@ -140,13 +112,8 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		// schedule the autonomous command (example)
-			autonomousCommand = (Command) autoChooser.getSelected();
-			autonomousCommand.start();
-			
-//			rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-//			leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-//			rightRearMotor.changeControlMode(TalonControlMode.Follower);
-//			leftRearMotor.changeControlMode(TalonControlMode.Follower);
+		autonomousCommand = (Command) autoChooser.getSelected();
+		autonomousCommand.start();
 	}
 
 	/**
@@ -163,11 +130,6 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
-		
-//		rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-//		leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-//		rightRearMotor.changeControlMode(TalonControlMode.PercentVbus);
-//		leftRearMotor.changeControlMode(TalonControlMode.PercentVbus);
 	}
 
 	/**
@@ -192,7 +154,7 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
-	
+
 	public static void disable() {
 	}
 

@@ -4,9 +4,8 @@ import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team2903.robot.Robot;
 import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
+import org.usfirst.frc.team2903.robot.subsystems.Vision2903;
 
-import edu.wpi.cscore.AxisCamera;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.VisionThread;
@@ -23,22 +22,26 @@ public class GearAim extends Command {
 
 	public GearAim() {
 		requires(Robot.driveSubsystem);
-
 	}
+
+	Vision2903 camera;
 
 	@Override
 	protected void initialize() {
-		AxisCamera camera = CameraServer.getInstance().addAxisCamera("10.29.3.56");
-		
+		// set up camera server
+		camera = new Vision2903("10.29.3.56");
+
+		// setup camera
+		camera.setBrightness(0);
 		camera.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
-	
-		visionThread = new VisionThread(camera, new GearPegPipeline2903(), pipeline -> {
-				if (!pipeline.filterContoursOutput().isEmpty()) {
-					Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-					synchronized (imgLock) {
-						centerX = r.x + (r.width / 2);
-					}
+
+		visionThread = new VisionThread(camera.getCamera(), new GearPegPipeline2903(), pipeline -> {
+			if (!pipeline.filterContoursOutput().isEmpty()) {
+				Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+				synchronized (imgLock) {
+					centerX = r.x + (r.width / 2);
 				}
+			}
 		});
 		visionThread.start();
 	}
@@ -65,19 +68,19 @@ public class GearAim extends Command {
 		if (Math.abs(turn) > maxSpeed) {
 			if (turn < 0)
 				turn = -maxSpeed;
-			else 
+			else
 				turn = maxSpeed;
 		} else if (Math.abs(turn) < minSpeed) {
 			if (turn < 0)
 				turn = -minSpeed;
-			else 
+			else
 				turn = minSpeed;
 		}
-			
+
 		SmartDashboard.putNumber("turn (for vision) ", turn);
 		SmartDashboard.putNumber("Distance from center ", distanceFromCenter);
 		if (Math.abs(distanceFromCenter) > error) {
-			
+
 			Robot.driveSubsystem.arcadeDrive(0, turn);
 			return false;
 		} else {
@@ -87,8 +90,12 @@ public class GearAim extends Command {
 
 	@Override
 	protected void end() {
+
+		camera.setBrightness(100);
+
 		// TODO Auto-generated method stub
 		Robot.driveSubsystem.arcadeDrive(0, 0);
+
 	}
 
 	@Override

@@ -9,10 +9,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class DriveInAOneFootSquare extends CommandGroup {
 
 	public DriveInAOneFootSquare(){
-		requires(Robot.driveSubsystem);
-		requires(Robot.gyroSubsystem);
-
-		Robot.gyroSubsystem.Calibrate();
 		//addSequential(new TurnWithGyro(0));
 		addSequential(new DriveStraightForDistance(12, true));
 		addSequential(new TurnWithGyro(90));
@@ -25,7 +21,6 @@ public class DriveInAOneFootSquare extends CommandGroup {
 		Robot.gyroSubsystem.reset();
 		addSequential(new DriveStraightForDistance(12, true));
 //		addSequential(new TurnWithGyro(360));
-		Robot.gyroSubsystem.reset();
 		
 
 

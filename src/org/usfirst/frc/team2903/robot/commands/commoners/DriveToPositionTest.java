@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveToPositionTest extends Command {
 
-	// TODO update for two encoders with average of the two and gyro 
+	// TODO update for two encoders with average of the two and gyro
 
 	double HighLimit;
 	double LowLimit;
@@ -17,48 +17,44 @@ public class DriveToPositionTest extends Command {
 	int CurrentRightEncoderPos;
 	int CurrentLeftEncoderPos;
 	private double Distance;
-	
+
 	double MinMotorSpeed = 0.3;
 
-	static final double		PI						= 3.14159;
-	
-	static final double COUNTS_PER_MOTOR_REV = 1024; //Quad Encoder
-	static final double DRIVE_GEAR_REDUCTION = 1.1; 
+	static final double PI = 3.14159;
+
+	static final double COUNTS_PER_MOTOR_REV = 1024; // Quad Encoder
+	static final double DRIVE_GEAR_REDUCTION = 1.1;
 	static final double WHEEL_DIAMETER_INCHES = 4.0;
 	static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * PI;
-	
-	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / 
-			(WHEEL_DIAMETER_INCHES * 3.141595));
 
-	//distance in inches 
-	public DriveToPositionTest(double distance)
-	{
-		super("DriveToPositionTest");
-		
+	static final double COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)
+			/ (WHEEL_DIAMETER_INCHES * 3.141595));
+
+	// distance in inches
+	public DriveToPositionTest(double distance) {
 		requires(Robot.driveSubsystem);
 		Distance = distance;
 	}
-	
-	
+
 	@Override
 	protected void initialize() {
 
 		Robot.driveSubsystem.driveReset();
 		Robot.driveSubsystem.setAutoPositionMode();
-		
+
 		// get current encoder counts
 		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
-		
+
 		// calculate target position
-		TargetEncoderPos =  (int) ((Distance * COUNTS_PER_INCH) + Math.abs(Robot.driveSubsystem.rightGetRawCount())); 
-		
+		TargetEncoderPos = (int) ((Distance * COUNTS_PER_INCH) + Math.abs(Robot.driveSubsystem.rightGetRawCount()));
+
 		SmartDashboard.putNumber("Right ", Math.abs(Robot.driveSubsystem.rightGetRawCount()));
 		SmartDashboard.putNumber("DP distance", Distance);
 		SmartDashboard.putNumber("DP Target", TargetEncoderPos);
 
 		HighLimit = TargetEncoderPos + ErrorLimit;
 		LowLimit = TargetEncoderPos - ErrorLimit;
-		
+
 		Robot.driveSubsystem.setPosition(-TargetEncoderPos);
 
 	}
@@ -74,7 +70,7 @@ public class DriveToPositionTest extends Command {
 		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());
 
 		// within our error window?
-		if (LowLimit <= CurrentRightEncoderPos && CurrentRightEncoderPos <= HighLimit ) 
+		if (LowLimit <= CurrentRightEncoderPos && CurrentRightEncoderPos <= HighLimit)
 			return true;
 		else
 			return false;

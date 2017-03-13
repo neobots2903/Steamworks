@@ -14,30 +14,22 @@ public class RobotMap {
 	public static int LeftTopMotor = 3;
 	public static int LeftBottomMotor = 4;
 
-
-	
-
-	
 	// shooter mechanisim
 	public static int shootMotor = 5;
 	public static int shakeMotor = 8;
-	
-	
+
 	// Pick Up
 	public static int PickUpMotor = 6;
-	
-	
+
 	// Analog Gyro is on analog 0
 	public static int AnalogGyro = 0;
 
-	
 	// Winch
 	public static int WinchMotor = 7;
-	
+
 	// Pnuematics
 	public static int highGearShiftSol = 6;
 	public static int lowGearShiftSol = 7;
 	public static int gearArmsOpen = 0;
 	public static int gearArmsClose = 1;
-	
 }

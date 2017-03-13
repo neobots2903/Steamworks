@@ -19,15 +19,16 @@ public class Auto extends Command {
 	public Auto() {
 		requires(Robot.driveSubsystem);
 		requires(Robot.gyroSubsystem);
-		requires(Robot.minipidSubsystem); 
-		
+		requires(Robot.minipidSubsystem);
+
 		// initialize the pid and gyro
 		Robot.minipidSubsystem.setPID(0.25, 0.01, 0.4);
 		Robot.gyroSubsystem.Calibrate();
-		
-		//9.549296585513720 encoder clicks per rotation of a wheel
-		// distance of one wheel rotation is 37.699111843077518861551720599354 inches
-		//close to three feet.
+
+		// 9.549296585513720 encoder clicks per rotation of a wheel
+		// distance of one wheel rotation is 37.699111843077518861551720599354
+		// inches
+		// close to three feet.
 	}
 
 	/*
@@ -36,43 +37,42 @@ public class Auto extends Command {
 	protected void initialize() {
 		// set the target for the PID subsystem
 		Robot.minipidSubsystem.setSetpoint(90);
-		
+
 		// set the minimum and maximum output limits for the PID subsystem
-		Robot.minipidSubsystem.setOutputLimits(-80,80);
-		
+		Robot.minipidSubsystem.setOutputLimits(-80, 80);
+
 		// Disable safety checks on drive subsystem
 		Robot.driveSubsystem.robotDrive.setSafetyEnabled(false);
 	}
 
-	
 	/*
 	 * This routine is called by the scheduler on a regular basis so be careful
-	 * when adding code to not cause blocking issues or delays as this will affect
-	 * the performance of the robot.
+	 * when adding code to not cause blocking issues or delays as this will
+	 * affect the performance of the robot.
 	 */
 	protected void execute() {
 		// Get output from PID and dvide by 4
-		double output = Robot.minipidSubsystem.getOutput(Robot.gyroSubsystem.GyroPosition(),90) * 0.25;
-		
+		double output = Robot.minipidSubsystem.getOutput(Robot.gyroSubsystem.GyroPosition(), 90) * 0.25;
+
 		// limit output to 25% in either direction
-		if (output > 25) 
+		if (output > 25)
 			output = 25;
 		else if (output < -25)
 			output = -25;
-		
+
 		// convert output to a value the drive subsystem can use (-1 to 1)
 		output /= 100;
-		
+
 		// drive the robot, only providing the turn speed
-		Robot.driveSubsystem.robotDrive.arcadeDrive(0,output);
-		//Robot.driveSubsystem.tankDrive(-output, output);
+		Robot.driveSubsystem.robotDrive.arcadeDrive(0, output);
+		// Robot.driveSubsystem.tankDrive(-output, output);
 	}
 
 	/*
-	 * This is also called by the scheduler on a regular basis and will cause the robot
-	 * to cease to function for the duration of the match if true is returned.
-	 *	Return true if the robot work is finished
-	 *	Return false if the robot is not finished
+	 * This is also called by the scheduler on a regular basis and will cause
+	 * the robot to cease to function for the duration of the match if true is
+	 * returned. Return true if the robot work is finished Return false if the
+	 * robot is not finished
 	 */
 	protected boolean isFinished() {
 		// get the current angle from the gyro
@@ -86,12 +86,12 @@ public class Auto extends Command {
 			// we are not quite there yet, keep going
 			return false;
 		}
-	
+
 	}
 
 	/*
-	 * This is called when the match ends or if isFinished returns true.
-	 * all systems should be disabled at this point.
+	 * This is called when the match ends or if isFinished returns true. all
+	 * systems should be disabled at this point.
 	 */
 	protected void end() {
 		// we are ending the, stop moving the robot
@@ -99,11 +99,10 @@ public class Auto extends Command {
 	}
 
 	/*
-	 * This is called if for some reason the normal operation of the robot is cancelled 
-	 * by an external action.
+	 * This is called if for some reason the normal operation of the robot is
+	 * cancelled by an external action.
 	 */
 	protected void interrupted() {
 	}
-
 
 }

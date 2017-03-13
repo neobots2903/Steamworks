@@ -5,30 +5,28 @@ import org.usfirst.frc.team2903.robot.Robot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
-public  class DriveForTime extends Command{
+public class DriveForTime extends Command {
+
+	static final double TURN_SPEED = 0.5;
+	static final double MAX_SPEED = 0.8;
 	double TimeForDistance;
 	double timeInSeconds;
 	Timer timer = new Timer();
-	private int targetAngle;
 	private double gyroAngle;
 	private double highAngleLimit = 2;
 	private double lowAngleLimit = -2;
-	
-	public DriveForTime(double timeInSeconds){
-		super("DriveForTime");
+
+	public DriveForTime(double timeInSeconds) {
 		requires(Robot.driveSubsystem);
 
 		this.timeInSeconds = timeInSeconds;
 	}
-	
-	protected void initialize(){
-		//TODO Auto-generated method stub
+
+	protected void initialize() {
+		// TODO Auto-generated method stub
 		timer.reset();
 		timer.start();
-		TimeForDistance =timer.get();
-		
-		targetAngle = 0;
-		
+		TimeForDistance = timer.get();
 
 	}
 
@@ -36,36 +34,30 @@ public  class DriveForTime extends Command{
 	protected void execute() {
 
 		double turnSpeed = 0;
-		
+
 		gyroAngle = Robot.gyroSubsystem.GyroPosition();
-		
-		//SmartDashboard.putNumber("gyroAngle ", gyroAngle);
+
+		// SmartDashboard.putNumber("gyroAngle ", gyroAngle);
 		if (lowAngleLimit >= gyroAngle && gyroAngle >= highAngleLimit) {
 			if (gyroAngle > 0) {
-				turnSpeed = -0.5;
+				turnSpeed = -TURN_SPEED;
 
-			}
-			else {// (gyroAngle < (targetAngle)) {
-				turnSpeed = 0.5;
+			} else {
+				turnSpeed = TURN_SPEED;
 
 			}
 		} else {
 			turnSpeed = 0;
 		}
-		// TODO Auto-generated method stub
-		//DriveStraightWithGyro.GyroPID(Robot.driveSubsystem, Robot.gyroSubsystem);
-		//SmartDashboard.putNumber("turnSpeed", turnSpeed);
-		Robot.driveSubsystem.tankDrive(0.8+(turnSpeed/2), -0.8+(turnSpeed/2));
-		//Robot.driveSubsystem.arcadeDrive(0, -0.8);
+
+		Robot.driveSubsystem.tankDrive(MAX_SPEED + (turnSpeed / 2), -MAX_SPEED + (turnSpeed / 2));
 		TimeForDistance = timer.get();
 	}
-	
-	@Override
-	
-	protected boolean isFinished() {
-		// TODO Auto-generated method stub
 
-		if(TimeForDistance >= timeInSeconds){
+	@Override
+
+	protected boolean isFinished() {
+		if (TimeForDistance >= timeInSeconds) {
 			return true;
 		}
 		return false;
@@ -73,13 +65,13 @@ public  class DriveForTime extends Command{
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
+		Robot.driveSubsystem.tankDrive(0, 0);
 		timer.stop();
 	}
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
+		end();
+
 	}
 }
