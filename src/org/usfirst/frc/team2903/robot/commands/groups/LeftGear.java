@@ -21,7 +21,7 @@ public class LeftGear extends CommandGroup {
 //		for (int i = 0; i < 5; i++) {
 			addSequential(new DriveStraightForDistance(83, true));
 			addSequential(new TurnWithGyro(sideGearPegAngle));
-			//addSequential(new GearAim());
+//			addSequential(new GearAim());
 			addSequential(new DriveStraightForDistance(-1,true));
 			addSequential(new DriveStraightForDistance(50,false));
 			addSequential(new OpenArms());
