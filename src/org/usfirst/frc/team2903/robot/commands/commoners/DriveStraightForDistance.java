@@ -57,8 +57,6 @@ public class DriveStraightForDistance extends Command {
 
 	public static final double maxSpeed = 0.8;
 	public static final double minSpeed = 0.6;
-
-	AxisCamera camera;
 	
 	// distance in inches
 	public DriveStraightForDistance(int distance, boolean useGyro) {
@@ -79,12 +77,12 @@ public class DriveStraightForDistance extends Command {
 		if (UseGyro) {
 			Robot.gyroSubsystem.reset();
 		} else {
-			camera = CameraServer.getInstance().addAxisCamera("10.29.3.56");
+			camera = new Vision2903("10.29.3.56");
 
 			camera.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
 			camera.setBrightness(0);
 
-			visionThread = new VisionThread(camera, new GearPegPipeline2903(), pipeline -> {
+			visionThread = new VisionThread(camera.getCamera(), new GearPegPipeline2903(), pipeline -> {
 				if (!pipeline.filterContoursOutput().isEmpty()) {
 					Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 					synchronized (imgLock) {
@@ -149,7 +147,7 @@ public class DriveStraightForDistance extends Command {
 
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
-		double angle;
+		
 		MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
 		if (UseGyro) {
 			angle = -(StartAngle - Robot.gyroSubsystem.GyroPosition());
