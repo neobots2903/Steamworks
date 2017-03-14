@@ -14,8 +14,8 @@ public class GearAim extends Command {
 
 	private double centerX = 0.0;
 	public static final int error = 3;
-	public static final double maxSpeed = 0.6;
-	public static final double minSpeed = 0.45;
+	public static final double maxSpeed = 0.65;
+	public static final double minSpeed = 0.5;
 
 	private Object imgLock = new Object();
 	private VisionThread visionThread;

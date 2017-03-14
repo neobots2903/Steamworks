@@ -32,6 +32,7 @@ public class DriveStraightForDistance extends Command {
 	boolean ourJobIsDoneHere = false;
 
 	double MinMotorSpeed = 0.3;
+	double MaxMotorSpeed = 0.5;
 
 	private double Kp = 0.03;
 	private double MotorSpeed;
@@ -53,9 +54,12 @@ public class DriveStraightForDistance extends Command {
 	private Object imgLock = new Object();
 	private VisionThread visionThread;
 	private double centerX = 0.0;
-	public static final double minSpeed = 0.45;
-	public static final double maxSpeed = 0.6;
 
+	public static final double maxSpeed = 0.8;
+	public static final double minSpeed = 0.6;
+
+	AxisCamera camera;
+	
 	// distance in inches
 	public DriveStraightForDistance(int distance, boolean useGyro) {
 		requires(Robot.driveSubsystem);
@@ -74,23 +78,13 @@ public class DriveStraightForDistance extends Command {
 		Robot.driveSubsystem.setAutoMode();
 		if (UseGyro) {
 			Robot.gyroSubsystem.reset();
-			StartAngle = Robot.gyroSubsystem.GyroPosition();
-
-			// setup the PID system
-			Robot.minipidSubsystem.reset();
-			Robot.minipidSubsystem.setSetpoint(TargetEncoderPos);
-			Robot.minipidSubsystem.setOutputLimits(-80, 80);
-			Robot.minipidSubsystem.setP(0.2);
-			Robot.minipidSubsystem.setI(0);
-			Robot.minipidSubsystem.setD(0);
 		} else {
+			camera = CameraServer.getInstance().addAxisCamera("10.29.3.56");
 
-			camera = new Vision2903("10.29.3.56");
-
-			camera.setBrightness(0);
 			camera.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
+			camera.setBrightness(0);
 
-			visionThread = new VisionThread(camera.getCamera(), new GearPegPipeline2903(), pipeline -> {
+			visionThread = new VisionThread(camera, new GearPegPipeline2903(), pipeline -> {
 				if (!pipeline.filterContoursOutput().isEmpty()) {
 					Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 					synchronized (imgLock) {
@@ -105,6 +99,8 @@ public class DriveStraightForDistance extends Command {
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
 
+		StartAngle = Robot.gyroSubsystem.GyroPosition();
+
 		// calculate target position
 		TargetEncoderPos = (Distance * (int) COUNTS_PER_INCH);
 
@@ -113,13 +109,22 @@ public class DriveStraightForDistance extends Command {
 		// SmartDashboard.putNumber("DF distance", Distance);
 		// SmartDashboard.putNumber("DF Target", TargetEncoderPos);
 
+		// setup the PID system
+		Robot.minipidSubsystem.reset();
+		Robot.minipidSubsystem.setSetpoint(TargetEncoderPos);
+
+		Robot.minipidSubsystem.setOutputLimits(-80, 80);
+
 		HighLimit = TargetEncoderPos + ErrorLimit;
 		LowLimit = TargetEncoderPos - ErrorLimit;
+
+		// Robot.minipidSubsystem.setP(Kp);
+		// Robot.minipidSubsystem.setI(0);
+		// Robot.minipidSubsystem.setD(0);
 
 		ourJobIsDoneHere = false;
 	}
 
-	// used only if UseGyro is false
 	public double getCenterX() {
 		double localCenterX = 0;
 		if (!UseGyro) {
@@ -143,29 +148,28 @@ public class DriveStraightForDistance extends Command {
 		double angle;
 
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
-
-		// if using gyro, then angle is the difference between our start
-		// position and the current position
-		// if not using gyro, then angle is the percentage offset from the
-		// center of the image
+		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
+		double angle;
+		MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
 		if (UseGyro) {
-			MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
 			angle = -(StartAngle - Robot.gyroSubsystem.GyroPosition());
+			angle *= Kp;
 		} else {
 			double localCenterX = getCenterX();
 			double distanceFromCenter = (localCenterX - (Robot.IMG_WIDTH / 2));
-			angle = distanceFromCenter / (Robot.IMG_WIDTH / 2);
-			if (Math.abs(angle) > maxSpeed) {
-				if (angle < 0)
-					angle = -maxSpeed;
-				else
-					angle = maxSpeed;
-			} else if (Math.abs(angle) < minSpeed) {
-				if (angle < 0)
-					angle = -minSpeed;
-				else
-					angle = minSpeed;
-			}
+			angle = -(distanceFromCenter / (Robot.IMG_WIDTH / 2));
+			SmartDashboard.putNumber("CenterX in Drive Straight", localCenterX);
+			 if (Math.abs(angle) > maxSpeed) {
+			 if (angle < 0)
+			 angle = -maxSpeed;
+			 else if (angle > 0)
+			 angle = maxSpeed;
+			 } else if (Math.abs(angle) < minSpeed) {
+			 if (angle < 0)
+			 angle = -minSpeed;
+			 else if (angle > 0)
+			 angle = minSpeed;
+			 }
 		}
 
 		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed)
@@ -177,7 +181,8 @@ public class DriveStraightForDistance extends Command {
 		SmartDashboard.putNumber("Angle    ", -angle);
 		SmartDashboard.putNumber("Angle*Kp ", -angle * Kp);
 
-		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, -angle * Kp);
+		// TODO Auto-generated method stub
+		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, -angle);
 	}
 
 	@Override
@@ -192,9 +197,44 @@ public class DriveStraightForDistance extends Command {
 		SmartDashboard.putNumber("target position", TargetEncoderPos);
 		SmartDashboard.putNumber("MOTOR SPEED", MotorSpeed);
 
-		// check to see if we've gone past our target
-		if (Distance > 0) {
-			if (CurrentRightEncoderPos >= TargetEncoderPos && TargetEncoderPos != 0) {
+		// see if we have seen this saved encoder count before
+		if (CurrentRightEncoderPos != savedEncoderPosition) {
+			// new encoder count, save it off
+			savedEncoderPosition = CurrentRightEncoderPos;
+
+			// reset the counter
+			sameEncoderCount = 0;
+		} else {
+			// same encoder count -- register count
+			sameEncoderCount++;
+
+			// check to see if we have registered the same encoder count
+			// mulitple times in a row
+			// if (sameEncoderCount > MAX_SAME_ENCODER_COUNT) {
+			// /*
+			// * We could adjust the motor speed for each time we see the same
+			// * encoder count max times, but only if the motor speed is not 0
+			// */
+			// if (MotorSpeed != 0) {
+			// // increase minimum motor speed by 5% and reset the same count
+			// MinMotorSpeed += 0.05;
+			// sameEncoderCount = 0;
+			// } else {
+			// ourJobIsDoneHere = true;
+			// }
+			// }
+		}
+
+		if (!ourJobIsDoneHere) {
+			if (Distance > 0) {
+				if (CurrentRightEncoderPos >= TargetEncoderPos && TargetEncoderPos != 0) {
+					ourJobIsDoneHere = true;
+				}
+			} else if (Distance < 0) {
+				if (CurrentRightEncoderPos <= TargetEncoderPos && TargetEncoderPos != 0) {
+					ourJobIsDoneHere = true;
+				}
+			} else {
 				ourJobIsDoneHere = true;
 			}
 		} else if (Distance < 0) {
@@ -204,7 +244,9 @@ public class DriveStraightForDistance extends Command {
 		} else {
 			ourJobIsDoneHere = true;
 		}
-
+		
+		if (ourJobIsDoneHere && !UseGyro) 
+			camera.setBrightness(100);
 		return ourJobIsDoneHere;
 	}
 
