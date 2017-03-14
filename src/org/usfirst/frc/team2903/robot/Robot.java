@@ -114,7 +114,7 @@ public class Robot extends IterativeRobot {
 //			autoChooser.addObject("MiddleGear", new MiddleGear());
 			autoChooser.addDefault("RightGear", new RightGear());
 //			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
-			autoChooser.addObject("MiddleGear", new GearAim());
+			autoChooser.addObject("MiddleGear", new MiddleGear());
 //			autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
 //			autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 //			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
