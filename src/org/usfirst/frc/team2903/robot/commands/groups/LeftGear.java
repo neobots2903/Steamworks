@@ -12,15 +12,13 @@ public class LeftGear extends CommandGroup {
 	// Angle when driving straight from base line to the gear peg
 	static final double sideGearPegAngle = 50;
 
-//		for (int i = 0; i < 5; i++) {
+	public LeftGear() throws InterruptedException {
 			addSequential(new DriveStraightForDistance(83, true));
 			addSequential(new TurnWithGyro(sideGearPegAngle));
 //			addSequential(new GearAim());
 			addSequential(new DriveStraightForDistance(-1,true));
 			addSequential(new DriveStraightForDistance(50,false));
 			addSequential(new OpenArms());
-			
-//		}
 	}
 
 }
