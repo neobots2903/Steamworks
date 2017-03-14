@@ -40,7 +40,7 @@ public class DriveToPositionTest extends Command {
 	protected void initialize() {
 
 		Robot.driveSubsystem.driveReset();
-		Robot.driveSubsystem.setAutoPositionMode();
+		Robot.driveSubsystem.setAutoPositionMode(false);
 
 		// get current encoder counts
 		CurrentRightEncoderPos = Math.abs(Robot.driveSubsystem.rightGetRawCount());

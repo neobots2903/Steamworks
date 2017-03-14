@@ -73,7 +73,7 @@ public class Drive2903 extends Subsystem {
 		robotDrive = new RobotDrive(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
 		
 		// talon position set up 
-		int absolutePosition = leftFrontMotor.getPulseWidthPosition() & 0xFFF;
+		absolutePosition = leftFrontMotor.getPulseWidthPosition() & 0xFFF;
 		leftFrontMotor.setEncPosition(absolutePosition);
 		absolutePosition = rightFrontMotor.getPulseWidthPosition() & 0xFFF;
 		rightFrontMotor.setEncPosition(absolutePosition);		
