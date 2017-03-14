@@ -38,7 +38,7 @@ public class Shooter2903 extends Subsystem {
 	public Shooter2903() {
 		shootMotor = new CANTalon(RobotMap.shootMotor);
 		shakeMotor = new CANTalon(RobotMap.shakeMotor);
-		gate = new Servo(1);
+		gate = new Servo(RobotMap.AllieGator);
 		shootMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		
 		shootMotor.changeControlMode(TalonControlMode.PercentVbus);
