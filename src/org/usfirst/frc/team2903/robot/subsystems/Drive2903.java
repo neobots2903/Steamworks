@@ -70,8 +70,8 @@ public class Drive2903 extends Subsystem {
 
 		rightFrontMotor.setInverted(false);
 		rightRearMotor.setInverted(false);
-		leftFrontMotor.setInverted(true);
-		leftRearMotor.setInverted(true);
+		leftFrontMotor.setInverted(false);
+		leftRearMotor.setInverted(false);
 
 		robotDrive = new RobotDrive(leftFrontMotor, leftRearMotor, rightFrontMotor, rightRearMotor);
 

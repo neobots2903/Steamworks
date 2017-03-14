@@ -13,7 +13,9 @@ public class MiddleGear extends CommandGroup {
 	public MiddleGear() throws InterruptedException{
 		requires(Robot.driveSubsystem);
 
-			addSequential(new DriveStraightForDistance(78,true));
+			addSequential(new DriveStraightForDistance(28,true));
+			addSequential(new DriveStraightForDistance(-1, true));
+			addSequential(new DriveStraightForDistance(50, true));
 			addSequential(new OpenArms());
 	}
 

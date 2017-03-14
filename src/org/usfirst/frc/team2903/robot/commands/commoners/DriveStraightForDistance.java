@@ -40,8 +40,8 @@ public class DriveStraightForDistance extends Command {
 	private boolean UseGyro;
 
 	static final double PI = 3.14159;
-	static final int COUNTS_PER_MOTOR_REV = 1024; // eg: Grayhill 61R256
-	static final double DRIVE_GEAR_REDUCTION = 1.1; // This is < 1.0 if geared
+	static final int COUNTS_PER_MOTOR_REV = 256; // eg: Grayhill 61R256
+	static final double DRIVE_GEAR_REDUCTION = 30/54; // Vex Pro 3 Sim Shifter Gear Ratio
 													// UP
 	static final double WHEEL_DIAMETER_INCHES = 4.0; // For figuring
 														// circumference
