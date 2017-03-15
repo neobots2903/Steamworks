@@ -202,6 +202,18 @@ public class DriveStraightForDistance extends Command {
 
 	}
 
+	
+	/*
+	 * when driving with gyro, we want to drive "away" from the current angle 
+	 * if our current target is 0, and our current angle is positive, we want to set 
+	 * the angle to negative  to straighten the robot.  If the current angle is 
+	 * negative, then we want to set the angle to positive to straighten the robot.
+	 *       
+	 * when driving with the camera, we want to drive towards the offset.  If we
+	 * show that the image is off to the left of the camera, we want to turn left
+	 * to try and center the image (negative angle).  If our image is off to the
+	 * right, then we want to turn to the right (positive angle)       
+	 */
 	private double getTurnAngle() {
 		double angle;
 		// Use gyro to calculate our turn value
@@ -215,9 +227,12 @@ public class DriveStraightForDistance extends Command {
 			double distanceFromCenter = (localCenterX - (Robot.IMG_WIDTH / 2));
 
 			// get distance from center of image by percentage
-			angle = -(distanceFromCenter / (Robot.IMG_WIDTH / 2)) * Kp;
+			angle = (distanceFromCenter / (Robot.IMG_WIDTH / 2)) * Kp;
 			SmartDashboard.putNumber("CenterX in Drive Straight", localCenterX);
 
+/* we are technically using Kp to limit the speed and since we are also moving forward
+ * setting a minimum or maximum doesn't see valuable.  Tests using Kp will prove this
+ * one way or another
 			// cap the maximum turn speed
 			if (Math.abs(angle) > maxSpeed) {
 				if (angle < 0)
@@ -232,7 +247,7 @@ public class DriveStraightForDistance extends Command {
 				else if (angle > 0)
 					angle = minSpeed;
 			}
-		}
+*/		}
 
 		// cap the maximum forward speed
 		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed)
