@@ -5,3 +5,4 @@
 /src/wpilib/tools/JRE
 /src/wpilib/tools/ejdk1.8.0_06
 /src/wpilib/tools/ejdk-8u6-fcs-b23-linux-arm-vfp-sflt-12_jun_2014.tar.gz
+.gitignore

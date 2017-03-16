@@ -41,13 +41,13 @@ public class DriveStraightForDistance extends Command {
 
 	static final double PI = 3.14159;
 	static final int COUNTS_PER_MOTOR_REV = 1024; // eg: Grayhill 61R256
-	static final double DRIVE_GEAR_REDUCTION = 30 / 54; // Vex Pro 3 Sim Shifter Gear Ratio
+	static final double DRIVE_GEAR_REDUCTION = 1.1; // Vex Pro 3 Sim Shifter Gear Ratio
 	static final double WHEEL_DIAMETER_INCHES = 4.0; // For figuring circumference
 	
 	// count conversion to inches and centimeters
 	static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * PI);
-	static final double CM_PER_INCH = 2.54;
-	static final double COUNTS_PER_CM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / ((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
+	//static final double CM_PER_INCH = 2.54;
+	//static final double COUNTS_PER_CM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / ((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
 
 	// for camera tracking
 	private Object imgLock = new Object();
@@ -74,27 +74,10 @@ public class DriveStraightForDistance extends Command {
 	@Override
 	protected void initialize() {
 
+		Robot.gyroSubsystem.reset();
 		Robot.driveSubsystem.driveReset();
 		Robot.driveSubsystem.setAutoMode();
-		if (UseGyro) {
-			Robot.gyroSubsystem.reset();
-			StartAngle = Robot.gyroSubsystem.GyroPosition();
-		} else {
-			camera = new Vision2903("10.29.3.56");
-
-			camera.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
-			camera.setBrightness(0);
-
-			visionThread = new VisionThread(camera.getCamera(), new GearPegPipeline2903(), pipeline -> {
-				if (!pipeline.filterContoursOutput().isEmpty()) {
-					Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-					synchronized (imgLock) {
-						centerX = r.x + (r.width / 2);
-					}
-				}
-			});
-			visionThread.start();
-		}
+		
 
 		// get current encoder counts
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
@@ -116,6 +99,27 @@ public class DriveStraightForDistance extends Command {
 		LowLimit = TargetEncoderPos - ErrorLimit;
 
 		ourJobIsDoneHere = false;
+		
+		if (UseGyro) {
+			Robot.gyroSubsystem.reset();
+			StartAngle = Robot.gyroSubsystem.GyroPosition();
+		} else {
+			camera = new Vision2903("10.29.3.56");
+
+			camera.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
+			camera.setBrightness(0);
+
+			visionThread = new VisionThread(camera.getCamera(), new GearPegPipeline2903(), pipeline -> {
+				if (!pipeline.filterContoursOutput().isEmpty()) {
+					Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+					synchronized (imgLock) {
+						centerX = r.x + (r.width / 2);
+					}
+				}
+			});
+			visionThread.start();
+		}
+
 	}
 
 	public double getCenterX() {
@@ -146,9 +150,23 @@ public class DriveStraightForDistance extends Command {
 		MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
 		
 		// get angle from either gyro or camera centerx
-		angle = getTurnAngle();
+		//angle = getTurnAngle();
+		if (UseGyro) {
+			angle = (Robot.gyroSubsystem.GyroPosition()) * Kp; //StartAngle - 
+		}
+
+		// use camera image to calculate our turn value
+		else {
+			double localCenterX = getCenterX();
+			double distanceFromCenter = (localCenterX - (Robot.IMG_WIDTH / 2));
+
+			// get distance from center of image by percentage
+			angle = (distanceFromCenter / (Robot.IMG_WIDTH / 2)) * Kp;
+			SmartDashboard.putNumber("CenterX in Drive Straight", localCenterX);
+		}
 		
-		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, angle);
+		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, -angle *Kp);
+		//Robot.driveSubsystem.tankDrive(-MotorSpeed * 0.95, -MotorSpeed);
 	}
 
 	@Override
@@ -163,18 +181,23 @@ public class DriveStraightForDistance extends Command {
 		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("target position", TargetEncoderPos);
 		SmartDashboard.putNumber("MOTOR SPEED", MotorSpeed);
-
-		if (Distance > 0) {
-			if (CurrentRightEncoderPos >= TargetEncoderPos && TargetEncoderPos != 0) {
-				ourJobIsDoneHere = true;
-			}
-		} else if (Distance < 0) {
-			if (CurrentRightEncoderPos <= TargetEncoderPos && TargetEncoderPos != 0) {
-				ourJobIsDoneHere = true;
-			}
-		} else {
+		SmartDashboard.putNumber("Angle", angle);
+		
+		if (Math.abs(CurrentRightEncoderPos) >= Math.abs(TargetEncoderPos)){
 			ourJobIsDoneHere = true;
 		}
+
+//		if (Distance != 0) {
+//			if (CurrentRightEncoderPos >= TargetEncoderPos && TargetEncoderPos != 0) {
+//				ourJobIsDoneHere = true;
+//			}
+//		} else if (Distance < 0) {
+//			if (CurrentRightEncoderPos <= TargetEncoderPos && TargetEncoderPos != 0) {
+//				ourJobIsDoneHere = true;
+//			}
+//		} else {
+//			ourJobIsDoneHere = true;
+//		}
 
 		if (ourJobIsDoneHere && !UseGyro)
 			camera.setBrightness(100);
