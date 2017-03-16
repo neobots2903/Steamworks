@@ -29,14 +29,12 @@ public class DriveStraightForDistance extends Command {
 	int CurrentLeftEncoderPos = 0;
 	private int Distance = 0;
 
-	boolean ourJobIsDoneHere = false;
 
-	double MinMotorSpeed = 0.3;
-	double MaxMotorSpeed = 0.5;
+	static final double MIN_MOTOR_SPEED = 0.5;
 
 	private double Kp = 0.03;
 	private double MotorSpeed;
-	private double StartAngle;
+//	private double StartAngle;
 	private boolean UseGyro;
 
 	static final double PI = 3.14159;
@@ -44,21 +42,14 @@ public class DriveStraightForDistance extends Command {
 	static final double DRIVE_GEAR_REDUCTION = 1.1; // Vex Pro 3 Sim Shifter Gear Ratio
 	static final double WHEEL_DIAMETER_INCHES = 4.0; // For figuring circumference
 	
-	// count conversion to inches and centimeters
+	// count conversion to inches
 	static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * PI);
-	//static final double CM_PER_INCH = 2.54;
-	//static final double COUNTS_PER_CM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / ((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI);
 
 	// for camera tracking
 	private Object imgLock = new Object();
 	private VisionThread visionThread;
 	private double centerX = 0.0;
 
-	// for turning towards target
-	private double angle;
-
-	public static final double maxSpeed = 0.8;
-	public static final double minSpeed = 0.6;
 
 	// distance in inches
 	public DriveStraightForDistance(int distance, boolean useGyro) {
@@ -98,14 +89,13 @@ public class DriveStraightForDistance extends Command {
 		HighLimit = TargetEncoderPos + ErrorLimit;
 		LowLimit = TargetEncoderPos - ErrorLimit;
 
-		ourJobIsDoneHere = false;
-		
 		if (UseGyro) {
 			Robot.gyroSubsystem.reset();
-			StartAngle = Robot.gyroSubsystem.GyroPosition();
+//			StartAngle = Robot.gyroSubsystem.GyroPosition();
 		} else {
+//			StartAngle = 0;
+			
 			camera = new Vision2903("10.29.3.56");
-
 			camera.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
 			camera.setBrightness(0);
 
@@ -142,6 +132,8 @@ public class DriveStraightForDistance extends Command {
 
 	@Override
 	protected void execute() {
+		
+		double angle = 0;
 
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
@@ -152,7 +144,7 @@ public class DriveStraightForDistance extends Command {
 		// get angle from either gyro or camera centerx
 		//angle = getTurnAngle();
 		if (UseGyro) {
-			angle = (Robot.gyroSubsystem.GyroPosition()) * Kp; //StartAngle - 
+			angle = -Robot.gyroSubsystem.GyroPosition(); //StartAngle - 
 		}
 
 		// use camera image to calculate our turn value
@@ -161,45 +153,35 @@ public class DriveStraightForDistance extends Command {
 			double distanceFromCenter = (localCenterX - (Robot.IMG_WIDTH / 2));
 
 			// get distance from center of image by percentage
-			angle = (distanceFromCenter / (Robot.IMG_WIDTH / 2)) * Kp;
+			angle = (distanceFromCenter / (Robot.IMG_WIDTH / 2));
 			SmartDashboard.putNumber("CenterX in Drive Straight", localCenterX);
 		}
 		
-		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, -angle *Kp);
-		//Robot.driveSubsystem.tankDrive(-MotorSpeed * 0.95, -MotorSpeed);
-	}
-
-	@Override
-	protected boolean isFinished() {
-
-		// assume we are not finished
-		ourJobIsDoneHere = false;
-
-		// TODO Auto-generated method stub
-		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
+		// limit the minimum forward speed
+		if (0 <= MotorSpeed && MotorSpeed < MIN_MOTOR_SPEED)
+			MotorSpeed = MIN_MOTOR_SPEED;
+		else if (-MIN_MOTOR_SPEED < MotorSpeed && MotorSpeed <= 0)
+			MotorSpeed = -MIN_MOTOR_SPEED;
 
 		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("target position", TargetEncoderPos);
 		SmartDashboard.putNumber("MOTOR SPEED", MotorSpeed);
 		SmartDashboard.putNumber("Angle", angle);
 		
-		if (Math.abs(CurrentRightEncoderPos) >= Math.abs(TargetEncoderPos)){
+		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, angle * Kp);
+	}
+
+	@Override
+	protected boolean isFinished() {
+
+		// assume we are not finished
+		boolean ourJobIsDoneHere = false;
+
+		if (Math.abs(Robot.driveSubsystem.rightGetRawCount()) >= Math.abs(TargetEncoderPos)){
 			ourJobIsDoneHere = true;
 		}
 
-//		if (Distance != 0) {
-//			if (CurrentRightEncoderPos >= TargetEncoderPos && TargetEncoderPos != 0) {
-//				ourJobIsDoneHere = true;
-//			}
-//		} else if (Distance < 0) {
-//			if (CurrentRightEncoderPos <= TargetEncoderPos && TargetEncoderPos != 0) {
-//				ourJobIsDoneHere = true;
-//			}
-//		} else {
-//			ourJobIsDoneHere = true;
-//		}
-
-		if (ourJobIsDoneHere && !UseGyro)
+		if (ourJobIsDoneHere && !UseGyro && camera != null)
 			camera.setBrightness(100);
 
 		return ourJobIsDoneHere;
@@ -208,9 +190,8 @@ public class DriveStraightForDistance extends Command {
 	@Override
 	protected void end() {
 
-		// stop driving and put us back in teleop mode
+		// stop driving
 		Robot.driveSubsystem.arcadeDrive(0, 0);
-		ourJobIsDoneHere = false;
 
 		// raise the brightness if using camera to drive straight
 		if (!UseGyro) {
@@ -221,69 +202,6 @@ public class DriveStraightForDistance extends Command {
 	@Override
 	protected void interrupted() {
 		end();
-		// TODO Auto-generated method stub
-
-	}
-
-	
-	/*
-	 * when driving with gyro, we want to drive "away" from the current angle 
-	 * if our current target is 0, and our current angle is positive, we want to set 
-	 * the angle to negative  to straighten the robot.  If the current angle is 
-	 * negative, then we want to set the angle to positive to straighten the robot.
-	 *       
-	 * when driving with the camera, we want to drive towards the offset.  If we
-	 * show that the image is off to the left of the camera, we want to turn left
-	 * to try and center the image (negative angle).  If our image is off to the
-	 * right, then we want to turn to the right (positive angle)       
-	 */
-	private double getTurnAngle() {
-		double angle;
-		// Use gyro to calculate our turn value
-		if (UseGyro) {
-			angle = -(StartAngle - Robot.gyroSubsystem.GyroPosition()) * Kp;
-		}
-
-		// use camera image to calculate our turn value
-		else {
-			double localCenterX = getCenterX();
-			double distanceFromCenter = (localCenterX - (Robot.IMG_WIDTH / 2));
-
-			// get distance from center of image by percentage
-			angle = (distanceFromCenter / (Robot.IMG_WIDTH / 2)) * Kp;
-			SmartDashboard.putNumber("CenterX in Drive Straight", localCenterX);
-
-/* we are technically using Kp to limit the speed and since we are also moving forward
- * setting a minimum or maximum doesn't see valuable.  Tests using Kp will prove this
- * one way or another
-			// cap the maximum turn speed
-			if (Math.abs(angle) > maxSpeed) {
-				if (angle < 0)
-					angle = -maxSpeed;
-				else if (angle > 0)
-					angle = maxSpeed;
-			}
-
-			else if (Math.abs(angle) < minSpeed) {
-				if (angle < 0)
-					angle = -minSpeed;
-				else if (angle > 0)
-					angle = minSpeed;
-			}
-*/		}
-
-		// cap the maximum forward speed
-		if (0 <= MotorSpeed && MotorSpeed < MinMotorSpeed)
-			MotorSpeed = MinMotorSpeed;
-		else if (-MinMotorSpeed < MotorSpeed && MotorSpeed <= 0)
-			MotorSpeed = -MinMotorSpeed;
-
-		SmartDashboard.putNumber("Right    ", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("Angle    ", angle);
-		SmartDashboard.putNumber("Angle*Kp ", angle * Kp);
-
-		return angle;
-
 	}
 
 }
