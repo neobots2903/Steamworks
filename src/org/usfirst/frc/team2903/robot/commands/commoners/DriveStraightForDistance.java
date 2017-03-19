@@ -14,8 +14,6 @@ public class DriveStraightForDistance extends Command {
 
 	// TODO update for two encoders with average of the two and gyro
 
-	private Vision2903 camera;
-
 	double HighLimit;
 	double LowLimit;
 	double ErrorLimit = 3;
@@ -94,12 +92,11 @@ public class DriveStraightForDistance extends Command {
 //			StartAngle = Robot.gyroSubsystem.GyroPosition();
 		} else {
 //			StartAngle = 0;
-			
-			camera = new Vision2903("10.29.3.56");
-			camera.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
-			camera.setBrightness(0);
+		
+			Robot.camera.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
+			Robot.camera.setBrightness(0);
 
-			visionThread = new VisionThread(camera.getCamera(), new GearPegPipeline2903(), pipeline -> {
+			visionThread = new VisionThread(Robot.camera.getCamera(), new GearPegPipeline2903(), pipeline -> {
 				if (!pipeline.filterContoursOutput().isEmpty()) {
 					Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 					synchronized (imgLock) {
@@ -176,13 +173,19 @@ public class DriveStraightForDistance extends Command {
 
 		// assume we are not finished
 		boolean ourJobIsDoneHere = false;
-
-		if (Math.abs(Robot.driveSubsystem.rightGetRawCount()) >= Math.abs(TargetEncoderPos)){
-			ourJobIsDoneHere = true;
+		if (Distance >= 0) {
+			if (Math.abs(Robot.driveSubsystem.rightGetRawCount()) >= Math.abs(TargetEncoderPos)){
+				ourJobIsDoneHere = true;
+			}
+		} else {
+			if (Robot.driveSubsystem.rightGetRawCount() <= TargetEncoderPos){
+				ourJobIsDoneHere = true;
+			}
 		}
+		
 
-		if (ourJobIsDoneHere && !UseGyro && camera != null)
-			camera.setBrightness(100);
+		if (ourJobIsDoneHere && !UseGyro && Robot.camera != null)
+			Robot.camera.setBrightness(100);
 
 		return ourJobIsDoneHere;
 	}
@@ -195,7 +198,7 @@ public class DriveStraightForDistance extends Command {
 
 		// raise the brightness if using camera to drive straight
 		if (!UseGyro) {
-			camera.setBrightness(100);
+			Robot.camera.setBrightness(100);
 		}
 	}
 

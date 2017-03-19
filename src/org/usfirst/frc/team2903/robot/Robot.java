@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
 import org.usfirst.frc.team2903.robot.commands.groups.LeftGear;
 import org.usfirst.frc.team2903.robot.commands.groups.MiddleGear;
+import org.usfirst.frc.team2903.robot.commands.groups.MinimalAutonomous;
 import org.usfirst.frc.team2903.robot.commands.groups.RightGear;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
 import org.usfirst.frc.team2903.robot.subsystems.Gear2903;
@@ -23,6 +24,7 @@ import org.usfirst.frc.team2903.robot.subsystems.Gyro2903;
 import org.usfirst.frc.team2903.robot.subsystems.LIDAR2903;
 import org.usfirst.frc.team2903.robot.subsystems.MiniPID2903;
 import org.usfirst.frc.team2903.robot.subsystems.Shooter2903;
+import org.usfirst.frc.team2903.robot.subsystems.Vision2903;
 import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
 
 import org.usfirst.frc.team2903.robot.subsystems.PickUp2903;
@@ -49,6 +51,8 @@ public class Robot extends IterativeRobot {
 	public static Climber2903 climberSubsystem;
 	public static GearPegPipeline2903 gearPegSubsystem;
 
+	public static Vision2903 camera;
+	
 	Command autonomousCommand;
 	SendableChooser<Command> autoChooser;
 	Command teleopCommand;
@@ -81,6 +85,8 @@ public class Robot extends IterativeRobot {
 		climberSubsystem = new Climber2903();
 		lidarSubsystem = new LIDAR2903(lidarPort);
 
+		camera = new Vision2903("10.29.3.56"); 
+		
 		// SmartDashboard.putNumber("kP", minipidSubsystem.getP());
 		// SmartDashboard.putNumber("kI", minipidSubsystem.getI());
 		// SmartDashboard.putNumber("kD", minipidSubsystem.getD());
@@ -97,6 +103,7 @@ public class Robot extends IterativeRobot {
 			autoChooser.addDefault("MiddleGear", new MiddleGear());
 			autoChooser.addObject("LeftGear", new LeftGear());
 			autoChooser.addObject("RightGear", new RightGear());
+			autoChooser.addObject("MinimalAutonomous", new MinimalAutonomous());
 			SmartDashboard.putData("AutoChooser", autoChooser);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

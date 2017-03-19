@@ -24,6 +24,8 @@ public class Teleop extends Command {
 		Robot.driveSubsystem.setTeleopMode();
 		Robot.gyroSubsystem.reset();
 
+		
+		Robot.camera.setBrightness(100);
 	}
 
 	/*

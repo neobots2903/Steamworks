@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class RightGear extends CommandGroup {
 
 	// Angle when driving straight from base line to the gear peg
-	static final double sideGearPegAngle = -50;
+	static final double sideGearPegAngle = -56.5;
 
 	public RightGear() throws InterruptedException {
 		addSequential(new DriveStraightForDistance(83, true));
@@ -18,7 +18,7 @@ public class RightGear extends CommandGroup {
 		// addSequential(new GearAim());
 		addSequential(new DriveStraightForDistance(-1, true));
 		addSequential(new DriveStraightForDistance(50, false));
-		addSequential(new OpenArms());
+		//addSequential(new OpenArms());
 	}
 
 }

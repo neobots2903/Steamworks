@@ -8,18 +8,13 @@ import org.usfirst.frc.team2903.robot.commands.commoners.OpenArms;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class MiddleGear extends CommandGroup
-{
-
-	public MiddleGear() throws InterruptedException
-	{
+public class MinimalAutonomous extends CommandGroup {
+	
+	public MinimalAutonomous() throws InterruptedException{
 		requires(Robot.driveSubsystem);
 
-		addSequential(new DriveStraightForDistance(27, true)); //28
-		//addSequential(new DriveStraightForDistance(-1, true));
-		//addSequential(new DriveStraightForDistance(16, false)); //50
-		addSequential(new OpenArms());
-
+			addSequential(new DriveStraightForDistance(81,true));
+			//addSequential(new OpenArms());
 	}
 
 }
