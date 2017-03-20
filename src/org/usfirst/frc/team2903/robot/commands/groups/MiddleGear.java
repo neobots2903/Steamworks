@@ -18,7 +18,6 @@ public class MiddleGear extends CommandGroup
 		addSequential(new DriveStraightForDistance(27, true)); //28
 		//addSequential(new DriveStraightForDistance(-1, true));
 		//addSequential(new DriveStraightForDistance(16, false)); //50
-		addSequential(new OpenArms());
 
 	}
 

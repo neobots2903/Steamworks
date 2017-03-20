@@ -14,7 +14,6 @@ public class MinimalAutonomous extends CommandGroup {
 		requires(Robot.driveSubsystem);
 
 			addSequential(new DriveStraightForDistance(81,true));
-			//addSequential(new OpenArms());
 	}
 
 }

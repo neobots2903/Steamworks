@@ -37,7 +37,7 @@ public class DriveStraightForDistance extends Command {
 
 	static final double PI = 3.14159;
 	static final int COUNTS_PER_MOTOR_REV = 1024; // eg: Grayhill 61R256
-	static final double DRIVE_GEAR_REDUCTION = 1.1; // Vex Pro 3 Sim Shifter Gear Ratio
+	static final double DRIVE_GEAR_REDUCTION = (30.0/54.0); // Vex Pro 3 Sim Shifter Gear Ratio
 	static final double WHEEL_DIAMETER_INCHES = 4.0; // For figuring circumference
 	
 	// count conversion to inches

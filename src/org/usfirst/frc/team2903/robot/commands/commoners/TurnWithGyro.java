@@ -59,6 +59,7 @@ public class TurnWithGyro extends Command{
 	@Override
 	protected void initialize() {
 		Robot.gyroSubsystem.reset();
+		Robot.driveSubsystem.setAutoMode();
 	}
 
 	@Override
@@ -76,6 +77,8 @@ public class TurnWithGyro extends Command{
 		SmartDashboard.putNumber("Taget Angle", TargetAngle);
 		SmartDashboard.putNumber("MotorSpeed = ", MotorSpeed);
 		Robot.driveSubsystem.tankDrive(-MotorSpeed, MotorSpeed);
+//		Robot.driveSubsystem.arcadeDrive(MotorSpeed,0);
+
 	}
 
 	@Override

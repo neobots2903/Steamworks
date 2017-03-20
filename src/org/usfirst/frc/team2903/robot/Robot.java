@@ -100,10 +100,10 @@ public class Robot extends IterativeRobot {
 
 		autoChooser = new SendableChooser<Command>();
 		try {
-			autoChooser.addDefault("MiddleGear", new MiddleGear());
-			autoChooser.addObject("LeftGear", new LeftGear());
 			autoChooser.addObject("RightGear", new RightGear());
-			autoChooser.addObject("MinimalAutonomous", new MinimalAutonomous());
+			autoChooser.addObject("MiddleGear", new MiddleGear());
+			autoChooser.addObject("LeftGear", new LeftGear());
+			autoChooser.addDefault("MinimalAutonomous", new MinimalAutonomous());
 			SmartDashboard.putData("AutoChooser", autoChooser);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
