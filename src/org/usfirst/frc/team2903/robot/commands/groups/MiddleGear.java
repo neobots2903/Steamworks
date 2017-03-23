@@ -15,7 +15,7 @@ public class MiddleGear extends CommandGroup
 	{
 		requires(Robot.driveSubsystem);
 
-		addSequential(new DriveStraightForDistance(27, true)); //28
+		addSequential(new DriveStraightForDistance(78, true)); //27
 		//addSequential(new DriveStraightForDistance(-1, true));
 		//addSequential(new DriveStraightForDistance(16, false)); //50
 

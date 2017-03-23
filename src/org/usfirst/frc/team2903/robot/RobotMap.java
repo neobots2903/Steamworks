@@ -20,7 +20,7 @@ public class RobotMap {
 
 	// Pick Up
 	public static int PickUpMotor = 6;
-	public static int AllieGator = 1;
+	public static int AllieGator = 0;
 
 	// Analog Gyro is on analog 0
 	public static int AnalogGyro = 0;

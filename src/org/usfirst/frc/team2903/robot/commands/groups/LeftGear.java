@@ -4,6 +4,7 @@ import org.usfirst.frc.team2903.robot.commands.commoners.DriveStraightForDistanc
 import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
 //import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
 import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
+import org.usfirst.frc.team2903.robot.commands.commoners.LowGear;
 import org.usfirst.frc.team2903.robot.commands.commoners.OpenArms;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -14,11 +15,12 @@ public class LeftGear extends CommandGroup {
 	static final double sideGearPegAngle = 56.5;
 	
 	public LeftGear() throws InterruptedException {
-			addSequential(new DriveStraightForDistance(75, true));
+			addSequential(new LowGear());
+			addSequential(new DriveStraightForDistance(83, true));
 			addSequential(new TurnWithGyro(sideGearPegAngle));
 			addSequential(new GearAim());
 			addSequential(new DriveStraightForDistance(-1,true));
-			addSequential(new DriveStraightForDistance(50,true));
+			addSequential(new DriveStraightForDistance(45,false));
 			
 	}
 
