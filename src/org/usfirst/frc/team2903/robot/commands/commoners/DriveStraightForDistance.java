@@ -95,7 +95,7 @@ public class DriveStraightForDistance extends Command {
 			Robot.camera.setBrightness(0);
 
 			visionThread = new VisionThread(Robot.camera.getCamera(), new GearPegPipeline2903(), pipeline -> {
-				if (!pipeline.filterContoursOutput().isEmpty()) {
+ 				if (!pipeline.filterContoursOutput().isEmpty()) {
 					Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 					synchronized (imgLock) {
 						centerX = r.x + (r.width / 2);
