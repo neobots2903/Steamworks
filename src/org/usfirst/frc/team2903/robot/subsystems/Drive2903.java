@@ -167,22 +167,7 @@ public class Drive2903 extends Subsystem {
 
 	public void setAutoMode()
 	{
-		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
-		Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
-		
-		// have the motors follow rightFrontMotor
-		rightFrontMotor.set(0);
-		leftFrontMotor.set(0);
-		leftRearMotor.set(leftFrontMotor.getDeviceID());
-		rightRearMotor.set(rightFrontMotor.getDeviceID());
-		
-		//Reset the encoder to zero as its current position
-		rightFrontMotor.setPosition(0);
-		rightFrontMotor.setEncPosition(0);
-		leftFrontMotor.setPosition(0);
-		leftFrontMotor.setEncPosition(0);
+		setTeleopMode();
 	}
 
 	/**
@@ -194,83 +179,6 @@ public class Drive2903 extends Subsystem {
 	 *            if true, sets the left side into position mode if false, sets
 	 *            the left side into follower mode
 	 */
-	public void setAutoPositionMode(boolean bothSides) {
-
-		autoPositionBothSides = bothSides;
-
-		// set the right side primary to position and the secondary to follower
-		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.Position);
-		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
-
-		// talon position set up
-		int absolutePosition = rightFrontMotor.getPulseWidthPosition() & 0xFFF;
-		rightFrontMotor.setEncPosition(absolutePosition);
-
-		// have the motors follow rightFrontMotor
-		rightFrontMotor.set(0);
-		rightRearMotor.set(rightFrontMotor.getDeviceID());
-
-		// Enable PID control on the talon
-		rightFrontMotor.enableControl();
-
-		// Reset the encoder to zero as its current position
-		rightFrontMotor.setPosition(0);
-		rightFrontMotor.setEncPosition(0);
-
-		/* set closed loop gains in slot0 */
-		rightFrontMotor.setAllowableClosedLoopErr(0);
-		rightFrontMotor.setProfile(0);
-		// rightFrontMotor.setF(FULL_FORWARD / NATIVE_UNITS_PER_TVE); // this
-		// needs to be FULL-FOWARD / NATIVE UNITS)
-		rightFrontMotor.setF(0); // this needs to be FULL-FOWARD / NATIVE UNITS)
-		rightFrontMotor.setP(0.1);
-		rightFrontMotor.setI(0);
-		rightFrontMotor.setD(0);
-
-		// both sides are going to be monitoring position
-		if (bothSides) {
-			// put left primary into position mode and the secondary to follower
-			Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Position);
-			Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);
-
-			// talon position set up
-			absolutePosition = leftFrontMotor.getPulseWidthPosition() & 0xFFF;
-			leftFrontMotor.setEncPosition(absolutePosition);
-
-			// left side follows right front motor
-			leftFrontMotor.set(0);
-			leftRearMotor.set(leftFrontMotor.getDeviceID());
-
-			// Enable PID control on the talon
-			leftFrontMotor.enableControl();
-
-			// Reset the encoder to zero as its current position
-			leftFrontMotor.setPosition(0);
-			leftFrontMotor.setEncPosition(0);
-
-			/* set closed loop gains in slot0 */
-			leftFrontMotor.setProfile(0);
-
-			// leftFrontMotor.setF(FULL_FORWARD / NATIVE_UNITS_PER_TVE); // this
-			// needs to be FULL-FOWARD / NATIVE UNITS
-			leftFrontMotor.setF(0);
-			leftFrontMotor.setP(0);
-			leftFrontMotor.setI(0);
-			leftFrontMotor.setD(0);
-		}
-
-		// only the right side is monitoring position, left side follows right
-		// side
-		else {
-			// put left side into follower mode
-			Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Follower);
-			Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);
-
-			// left side follows right front motor
-			leftFrontMotor.set(rightFrontMotor.getDeviceID());
-			leftRearMotor.set(rightFrontMotor.getDeviceID());
-		}
-	}
 
 	public void setTeleopMode() {
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);

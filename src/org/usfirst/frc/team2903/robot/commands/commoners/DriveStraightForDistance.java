@@ -28,7 +28,7 @@ public class DriveStraightForDistance extends Command {
 	private int Distance = 0;
 
 
-	static final double MIN_MOTOR_SPEED = 0.6;
+	static final double MIN_MOTOR_SPEED = 0.5;
 
 	private double Kp = 0.03;
 	private double MotorSpeed;
@@ -62,8 +62,8 @@ public class DriveStraightForDistance extends Command {
 	protected void initialize() {
 
 		Robot.gyroSubsystem.reset();
-		Robot.driveSubsystem.driveReset();
-		Robot.driveSubsystem.setAutoMode();
+//		Robot.driveSubsystem.driveReset();
+//		Robot.driveSubsystem.setAutoMode();
 		
 
 		// get current encoder counts
@@ -71,7 +71,7 @@ public class DriveStraightForDistance extends Command {
 		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
 
 		// calculate target position
-		TargetEncoderPos = (Distance * (int) COUNTS_PER_INCH);
+		TargetEncoderPos = (Distance * (int) COUNTS_PER_INCH) + CurrentRightEncoderPos;
 
 		// setup the PID system
 		Robot.minipidSubsystem.reset();
@@ -117,13 +117,6 @@ public class DriveStraightForDistance extends Command {
 		return localCenterX;
 	}
 
-	public int getDistance() {
-		return Distance;
-	}
-
-	public void setDistance(int distance) {
-		Distance = distance;
-	}
 
 	@Override
 	protected void execute() {

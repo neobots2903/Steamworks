@@ -15,12 +15,13 @@ public class RightGear extends CommandGroup {
 	static final double sideGearPegAngle = -60.0;
 
 	public RightGear() throws InterruptedException {
+		//robot must be placed 57in from the barrier 
 		addSequential(new LowGear());
-		addSequential(new DriveStraightForDistance(79, true));
+		addSequential(new DriveStraightForDistance(44, true));
 		addSequential(new TurnWithGyro(sideGearPegAngle));
 		addSequential(new GearAim());
 		addSequential(new DriveStraightForDistance(-1, true));
-		addSequential(new DriveStraightForDistance(21, true));
+		addSequential(new DriveStraightForDistance(55, true));
 		//addSequential(new DriveStraightForDistance(-1, true));
 
 	}

@@ -17,13 +17,8 @@ public class MiddleGear extends CommandGroup
 	{
 		requires(Robot.driveSubsystem);
 		addSequential(new LowGear());
-		addSequential(new DriveStraightForDistance(71, true));
-		//addSequential(new DriveStraightForDistance(-1, true));
-		//addSequential(new DriveStraightForDistance(52, false));
-		//addSequential(new DriveStraightForDistance(-1, true));
-
-		//addSequential(new DriveStraightForDistance(-1, true));
-		//addSequential(new DriveStraightForDistance(16, false)); //50
+		//distance from front of robot to peg total is 68in
+		addSequential(new DriveStraightForDistance(68, true));
 
 	}
 
