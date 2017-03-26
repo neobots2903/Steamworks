@@ -28,7 +28,7 @@ public class DriveStraightForDistance extends Command {
 	private int Distance = 0;
 
 
-	static final double MIN_MOTOR_SPEED = 0.5;
+	static final double MIN_MOTOR_SPEED = 0.6;
 
 	private double Kp = 0.03;
 	private double MotorSpeed;
@@ -54,8 +54,6 @@ public class DriveStraightForDistance extends Command {
 		requires(Robot.driveSubsystem);
 		requires(Robot.gyroSubsystem);
 
-		Robot.driveSubsystem.driveReset();
-		Robot.driveSubsystem.setAutoMode();
 		Distance = distance;
 		UseGyro = useGyro;
 	}
@@ -142,6 +140,7 @@ public class DriveStraightForDistance extends Command {
 		//angle = getTurnAngle();
 		if (UseGyro) {
 			angle = -Robot.gyroSubsystem.GyroPosition(); //StartAngle - 
+			// angle *= Kp;
 		}
 
 		// use camera image to calculate our turn value
@@ -165,7 +164,8 @@ public class DriveStraightForDistance extends Command {
 		SmartDashboard.putNumber("MOTOR SPEED", MotorSpeed);
 		SmartDashboard.putNumber("Angle", angle);
 		
-		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, angle * Kp);
+		Robot.driveSubsystem.arcadeDrive(-MotorSpeed, angle * Kp); // comment this when you uncomment below
+		//Robot.driveSubsystem.arcadeDrive(-MotorSpeed, angle);
 	}
 
 	@Override

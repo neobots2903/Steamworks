@@ -23,8 +23,6 @@ public class Teleop extends Command {
 		// Robot.elevatorSubsystem.encoder.reset();
 		Robot.driveSubsystem.setTeleopMode();
 		Robot.gyroSubsystem.reset();
-
-		
 		Robot.camera.setBrightness(100);
 	}
 
@@ -51,12 +49,12 @@ public class Teleop extends Command {
 
 		// gear shifting
 		// switch to high gear
-		if (Robot.joy1.getRawButton(3)) {
+		if (Robot.joy1.getRawButton(9)) {
 			Robot.driveSubsystem.changeToHighGear();
 		}
 
 		// switch to low gear
-		if (Robot.joy1.getRawButton(4)) {
+		if (Robot.joy1.getRawButton(10)) {
 			Robot.driveSubsystem.changeToLowGear();
 		}
 
@@ -70,6 +68,15 @@ public class Teleop extends Command {
 			Robot.climberSubsystem.StopLift();
 		}
 
+		// Take rope off
+		if (Robot.joy1.getRawButton(7)) {
+			Robot.climberSubsystem.Fall();
+		}
+
+		// stop moving
+		else {
+			Robot.climberSubsystem.StopLift();
+		}
 		/***************************
 		 * OPERATOR CONTROLS
 		 ***************************/
@@ -80,7 +87,7 @@ public class Teleop extends Command {
 
 		// see if the ball gate needs to be opened to allow a ball into the
 		// shooter
-		Robot.shooterSubsystem.GateControl();
+		//Robot.shooterSubsystem.GateControl();
 
 		// open the arms holding the gear
 		if (Robot.joyOp.getRawButton(2)) {
@@ -110,6 +117,7 @@ public class Teleop extends Command {
 		// spin up the shoot wheel
 		if (Robot.joyOp.getRawButton(1)) {
 			Robot.shooterSubsystem.shoot();
+			Robot.shooterSubsystem.GateControl();
 		} else {
 			Robot.shooterSubsystem.StopShoot();
 		}

@@ -60,7 +60,7 @@ public class Shooter2903 extends Subsystem {
 	}
 
 	public void shoot() {
-		shootMotor.set(OPTIMAL_SPEED);
+		shootMotor.set(SHOOT_SPEED);
 	}
 
 	public void shaker(double shakerSpeed) {
@@ -74,19 +74,21 @@ public class Shooter2903 extends Subsystem {
 
 	public void OpenGate() {
 		if (gate.get() == CLOSED_GATE_POSITION) {
-			gate.set(OPEN_GATE_POSITION);
+			gate.setPosition(OPEN_GATE_POSITION);
+		//	gate.set(OPEN_GATE_POSITION);
 		}
 	}
 	public void CloseGate(){
 		if(gate.get() == OPEN_GATE_POSITION){
-			gate.set(CLOSED_GATE_POSITION);
+			gate.setPosition(CLOSED_GATE_POSITION);
+		//	gate.set(CLOSED_GATE_POSITION);
 		}
 	}
 
 
 	public void GateControl() {
 		// controls gate opening and closing
-		if (shootMotor.get() >= OPTIMAL_SPEED){
+		if (shootMotor.get() >= SHOOT_SPEED){
 			OpenGate();
 		}
 		else{

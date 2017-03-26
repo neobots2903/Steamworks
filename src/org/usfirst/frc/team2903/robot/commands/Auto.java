@@ -43,6 +43,9 @@ public class Auto extends Command {
 
 		// Disable safety checks on drive subsystem
 		Robot.driveSubsystem.robotDrive.setSafetyEnabled(false);
+		
+		Robot.camera.setBrightness(0);
+
 	}
 
 	/*
