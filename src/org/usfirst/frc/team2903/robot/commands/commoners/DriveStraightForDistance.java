@@ -36,7 +36,6 @@ public class DriveStraightForDistance extends Command {
 
 	int TargetEncoderPos = 0;
 	int CurrentRightEncoderPos = 0;
-	int CurrentLeftEncoderPos = 0; // ANDREW
 	private int Distance = 0;
 
 	boolean ourJobIsDoneHere = false;
@@ -56,17 +55,6 @@ public class DriveStraightForDistance extends Command {
 	static final double WHEEL_DIAMETER_INCHES = 6.0; // For figuring
 														// circumference
 	static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * PI);
-
-	static final double CM_PER_INCH = 2.54; // ANDREW
-	static final double COUNTS_PER_CM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) 
-			/ ((WHEEL_DIAMETER_INCHES * CM_PER_INCH) * PI); // ANDREW
-
-	static final double TARGET_SPEED = 144; // revolutions per minute   // ANDREW
-	static final double MIN_PER_SEC = 0.0167; // minute to second ratio // ANDREW
-	static final double SEC_PER_TVE = 0.1; // Seconds per 10 velocity // ANDREW
-											// measurement periods (100ms)
-	static final double NATIVE_UNITS_PER_TVE = TARGET_SPEED * MIN_PER_SEC * SEC_PER_TVE * COUNTS_PER_MOTOR_REV; // ANDREW
-	static final double FULL_FORWARD = 1023;  // ANDREW
 
 	private Object imgLock = new Object();
 	private VisionThread visionThread;
@@ -121,11 +109,6 @@ public class DriveStraightForDistance extends Command {
 		TargetEncoderPos = (Distance * (int) COUNTS_PER_INCH);// +
 																// Robot.driveSubsystem.rightGetRawCount();
 
-		// SmartDashboard.putNumber("Right ", CurrentRightEncoderPos); // ANDREW
-		// SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos); // ANDREW
-		// SmartDashboard.putNumber("DF distance", Distance); // ANDREW
-		// SmartDashboard.putNumber("DF Target", TargetEncoderPos); // ANDREW
-
 		// setup the PID system
 		Robot.minipidSubsystem.reset();
 		Robot.minipidSubsystem.setSetpoint(TargetEncoderPos);
@@ -134,10 +117,6 @@ public class DriveStraightForDistance extends Command {
 
 		HighLimit = TargetEncoderPos + ErrorLimit;
 		LowLimit = TargetEncoderPos - ErrorLimit;
-
-		// Robot.minipidSubsystem.setP(Kp); // ANDREW
-		// Robot.minipidSubsystem.setI(0); // ANDREW
-		// Robot.minipidSubsystem.setD(0); // ANDREW
 
 		ourJobIsDoneHere = false;
 	}
@@ -191,7 +170,6 @@ public class DriveStraightForDistance extends Command {
 			MotorSpeed = -MinMotorSpeed;
 
 		SmartDashboard.putNumber("Right ", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("Left ", CurrentLeftEncoderPos); // ANDREW
 		SmartDashboard.putNumber("Angle", angle);
 
 		// TODO Auto-generated method stub
@@ -207,37 +185,8 @@ public class DriveStraightForDistance extends Command {
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 
 		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
-		SmartDashboard.putNumber("current left position", CurrentLeftEncoderPos); // ANDREW
 		SmartDashboard.putNumber("target position", TargetEncoderPos);
 		SmartDashboard.putNumber("MOTOR SPEED", MotorSpeed);
-
-		// see if we have seen this saved encoder count before  // ANDREW
-		if (CurrentRightEncoderPos != savedEncoderPosition) { // ANDREW
-			// new encoder count, save it off // ANDREW
-			savedEncoderPosition = CurrentRightEncoderPos; // ANDREW
-			 // ANDREW
-			// reset the counter // ANDREW
-			sameEncoderCount = 0; // ANDREW
-		} else { // ANDREW
-			// same encoder count -- register count // ANDREW
-			sameEncoderCount++; // ANDREW
-			 // ANDREW
-			// check to see if we have registered the same encoder count // ANDREW
-			// mulitple times in a row // ANDREW
-			// if (sameEncoderCount > MAX_SAME_ENCODER_COUNT) { // ANDREW
-			// /* // ANDREW
-			// * We could adjust the motor speed for each time we see the same // ANDREW
-			// * encoder count max times, but only if the motor speed is not 0 // ANDREW
-			// */ // ANDREW
-			// if (MotorSpeed != 0) { // ANDREW
-			// // increase minimum motor speed by 5% and reset the same count // ANDREW
-			// MinMotorSpeed += 0.05; // ANDREW
-			// sameEncoderCount = 0; // ANDREW
-			// } else { // ANDREW
-			// ourJobIsDoneHere = true; // ANDREW
-			// } // ANDREW
-			// } // ANDREW
-		}
 
 		if (!ourJobIsDoneHere) {
 			if (Distance > 0) {
@@ -261,10 +210,6 @@ public class DriveStraightForDistance extends Command {
 	@Override
 	protected void end() {
 		Robot.driveSubsystem.arcadeDrive(0, 0);
-		// CurrentRightEncoderPos = 0; // ANDREW
-		// TargetEncoderPos = 0; // ANDREW
-		// TODO Auto-generated method stub // ANDREW
-		// putting drives back into teleop mode // ANDREW
 		Robot.driveSubsystem.setTeleopMode();
 		ourJobIsDoneHere = false;
 	}
