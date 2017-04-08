@@ -114,7 +114,6 @@ public class DriveStraightForDistance extends Command {
 
 		// get current encoder counts
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
-		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount(); // ANDREW
 
 		StartAngle = Robot.gyroSubsystem.GyroPosition();
 
@@ -163,7 +162,6 @@ public class DriveStraightForDistance extends Command {
 	protected void execute() {
 
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
-		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount(); // ANDREW
 		double angle;
 		MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
 		if (UseGyro) {
@@ -207,7 +205,6 @@ public class DriveStraightForDistance extends Command {
 
 		// TODO Auto-generated method stub
 		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
-		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount(); // ANDREW
 
 		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("current left position", CurrentLeftEncoderPos); // ANDREW
