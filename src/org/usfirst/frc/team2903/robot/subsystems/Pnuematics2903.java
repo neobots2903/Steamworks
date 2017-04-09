@@ -1,7 +1,10 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
 import org.usfirst.frc.team2903.robot.RobotMap;
+
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.hal.DIOJNI;
 
@@ -12,11 +15,11 @@ public class Pnuematics2903 {
 	public Solenoid gearArmsOpen = new Solenoid(RobotMap.gearArmsOpen);
 	public Solenoid gearArmsClosed = new Solenoid(RobotMap.gearArmsClose);
 	
-	public DigitalInput leftLimitSwitch = new DigitalInput(RobotMap.leftLimitSwitch);
-	public DigitalInput rightLimitSwitch = new DigitalInput(RobotMap.rightLimitSwitch);
+	public AnalogInput leftLimitSwitch = new AnalogInput(RobotMap.leftLimitSwitch);
+	//public DigitalInput rightLimitSwitch = new DigitalInput(RobotMap.rightLimitSwitch);
 	
-	public boolean leftLimitPressed = leftLimitSwitch.get();
-	public boolean rightLimitPressed = rightLimitSwitch.get();
+	public double leftLimitPressed = leftLimitSwitch.getVoltage();
+	//public boolean rightLimitPressed = rightLimitSwitch.get();
 	
 	
 	public Pnuematics2903 () {
@@ -60,12 +63,12 @@ public class Pnuematics2903 {
 		}
 	}
 	
-	public boolean limitSwitchesPressed() {
-	    if (leftLimitPressed && rightLimitPressed)
-	    	return true;
-	    else
-	    	return false;
-	  }
+//	public boolean limitSwitchesPressed() {
+//	    if (leftLimitPressed > 0.1)// && rightLimitPressed)
+//	    	return true;
+//	    else
+//	    	return false;
+//	  }
 	
 	
 	public void armReset()

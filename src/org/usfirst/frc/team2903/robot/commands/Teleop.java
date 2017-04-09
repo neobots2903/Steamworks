@@ -33,6 +33,7 @@ public class Teleop extends Command {
 	 */
 	protected void execute() {
 		SmartDashboard.putNumber("TurnWithGyro", Robot.gyroSubsystem.GyroPosition());
+		SmartDashboard.putNumber("Switch value", Robot.pnuematicsSubsystem.leftLimitSwitch.getVoltage());
 		/*
 		 * Drive the robot arcade style.  
 		 * X-axis -- forward and reverse

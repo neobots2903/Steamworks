@@ -16,12 +16,12 @@ public class Gear2903 extends Subsystem {
 	
 	//gear delivery system
 	public void openArms (){
-		if (Robot.pnuematicsSubsystem.limitSwitchesPressed())
+//		if (Robot.pnuematicsSubsystem.limitSwitchesPressed())
 		Robot.pnuematicsSubsystem.openarms();
 	}
 	
 	public void closeArms (){
-		if (Robot.pnuematicsSubsystem.limitSwitchesPressed())
+//		if (Robot.pnuematicsSubsystem.limitSwitchesPressed())
 		Robot.pnuematicsSubsystem.closearms();
 	}
 	
