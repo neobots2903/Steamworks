@@ -64,7 +64,7 @@ public class Pnuematics2903 {
 	}
 	
 //	public boolean limitSwitchesPressed() {
-//	    if (leftLimitPressed > 0.1)// && rightLimitPressed)
+//	    if (leftLimitPressed < 0.1)// && rightLimitPressed)
 //	    	return true;
 //	    else
 //	    	return false;
