@@ -33,7 +33,7 @@ public class Teleop extends Command {
 	 */
 	protected void execute() {
 		SmartDashboard.putNumber("TurnWithGyro", Robot.gyroSubsystem.GyroPosition());
-		SmartDashboard.putNumber("Left Encoder", Robot.driveSubsystem.rightGetRawCount());
+		SmartDashboard.putNumber("Switch value", Robot.pnuematicsSubsystem.leftLimitSwitch.getVoltage());
 
 		/***************************
 		 * DRIVER CONTROLS
