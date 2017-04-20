@@ -3,14 +3,13 @@ package org.usfirst.frc.team2903.robot.commands.commoners;
 import org.usfirst.frc.team2903.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class OpenArms extends Command {
+public class AUTOopenarms extends Command {
 
 	// TODO update for two encoders with average of the two and gyro 
 	
 	
-	public OpenArms()
+	public AUTOopenarms()
 	{
 		super("OpenArms");
 		
@@ -27,7 +26,6 @@ public class OpenArms extends Command {
 
 	@Override
 	protected void execute() {
-		SmartDashboard.putNumber("Switch value", Robot.pnuematicsSubsystem.leftLimitSwitch.getVoltage());
 		Robot.gearSubsystem.openArms(true);
 	}
 

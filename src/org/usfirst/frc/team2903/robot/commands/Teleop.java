@@ -23,7 +23,6 @@ public class Teleop extends Command {
 		// Robot.elevatorSubsystem.encoder.reset();
 		Robot.driveSubsystem.setTeleopMode();
 		Robot.gyroSubsystem.reset();
-
 	}
 	
 	/*
@@ -33,7 +32,6 @@ public class Teleop extends Command {
 	 */
 	protected void execute() {
 		SmartDashboard.putNumber("TurnWithGyro", Robot.gyroSubsystem.GyroPosition());
-		SmartDashboard.putNumber("Switch value", Robot.pnuematicsSubsystem.leftLimitSwitch.getVoltage());
 		/*
 		 * Drive the robot arcade style.  
 		 * X-axis -- forward and reverse
@@ -59,30 +57,33 @@ public class Teleop extends Command {
 		//Robot.driveSubsystem.tankDrive(forward, forward);
 
 		//driver
-		if (Robot.joy1.getRawButton(3)){
+		if (Robot.joy1.getRawButton(9)){
 			Robot.driveSubsystem.changeToHighGear();
 		}
 		
-		if (Robot.joy1.getRawButton(4)){
+		if (Robot.joy1.getRawButton(10)){
 			Robot.driveSubsystem.changeToLowGear();
 		}
 		
 		if (Robot.joy1.getRawButton(8)) {
+			Robot.climberSubsystem.Fall();
+		}
+		else if (Robot.joy1.getRawButton(7)){
 			Robot.climberSubsystem.LiftOff();
 		}
-		else{
+		else
+		{
 			Robot.climberSubsystem.StopLift();
 		}
-	
-	
+		
 		//Operator
 		
 		double shaker = Robot.joyOp.getY();
 		Robot.shooterSubsystem.shaker(shaker);
-		Robot.shooterSubsystem.GateControl();
+//		Robot.shooterSubsystem.GateControl();
 		
 		if (Robot.joyOp.getRawButton(2)){
-			Robot.gearSubsystem.openArms();
+			Robot.gearSubsystem.openArms(false);
 		}
 		
 		if (Robot.joyOp.getRawButton(3)){

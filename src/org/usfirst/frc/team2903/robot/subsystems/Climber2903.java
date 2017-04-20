@@ -30,14 +30,14 @@ public class Climber2903 extends Subsystem {
 
 	}
 
-	public void LiftOff() {
+	public void Fall() {
 		//Pick balls up 
 		ClimberMotor.set(-1);
 	}
 
 	
 
-	public void Fall() {
+	public void LiftOff() {
 		//spit balls out
 		ClimberMotor.set(1);
 	}

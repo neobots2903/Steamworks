@@ -186,7 +186,7 @@ public class Drive2903 extends Subsystem {
 		}
 
 		public int rightGetRawCount() {
-			return (int)-rightFrontMotor.getEncPosition(); // - lastRightRawCount;
+			return (int)rightFrontMotor.getEncPosition(); // - lastRightRawCount;
 		}
 		
 		public boolean isRightEncoderPresent() {

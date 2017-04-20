@@ -17,7 +17,6 @@ import org.usfirst.frc.team2903.robot.subsystems.GearPegPipeline2903;
 
 import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.VisionThread;
@@ -35,7 +34,6 @@ public class DriveStraightForDistance extends Command {
 	static final int MAX_SAME_ENCODER_COUNT = 5;
 
 	int TargetEncoderPos = 0;
-	int CurrentRightEncoderPos = 0;
 	private int Distance = 0;
 
 	boolean ourJobIsDoneHere = false;
@@ -49,12 +47,13 @@ public class DriveStraightForDistance extends Command {
 	private boolean UseGyro;
 
 	static final double PI = 3.14159;
-	static final int COUNTS_PER_MOTOR_REV = 1024; // eg: Grayhill 61R256
-	static final double DRIVE_GEAR_REDUCTION = 2.0; // This is < 1.0 if geared
+	static final int COUNTS_PER_MOTOR_REV = 256; // eg: Grayhill 61R256
+	static final double DRIVE_GEAR_REDUCTION = 1; // This is < 1.0 if geared
 													// UP
-	static final double WHEEL_DIAMETER_INCHES = 6.0; // For figuring
+	static final double WHEEL_DIAMETER_INCHES = 4.0; // For figuring
 														// circumference
-	static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * PI);
+	static final double COUNTS_PER_INCH = 265;
+			//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * PI);
 
 	private Object imgLock = new Object();
 	private VisionThread visionThread;
@@ -72,6 +71,9 @@ public class DriveStraightForDistance extends Command {
 
 		Distance = distance;
 		UseGyro = useGyro;
+		
+		// calculate target position
+		TargetEncoderPos = (Distance * (int) COUNTS_PER_INCH) + Robot.driveSubsystem.rightGetRawCount();
 	}
 
 	@Override
@@ -101,13 +103,9 @@ public class DriveStraightForDistance extends Command {
 		}
 
 		// get current encoder counts
-		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
+	//	int CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 
 		StartAngle = Robot.gyroSubsystem.GyroPosition();
-
-		// calculate target position
-		TargetEncoderPos = (Distance * (int) COUNTS_PER_INCH);// +
-																// Robot.driveSubsystem.rightGetRawCount();
 
 		// setup the PID system
 		Robot.minipidSubsystem.reset();
@@ -140,7 +138,7 @@ public class DriveStraightForDistance extends Command {
 	@Override
 	protected void execute() {
 
-		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
+		int CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 		double angle;
 		MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
 		if (UseGyro) {
@@ -182,7 +180,7 @@ public class DriveStraightForDistance extends Command {
 		ourJobIsDoneHere = false;
 
 		// TODO Auto-generated method stub
-		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
+		int CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
 
 		SmartDashboard.putNumber("current right position", CurrentRightEncoderPos);
 		SmartDashboard.putNumber("target position", TargetEncoderPos);

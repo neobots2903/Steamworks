@@ -22,6 +22,7 @@ import org.usfirst.frc.team2903.robot.commands.commoners.TurnWithGyro;
 import org.usfirst.frc.team2903.robot.commands.groups.LeftGear;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneFootSquare;
 import org.usfirst.frc.team2903.robot.commands.groups.DriveInAOneSecondSquare;
+import org.usfirst.frc.team2903.robot.commands.groups.MinimalAuto;
 import org.usfirst.frc.team2903.robot.commands.groups.MiddleGear;
 import org.usfirst.frc.team2903.robot.commands.groups.RightGear;
 import org.usfirst.frc.team2903.robot.commands.groups.StraightGearTime;
@@ -110,7 +111,7 @@ public class Robot extends IterativeRobot {
 		try {
 			autoChooser.addObject("LeftGear", new LeftGear());
 //			autoChooser.addDefault("LIDARtest", new LIDARTest());
-//			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
+			autoChooser.addObject("MinimalAuto", new MinimalAuto());
 //			autoChooser.addObject("MiddleGear", new MiddleGear());
 			autoChooser.addDefault("RightGear", new RightGear());
 //			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());

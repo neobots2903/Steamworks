@@ -24,7 +24,7 @@ public class LeftGear extends CommandGroup {
 //			addSequential(new GearAim());
 			addSequential(new DriveStraightForDistance(-1,true));
 			addSequential(new DriveStraightForDistance(50,false));
-			addSequential(new OpenArms());
+			//addSequential(new OpenArms());
 			
 //		}
 	}

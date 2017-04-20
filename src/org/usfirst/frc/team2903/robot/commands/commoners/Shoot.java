@@ -1,12 +1,15 @@
 package org.usfirst.frc.team2903.robot.commands.commoners;
 
+import org.usfirst.frc.team2903.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shoot extends Command {
 
 	public Shoot() {
 		super("Shoot");
-		// requires(Robot.shootSubsystem);
+		 requires(Robot.driveSubsystem);
 	}
 
 	@Override
@@ -17,7 +20,8 @@ public class Shoot extends Command {
 
 	@Override
 	protected void execute() {
-		// TODO Auto-generated method stub
+		SmartDashboard.putNumber("Switch value", Robot.pnuematicsSubsystem.leftLimitSwitch.getVoltage());
+
 	}
 
 	@Override

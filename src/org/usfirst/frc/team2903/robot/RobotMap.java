@@ -37,8 +37,8 @@ public class RobotMap {
 	// Pnuematics
 	public static int highGearShiftSol = 6;
 	public static int lowGearShiftSol = 7;
-	public static int gearArmsOpen = 0;
-	public static int gearArmsClose = 1;
+	public static int gearArmsOpen = 1;
+	public static int gearArmsClose = 0;
 	
 	public static int leftLimitSwitch = 0;
 	//public static int rightLimitSwitch = 1;
