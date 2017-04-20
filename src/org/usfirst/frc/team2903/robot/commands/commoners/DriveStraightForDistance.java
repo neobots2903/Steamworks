@@ -37,7 +37,7 @@ public class DriveStraightForDistance extends Command {
 
 	static final double PI = 3.14159;
 	static final int COUNTS_PER_MOTOR_REV = 1024; // eg: Grayhill 61R256
-	static final double DRIVE_GEAR_REDUCTION = (30.0/54.0); // Vex Pro 3 Sim Shifter Gear Ratio
+	static final double DRIVE_GEAR_REDUCTION = (34.0/50.0); // Vex Pro 3 Sim Shifter Gear Ratio
 	static final double WHEEL_DIAMETER_INCHES = 4.0; // For figuring circumference
 	
 	// count conversion to inches
@@ -130,11 +130,12 @@ public class DriveStraightForDistance extends Command {
 		
 		double angle = 0;
 
-		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
-		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
+//		CurrentRightEncoderPos = Robot.driveSubsystem.rightGetRawCount();
+//		CurrentLeftEncoderPos = Robot.driveSubsystem.leftGetRawCount();
 
 		// get motor speed from PID loop
-		MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
+		//MotorSpeed = Robot.minipidSubsystem.getOutput(CurrentRightEncoderPos, TargetEncoderPos) / 100;
+		MotorSpeed = 0.6;
 		
 		// get angle from either gyro or camera centerx
 		//angle = getTurnAngle();
