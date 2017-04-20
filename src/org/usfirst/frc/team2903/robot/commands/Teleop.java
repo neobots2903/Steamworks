@@ -117,7 +117,7 @@ public class Teleop extends Command {
 		// spin up the shoot wheel
 		if (Robot.joyOp.getRawButton(1)) {
 			Robot.shooterSubsystem.shoot();
-			Robot.shooterSubsystem.GateControl();
+//			Robot.shooterSubsystem.GateControl();
 		} else {
 			Robot.shooterSubsystem.StopShoot();
 		}

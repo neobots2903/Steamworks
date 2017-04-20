@@ -24,8 +24,8 @@ public class Shooter2903 extends Subsystem {
 	static final double SHOOT_SPEED = 0.5;
 	
 	// gate positions
-	static final double OPEN_GATE_POSITION = 0;
-	static final double CLOSED_GATE_POSITION = 1;
+//	static final double OPEN_GATE_POSITION = 0;
+//	static final double CLOSED_GATE_POSITION = 1;
 
 	// shooter and kicker talons
 	static CANTalon shootMotor;
@@ -38,7 +38,7 @@ public class Shooter2903 extends Subsystem {
 	public Shooter2903() {
 		shootMotor = new CANTalon(RobotMap.shootMotor);
 		shakeMotor = new CANTalon(RobotMap.shakeMotor);
-		gate = new Servo(RobotMap.AllieGator);
+	//	gate = new Servo(RobotMap.AllieGator);
 		shootMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		
 		shootMotor.changeControlMode(TalonControlMode.PercentVbus);
@@ -72,28 +72,28 @@ public class Shooter2903 extends Subsystem {
 		shootMotor.set(0);
 	}
 
-	public void OpenGate() {
-		if (gate.get() == CLOSED_GATE_POSITION) {
-			gate.setPosition(OPEN_GATE_POSITION);
-		//	gate.set(OPEN_GATE_POSITION);
-		}
-	}
-	public void CloseGate(){
-		if(gate.get() == OPEN_GATE_POSITION){
-			gate.setPosition(CLOSED_GATE_POSITION);
-		//	gate.set(CLOSED_GATE_POSITION);
-		}
-	}
+//	public void OpenGate() {
+//		if (gate.get() == CLOSED_GATE_POSITION) {
+//			gate.setPosition(OPEN_GATE_POSITION);
+//		//	gate.set(OPEN_GATE_POSITION);
+//		}
+//	}
+//	public void CloseGate(){
+//		if(gate.get() == OPEN_GATE_POSITION){
+//			gate.setPosition(CLOSED_GATE_POSITION);
+//		//	gate.set(CLOSED_GATE_POSITION);
+//		}
+//	}
 
 
-	public void GateControl() {
-		// controls gate opening and closing
-		if (shootMotor.get() >= SHOOT_SPEED){
-			OpenGate();
-		}
-		else{
-			CloseGate();
-		}
-	}
+//	public void GateControl() {
+//		// controls gate opening and closing
+//		if (shootMotor.get() >= SHOOT_SPEED){
+//			OpenGate();
+//		}
+//		else{
+//			CloseGate();
+//		}
+//	}
 
 }
