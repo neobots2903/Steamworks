@@ -5,21 +5,24 @@ import org.usfirst.frc.team2903.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Teleop extends Command {
+public class Teleop extends Command
+{
 
-	static final double errorTurn = 0.25;
-	static final double Proportional = 0.03;
-	static final double circleDegrees = 360;
-	static final double adjustTurn = 0.01;
+	static final double	errorTurn		= 0.25;
+	static final double	Proportional	= 0.03;
+	static final double	circleDegrees	= 360;
+	static final double	adjustTurn		= 0.01;
 
-	public Teleop() {
+	public Teleop()
+	{
 		requires(Robot.driveSubsystem);
 		requires(Robot.pickupSubsystem);
 
 		// requires(Robot.pneumaticsSubsystem);
 	}
 
-	protected void initialize() {
+	protected void initialize()
+	{
 		// Robot.elevatorSubsystem.encoder.reset();
 		Robot.driveSubsystem.setTeleopMode();
 		Robot.gyroSubsystem.reset();
@@ -31,7 +34,8 @@ public class Teleop extends Command {
 	 * when adding code to not cause blocking issues or delays as this will
 	 * affect the performance of the robot.
 	 */
-	protected void execute() {
+	protected void execute()
+	{
 		SmartDashboard.putNumber("TurnWithGyro", Robot.gyroSubsystem.GyroPosition());
 		SmartDashboard.putNumber("Switch value", Robot.pnuematicsSubsystem.leftLimitSwitch.getVoltage());
 
@@ -49,32 +53,38 @@ public class Teleop extends Command {
 
 		// gear shifting
 		// switch to high gear
-		if (Robot.joy1.getRawButton(9)) {
+		if (Robot.joy1.getRawButton(9))
+		{
 			Robot.driveSubsystem.changeToHighGear();
 		}
 
 		// switch to low gear
-		if (Robot.joy1.getRawButton(10)) {
+		if (Robot.joy1.getRawButton(10))
+		{
 			Robot.driveSubsystem.changeToLowGear();
 		}
 
 		// climb the rope
-		if (Robot.joy1.getRawButton(8)) {
+		if (Robot.joy1.getRawButton(8))
+		{
 			Robot.climberSubsystem.LiftOff();
 		}
 
 		// stop climing
-		else {
+		else
+		{
 			Robot.climberSubsystem.StopLift();
 		}
 
 		// Take rope off
-		if (Robot.joy1.getRawButton(7)) {
+		if (Robot.joy1.getRawButton(7))
+		{
 			Robot.climberSubsystem.Fall();
 		}
 
 		// stop moving
-		else {
+		else
+		{
 			Robot.climberSubsystem.StopLift();
 		}
 		/***************************
@@ -87,38 +97,45 @@ public class Teleop extends Command {
 
 		// see if the ball gate needs to be opened to allow a ball into the
 		// shooter
-		//Robot.shooterSubsystem.GateControl();
+		// Robot.shooterSubsystem.GateControl();
 
 		// open the arms holding the gear
-		if (Robot.joyOp.getRawButton(2)) {
+		if (Robot.joyOp.getRawButton(2))
+		{
 			Robot.gearSubsystem.openArms();
 		}
 
 		// close the arms
-		if (Robot.joyOp.getRawButton(3)) {
+		if (Robot.joyOp.getRawButton(3))
+		{
 			Robot.gearSubsystem.closeArms();
 		}
 
 		// spin the fuel pick up motor
-		if (Robot.joyOp.getRawButton(5)) {
+		if (Robot.joyOp.getRawButton(5))
+		{
 			Robot.pickupSubsystem.PickUp();
 		}
 
 		// reverse the pickup motor
-		else if (Robot.joyOp.getRawButton(6)) {
+		else if (Robot.joyOp.getRawButton(6))
+		{
 			Robot.pickupSubsystem.SpitOut();
 		}
 
 		// stop spinning the pick up motor
-		else {
+		else
+		{
 			Robot.pickupSubsystem.StopPickUp();
 		}
 
 		// spin up the shoot wheel
-		if (Robot.joyOp.getRawButton(1)) {
+		if (Robot.joyOp.getRawButton(1))
+		{
 			Robot.shooterSubsystem.shoot();
-//			Robot.shooterSubsystem.GateControl();
-		} else {
+			// Robot.shooterSubsystem.GateControl();
+		} else
+		{
 			Robot.shooterSubsystem.StopShoot();
 		}
 
@@ -133,7 +150,8 @@ public class Teleop extends Command {
 	 * returned. Return true if the robot work is finished Return false if the
 	 * robot is not finished
 	 */
-	protected boolean isFinished() {
+	protected boolean isFinished()
+	{
 		return false;
 	}
 
@@ -141,13 +159,15 @@ public class Teleop extends Command {
 	 * This is called when the match ends or if isFinished returns true. all
 	 * systems should be disabled at this point.
 	 */
-	protected void end() {
+	protected void end()
+	{
 	}
 
 	/*
 	 * This is called if for some reason the normal operation of the robot is
 	 * cancelled by an external action.
 	 */
-	protected void interrupted() {
+	protected void interrupted()
+	{
 	}
 }
