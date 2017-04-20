@@ -32,7 +32,7 @@ public class Teleop extends Command
 	/*
 	 * This routine is called by the scheduler on a regular basis so be careful
 	 * when adding code to not cause blocking issues or delays as this will
-	 * affect the performance of the robot.
+	 * affect the performance of the robot. 
 	 */
 	protected void execute()
 	{
