@@ -3,6 +3,7 @@ package org.usfirst.frc.team2903.robot.commands;
 import org.usfirst.frc.team2903.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
  * Autonomous mode basic
@@ -22,7 +23,7 @@ public class Auto extends Command {
 		requires(Robot.minipidSubsystem); 
 		
 		// initialize the pid and gyro
-		Robot.minipidSubsystem.setPID(0.25, 0.01, 0.4);
+//Robot.minipidSubsystem.setPID(0.25, 0.01, 0.4);
 		Robot.gyroSubsystem.Calibrate();
 		
 		//9.549296585513720 encoder clicks per rotation of a wheel
@@ -35,11 +36,11 @@ public class Auto extends Command {
 	 */
 	protected void initialize() {
 		// set the target for the PID subsystem
-		Robot.minipidSubsystem.setSetpoint(90);
+//		Robot.minipidSubsystem.setSetpoint(90);
 		
 		// set the minimum and maximum output limits for the PID subsystem
-		Robot.minipidSubsystem.setOutputLimits(-80,80);
-		
+//		Robot.minipidSubsystem.setOutputLimits(-80,80);
+	Robot.driveSubsystem.driveReset();
 		// Disable safety checks on drive subsystem
 		Robot.driveSubsystem.robotDrive.setSafetyEnabled(false);
 	}
@@ -52,19 +53,23 @@ public class Auto extends Command {
 	 */
 	protected void execute() {
 		// Get output from PID and dvide by 4
-		double output = Robot.minipidSubsystem.getOutput(Robot.gyroSubsystem.GyroPosition(),90) * 0.25;
+//double output = Robot.minipidSubsystem.getOutput(Robot.gyroSubsystem.GyroPosition(),90) * 0.25;
 		
 		// limit output to 25% in either direction
-		if (output > 25) 
-			output = 25;
-		else if (output < -25)
-			output = -25;
-		
-		// convert output to a value the drive subsystem can use (-1 to 1)
-		output /= 100;
+//		if (output > 25) 
+//			output = 25;
+//		else if (output < -25)
+//			output = -25;
+//		
+//		// convert output to a value the drive subsystem can use (-1 to 1)
+//		output /= 100;
 		
 		// drive the robot, only providing the turn speed
-		Robot.driveSubsystem.robotDrive.arcadeDrive(0,output);
+		
+		
+		SmartDashboard.putNumber("Right E ", Robot.driveSubsystem.rightGetCount());
+		SmartDashboard.putNumber("Right E raw", Robot.driveSubsystem.rightGetRawCount());
+//		Robot.driveSubsystem.robotDrive.arcadeDrive(0,output);
 		//Robot.driveSubsystem.tankDrive(-output, output);
 	}
 

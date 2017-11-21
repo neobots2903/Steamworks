@@ -30,10 +30,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Drive2903 extends Subsystem {
 
 	
-	CANTalon leftFrontMotor;
-	CANTalon leftRearMotor;
-	CANTalon rightFrontMotor;
-	CANTalon rightRearMotor;
+	public CANTalon leftFrontMotor;
+	public CANTalon leftRearMotor;
+	public CANTalon rightFrontMotor;
+	public CANTalon rightRearMotor;
 	
 	// ANDREW-TODO -- this should be set to 256 and the line in DriveReset for the right encoder should be uncommented.
     static final int     COUNTS_PER_MOTOR_REV    = 256 ;    // eg: Grayhill 61R256 
@@ -169,7 +169,7 @@ public class Drive2903 extends Subsystem {
 			
 			// configure the encoders
 			rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-			rightFrontMotor.reverseSensor(true);		
+			rightFrontMotor.reverseSensor(false);		
 			
 			 // ANDREW-TODO this should probably be uncommented and set to 256 for the grayhill encoder.  
 		    rightFrontMotor.configEncoderCodesPerRev(COUNTS_PER_MOTOR_REV);
@@ -185,6 +185,10 @@ public class Drive2903 extends Subsystem {
 			return (int)rightFrontMotor.getPosition();
 		}
 
+//		public int leftGetCount() {
+//			return (int)leftFrontMotor.getPosition();
+//		}
+		
 		public int rightGetRawCount() {
 			return (int)rightFrontMotor.getEncPosition(); // - lastRightRawCount;
 		}

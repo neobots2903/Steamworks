@@ -2,6 +2,7 @@ package org.usfirst.frc.team2903.robot.commands;
 
 import org.usfirst.frc.team2903.robot.Robot;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -32,6 +33,8 @@ public class Teleop extends Command {
 	 */
 	protected void execute() {
 		SmartDashboard.putNumber("TurnWithGyro", Robot.gyroSubsystem.GyroPosition());
+		SmartDashboard.putNumber("Right E ", Robot.driveSubsystem.rightGetCount());
+		SmartDashboard.putNumber("Right E raw", Robot.driveSubsystem.rightGetRawCount());
 		/*
 		 * Drive the robot arcade style.  
 		 * X-axis -- forward and reverse
@@ -43,7 +46,7 @@ public class Teleop extends Command {
 		double turn = Robot.joy1.getX();
 		
 //		if (-errorTurn >= turn && turn <= errorTurn) {
-//			double angle = Robot.gyroSubsystem.GyroPosition() % circleDegrees;
+//			double angle = Robot.gyroSubsystem.GyroPosition() % circleDegryees;
 //			angle = angle / circleDegrees;
 //			Robot.driveSubsystem.arcadeDrive(forward, -angle * Proportional);
 //		} else {

@@ -1,12 +1,15 @@
 package org.usfirst.frc.team2903.robot.subsystems;
 
+import org.usfirst.frc.team2903.robot.Robot;
 import org.usfirst.frc.team2903.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.hal.DIOJNI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Pnuematics2903 {
 	
@@ -15,12 +18,7 @@ public class Pnuematics2903 {
 	public Solenoid gearArmsOpen = new Solenoid(RobotMap.gearArmsOpen);
 	public Solenoid gearArmsClosed = new Solenoid(RobotMap.gearArmsClose);
 	
-	public AnalogInput leftLimitSwitch = new AnalogInput(RobotMap.leftLimitSwitch);
-	//public DigitalInput rightLimitSwitch = new DigitalInput(RobotMap.rightLimitSwitch);
-	
-	public double leftLimitPressed = leftLimitSwitch.getVoltage();
-	//public boolean rightLimitPressed = rightLimitSwitch.get();
-	
+	//public DigitalInput leftLimitSwitch = new DigitalInput(RobotMap.leftLimitSwitch);
 	
 	public Pnuematics2903 () {
 		highGearShift.clearAllPCMStickyFaults();
@@ -63,12 +61,12 @@ public class Pnuematics2903 {
 		}
 	}
 	
-//	public boolean limitSwitchesPressed() {
-//	    if (leftLimitPressed < 0.1)// && rightLimitPressed)
-//	    	return true;
-//	    else
-//	    	return false;
-//	  }
+	public boolean limitSwitchesPressed() {
+//		SmartDashboard.putBoolean("Limit Switch Closed?", !leftLimitSwitch.get());
+//		return !leftLimitSwitch.get(); // > 0;
+		SmartDashboard.putBoolean("Limit Switch Closed?", !Robot.pressurePlateSwitch.get());
+		return !Robot.pressurePlateSwitch.get(); // > 0;
+	  }
 	
 	
 	public void armReset()

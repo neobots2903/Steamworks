@@ -17,7 +17,7 @@ public class StraightGearTime extends CommandGroup {
 		//Robot.gyroSubsystem.reset();
 		Robot.gyroSubsystem.Calibrate();
 		
-		addSequential(new DriveForTime(3.2));
+		addSequential(new DriveForTime(3.2, false));
 		addSequential(new OpenArms());
 //		addSequential(new DriveStraightForDistance(-1));
 		addSequential(new CloseArms());

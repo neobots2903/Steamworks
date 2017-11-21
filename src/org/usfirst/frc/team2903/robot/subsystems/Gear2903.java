@@ -15,8 +15,8 @@ public class Gear2903 extends Subsystem {
 	// gear delivery system
 	public void openArms(boolean auto) {
 		// if (!auto && Robot.pnuematicsSubsystem.limitSwitchesPressed())
-		if (auto) {
-			if (Robot.pnuematicsSubsystem.leftLimitSwitch.getVoltage() < 0.1) {
+		if (auto) {		
+			if (Robot.pnuematicsSubsystem.limitSwitchesPressed()) {
 				Robot.pnuematicsSubsystem.openarms();
 			}
 		} else {

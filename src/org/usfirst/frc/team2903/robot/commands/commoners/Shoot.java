@@ -20,8 +20,6 @@ public class Shoot extends Command {
 
 	@Override
 	protected void execute() {
-		SmartDashboard.putNumber("Switch value", Robot.pnuematicsSubsystem.leftLimitSwitch.getVoltage());
-
 	}
 
 	@Override

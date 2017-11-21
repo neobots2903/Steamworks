@@ -14,16 +14,16 @@ public class DriveInAOneSecondSquare extends CommandGroup {
 
 		Robot.gyroSubsystem.Calibrate();
 		//addSequential(new TurnWithGyro(0));
-		addSequential(new DriveForTime(1));
-		addSequential(new TurnWithGyro(90));
-		Robot.gyroSubsystem.reset();
-		addSequential(new DriveForTime(1));
-		addSequential(new TurnWithGyro(180));
-		Robot.gyroSubsystem.reset();
-		addSequential(new DriveForTime(1));
-		addSequential(new TurnWithGyro(270));
-		Robot.gyroSubsystem.reset();
-		addSequential(new DriveForTime(1));
+		//addSequential(new DriveForTime(1, false));
+		addSequential(new TurnWithGyro(45));
+//		Robot.gyroSubsystem.reset();
+//		addSequential(new DriveForTime(1, false));
+//		addSequential(new TurnWithGyro(180));
+//		Robot.gyroSubsystem.reset();
+//		addSequential(new DriveForTime(1, false));
+//		addSequential(new TurnWithGyro(270));
+//		Robot.gyroSubsystem.reset();
+//		addSequential(new DriveForTime(1, false));
 //		addSequential(new TurnWithGyro(-180));
 		Robot.gyroSubsystem.reset();
 		

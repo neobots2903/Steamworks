@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team2903.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -13,8 +14,9 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team2903.robot.commands.Auto;
 import org.usfirst.frc.team2903.robot.commands.Teleop;
-import org.usfirst.frc.team2903.robot.commands.commoners.DriveToPositionTest;
+import org.usfirst.frc.team2903.robot.commands.commoners.DriveToPosition;
 import org.usfirst.frc.team2903.robot.commands.commoners.DriveWithLIDAR;
 import org.usfirst.frc.team2903.robot.commands.commoners.GearAim;
 import org.usfirst.frc.team2903.robot.commands.commoners.LIDARTest;
@@ -68,10 +70,11 @@ public class Robot extends IterativeRobot {
 	Command teleopCommand;
 
 	public static Joystick joyOp = new Joystick(0);
-	Button triggerKick = new JoystickButton(joyOp, 1);
+	//public static Joystick joyOp = new Joystick(2);
 	public static Vision2903 camera;
 
 	public static Joystick joy1 = new Joystick(1);
+	public static DigitalInput pressurePlateSwitch = new DigitalInput(RobotMap.pressurePlateSwitch);
 
 	public static Port lidarPort = I2C.Port.kOnboard;
 	
@@ -117,7 +120,7 @@ public class Robot extends IterativeRobot {
 //			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
 			autoChooser.addObject("MiddleGear", new MiddleGear());
 //			autoChooser.addObject("DriveInAOneFootSquare", new DriveInAOneFootSquare());
-//			autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
+			autoChooser.addObject("DriveInAOneSecondSquare", new DriveInAOneSecondSquare());
 //			autoChooser.addObject("DriveWithLIDAR", new DriveWithLIDAR());
 //			autoChooser.addObject("TurnWithGyro", new TurnWithGyro(90));
 //			autoChooser.addObject("DriveToPosition", new DriveToPositionTest(12));
@@ -141,6 +144,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		// schedule the autonomous command (example)
+			//autonomousCommand = new Auto();
 			autonomousCommand = (Command) autoChooser.getSelected();
 			autonomousCommand.start();
 			

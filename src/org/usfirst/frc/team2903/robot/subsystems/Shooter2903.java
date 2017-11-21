@@ -32,6 +32,8 @@ public class Shooter2903 extends Subsystem {
 
 	// variables
 	static final double optimalSpeed = 0.62;
+	
+	
 
 	public Shooter2903() {
 
@@ -63,7 +65,7 @@ public class Shooter2903 extends Subsystem {
 
 	public void shoot() {
 		// shootMotor.set(0.62);
-		shootMotor.set(0.5);
+		shootMotor.set(0.60); //60
 	}
 
 	public void shaker(double shakerSpeed) {

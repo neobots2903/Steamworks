@@ -13,7 +13,9 @@ public class MinimalAuto extends CommandGroup {
 	
 	public MinimalAuto() throws InterruptedException{
 		requires(Robot.driveSubsystem);
-		addSequential(new Shoot());
+		Robot.driveSubsystem.driveReset();
+		SmartDashboard.putNumber("Right E ", Robot.driveSubsystem.rightGetCount());
+		//addSequential(new Shoot());
 	}
 	
 }

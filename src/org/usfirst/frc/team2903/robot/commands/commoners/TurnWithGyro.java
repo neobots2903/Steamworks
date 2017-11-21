@@ -20,7 +20,7 @@ public class TurnWithGyro extends Command{
 	
 	double HighLimit;
 	double LowLimit;
-	double ErrorLimit = 0.45;
+	double ErrorLimit = 0.4;
 	double MotorSpeed = 0.6;
 	double MinMotorSpeed = 0.5;
 	double ReadjustMotorSpeed = 0;
