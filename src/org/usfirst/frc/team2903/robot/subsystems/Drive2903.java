@@ -114,21 +114,22 @@ public class Drive2903 extends Subsystem {
 	public void setAutoMode()
 	{
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
-		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.PercentVbus);
+		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Follower);
 		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
 		Robot.driveSubsystem.leftRearMotor.changeControlMode(TalonControlMode.Follower);	
 		
 		// have the motors follow rightFrontMotor
 		rightFrontMotor.set(0);
-		leftFrontMotor.set(0);
-		leftRearMotor.set(leftFrontMotor.getDeviceID());
+		leftFrontMotor.set(rightFrontMotor.getDeviceID());
+		leftRearMotor.set(rightFrontMotor.getDeviceID());
 		rightRearMotor.set(rightFrontMotor.getDeviceID());
 		
 		//Reset the encoder to zero as its current position
 		rightFrontMotor.setPosition(0);
 		rightFrontMotor.setEncPosition(0);
-		leftFrontMotor.setPosition(0);
-		leftFrontMotor.setEncPosition(0);	}
+//		leftFrontMotor.setPosition(0);
+//		leftFrontMotor.setEncPosition(0);	
+		}
 	
 	/**
 	 * This will set the primary motor controller on the right side to position mode.  Optionally, it can

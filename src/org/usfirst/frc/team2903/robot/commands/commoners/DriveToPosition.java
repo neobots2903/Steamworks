@@ -2,6 +2,7 @@ package org.usfirst.frc.team2903.robot.commands.commoners;
 
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2903.robot.Robot;
 import org.usfirst.frc.team2903.robot.subsystems.Drive2903;
@@ -32,26 +33,49 @@ public class DriveToPosition extends Command {
 		Distance = distance;
 		
 		DistanceInTicks = (int)((double)distance * COUNTS_PER_INCH);
-
+		
 	}
 
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
+		Robot.driveSubsystem.rightFrontMotor.reset();
+		
 		Robot.driveSubsystem.rightFrontMotor.changeControlMode(TalonControlMode.Position);
+		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
+		Robot.driveSubsystem.leftFrontMotor.changeControlMode(TalonControlMode.Follower);
+		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
+		
+		// have the motors follow rightFrontMotor
+		Robot.driveSubsystem.rightFrontMotor.set(0);
+		Robot.driveSubsystem.leftFrontMotor.set(Robot.driveSubsystem.rightFrontMotor.getDeviceID());
+		Robot.driveSubsystem.leftRearMotor.set(Robot.driveSubsystem.rightFrontMotor.getDeviceID());
+		Robot.driveSubsystem.rightRearMotor.set(Robot.driveSubsystem.rightFrontMotor.getDeviceID());
+				
+				//Reset the encoder to zero as its current position
+//		Robot.driveSubsystem.rightFrontMotor.setPosition(0);
+		Robot.driveSubsystem.rightFrontMotor.setEncPosition(0);
+//				leftFrontMotor.setPosition(0);
+//				leftFrontMotor.setEncPosition(0);	
+		
+		Robot.driveSubsystem.rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		Robot.driveSubsystem.rightFrontMotor.setPID(0.5, 0.0001, 0.0);
+		//Robot.driveSubsystem.rightFrontMotor.setPID(0.5, 0.001, 0.00, 0.00, 360, 36, 0);
+		
+		Robot.driveSubsystem.rightFrontMotor.enableControl();
+		Robot.driveSubsystem.rightFrontMotor.setPosition(DistanceInTicks);
 	}
 
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
-		Robot.driveSubsystem.rightFrontMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		Robot.driveSubsystem.rightFrontMotor.setPID(0.5, 0.0001, 0.0);
+		SmartDashboard.putNumber("Drive   ", DistanceInTicks);
+		SmartDashboard.putNumber("Right E ", Robot.driveSubsystem.rightGetRawCount());
 	}
 
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		Robot.driveSubsystem.rightFrontMotor.set(DistanceInTicks);
 		return false;
 	}
 
