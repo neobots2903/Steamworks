@@ -16,23 +16,24 @@ public class DriveToPosition extends Command {
 
 	int Distance;
 	
-	int DistanceInTicks;
+	int DistanceInRevolutions;
 	
 	static final double PI = 3.14159;
 	static final int COUNTS_PER_MOTOR_REV = 1024; // eg: Grayhill 61R256
-	static final double DRIVE_GEAR_REDUCTION = 0.5; // This is < 1.0 if geared
+	static final double DRIVE_GEAR_REDUCTION = 8; // This is < 1.0 if geared
 													// UP
 	static final double WHEEL_DIAMETER_INCHES = 4.5; // For figuring// circumference
 	
 	//change parameter to number of rotations instead of counts per inch
-	static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * PI);
+	//static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * PI);
+	static final double INCHES_PER_ENCODER_REV = (WHEEL_DIAMETER_INCHES* PI)/DRIVE_GEAR_REDUCTION;
 	
 	public DriveToPosition(int distance) {
 		super("DriveToPosition");
 		
 		Distance = distance;
 		
-		DistanceInTicks = (int)((double)distance * COUNTS_PER_INCH);
+		DistanceInRevolutions = (int)Math.round((double)distance/INCHES_PER_ENCODER_REV);
 		
 	}
 
@@ -47,14 +48,14 @@ public class DriveToPosition extends Command {
 		Robot.driveSubsystem.rightRearMotor.changeControlMode(TalonControlMode.Follower);
 		
 		// have the motors follow rightFrontMotor
-		Robot.driveSubsystem.rightFrontMotor.set(0);
+		Robot.driveSubsystem.rightFrontMotor.setPosition(0);
 		Robot.driveSubsystem.leftFrontMotor.set(Robot.driveSubsystem.rightFrontMotor.getDeviceID());
 		Robot.driveSubsystem.leftRearMotor.set(Robot.driveSubsystem.rightFrontMotor.getDeviceID());
 		Robot.driveSubsystem.rightRearMotor.set(Robot.driveSubsystem.rightFrontMotor.getDeviceID());
 				
 				//Reset the encoder to zero as its current position
 //		Robot.driveSubsystem.rightFrontMotor.setPosition(0);
-		Robot.driveSubsystem.rightFrontMotor.setEncPosition(0);
+		//Robot.driveSubsystem.rightFrontMotor.setEncPosition(0);
 //				leftFrontMotor.setPosition(0);
 //				leftFrontMotor.setEncPosition(0);	
 		
@@ -63,13 +64,13 @@ public class DriveToPosition extends Command {
 		//Robot.driveSubsystem.rightFrontMotor.setPID(0.5, 0.001, 0.00, 0.00, 360, 36, 0);
 		
 		Robot.driveSubsystem.rightFrontMotor.enableControl();
-		Robot.driveSubsystem.rightFrontMotor.setPosition(DistanceInTicks);
+		Robot.driveSubsystem.rightFrontMotor.set(DistanceInRevolutions);
 	}
 
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
-		SmartDashboard.putNumber("Drive   ", DistanceInTicks);
+		SmartDashboard.putNumber("Drive   ", DistanceInRevolutions);
 		SmartDashboard.putNumber("Right E ", Robot.driveSubsystem.rightGetRawCount());
 	}
 
